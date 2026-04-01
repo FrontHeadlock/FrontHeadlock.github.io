@@ -1,10 +1,10 @@
-import { About } from './about/About'
-import { ExperienceTimeline } from './experience/ExperienceTimeline'
-import { Header } from './header/Header'
-import { Hero } from './hero/Hero'
-import { ProjectsSection } from './projects/ProjectsSection'
-import { MatrixRainCanvas } from '../shared/ui/MatrixRainCanvas'
-import '../shared/styles/matrix-effects.css'
+import { About } from '../about/About'
+import { ExperienceTimeline } from '../experience/ExperienceTimeline'
+import { Header } from '../header/Header'
+import { Hero } from '../hero/Hero'
+import { ProjectsSection } from '../projects/ProjectsSection'
+import { MatrixRainCanvas } from '../../shared/ui/MatrixRainCanvas'
+import '../../shared/styles/matrix-effects.css'
 
 function App() {
   return (

@@ -1,8 +1,8 @@
 import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { projects } from '../../entities/project/data'
-import { Reveal } from '../shared/ui/Reveal'
-import { SectionHeading } from '../shared/ui/SectionHeading'
+import { Reveal } from '../../shared/ui/Reveal'
+import { SectionHeading } from '../../shared/ui/SectionHeading'
 import { ProjectCard } from './ProjectCard'
 import { ProjectDetailPanel } from './ProjectDetailPanel'
 

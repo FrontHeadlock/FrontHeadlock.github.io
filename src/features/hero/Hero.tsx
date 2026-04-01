@@ -1,6 +1,6 @@
 import { profile } from '../../entities/profile/data'
-import { Reveal } from '../shared/ui/Reveal'
-import { TerminalFrame } from '../shared/ui/TerminalFrame'
+import { Reveal } from '../../shared/ui/Reveal'
+import { TerminalFrame } from '../../shared/ui/TerminalFrame'
 import { AsciiHero } from './AsciiHero'
 import { HeroLinks } from './HeroLinks'
 import { MetricGrid } from './MetricGrid'

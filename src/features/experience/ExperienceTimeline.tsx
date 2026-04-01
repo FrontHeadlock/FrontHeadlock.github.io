@@ -1,6 +1,6 @@
 import { experience } from '../../entities/experience/data'
-import { Reveal } from '../shared/ui/Reveal'
-import { SectionHeading } from '../shared/ui/SectionHeading'
+import { Reveal } from '../../shared/ui/Reveal'
+import { SectionHeading } from '../../shared/ui/SectionHeading'
 import { TimelineEntry } from './TimelineEntry'
 
 export function ExperienceTimeline() {

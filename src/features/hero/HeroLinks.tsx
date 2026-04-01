@@ -1,6 +1,6 @@
 import { FileText, Github, Link as LinkIcon, Mail, NotebookPen } from 'lucide-react'
 import type { ProfileLink } from '../../entities/profile/types'
-import { IconLinkButton } from '../shared/ui/IconLinkButton'
+import { IconLinkButton } from '../../shared/ui/IconLinkButton'
 
 type HeroLinksProps = {
   links: ProfileLink[]

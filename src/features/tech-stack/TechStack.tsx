@@ -1,6 +1,6 @@
 import { skillCategories } from '../../entities/skill/data'
-import { Reveal } from '../shared/ui/Reveal'
-import { SectionHeading } from '../shared/ui/SectionHeading'
+import { Reveal } from '../../shared/ui/Reveal'
+import { SectionHeading } from '../../shared/ui/SectionHeading'
 import { SkillCategory } from './SkillCategory'
 
 export function TechStack() {

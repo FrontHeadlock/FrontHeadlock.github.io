@@ -1,9 +1,9 @@
 import { ServerCog } from 'lucide-react'
 import { profile } from '../../entities/profile/data'
 import { HeroLinks } from '../hero/HeroLinks'
-import { Reveal } from '../shared/ui/Reveal'
-import { SectionHeading } from '../shared/ui/SectionHeading'
-import { TerminalFrame } from '../shared/ui/TerminalFrame'
+import { Reveal } from '../../shared/ui/Reveal'
+import { SectionHeading } from '../../shared/ui/SectionHeading'
+import { TerminalFrame } from '../../shared/ui/TerminalFrame'
 
 export function Contact() {
   return (
