@@ -2,6 +2,16 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 
+beforeEach(() => {
+  window.sessionStorage.clear()
+  window.sessionStorage.setItem('fh_onboarding_seen_v1', '1')
+  window.history.pushState({}, '', '/resume')
+})
+
+afterEach(() => {
+  window.history.pushState({}, '', '/')
+})
+
 describe('App', () => {
   it('renders the primary navigation and hero identity', () => {
     const { container } = render(<App />)
