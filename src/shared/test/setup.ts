@@ -62,17 +62,60 @@ Object.defineProperty(globalThis, 'IntersectionObserver', {
   value: MockIntersectionObserver,
 })
 
+const createMockGradient = () =>
+  ({
+    addColorStop: () => undefined,
+  }) as CanvasGradient
+
+const createMockCanvasContext = () =>
+  ({
+    arc: () => undefined,
+    beginPath: () => undefined,
+    clearRect: () => undefined,
+    clip: () => undefined,
+    closePath: () => undefined,
+    createImageData: () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 }),
+    createLinearGradient: () => createMockGradient(),
+    createPattern: () => null,
+    createRadialGradient: () => createMockGradient(),
+    drawImage: () => undefined,
+    fill: () => undefined,
+    fillRect: () => undefined,
+    fillText: () => undefined,
+    getImageData: () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 }),
+    lineTo: () => undefined,
+    measureText: (text: string) =>
+      ({
+        width: text.length * 8,
+      }) as TextMetrics,
+    moveTo: () => undefined,
+    putImageData: () => undefined,
+    resetTransform: () => undefined,
+    restore: () => undefined,
+    rotate: () => undefined,
+    save: () => undefined,
+    scale: () => undefined,
+    setTransform: () => undefined,
+    stroke: () => undefined,
+    strokeRect: () => undefined,
+    translate: () => undefined,
+    filter: 'none',
+    fillStyle: '',
+    font: '',
+    globalAlpha: 1,
+    globalCompositeOperation: 'source-over',
+    lineWidth: 1,
+    shadowBlur: 0,
+    shadowColor: '',
+    strokeStyle: '',
+    textAlign: 'left',
+    textBaseline: 'alphabetic',
+  }) as unknown as CanvasRenderingContext2D
+
 Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   writable: true,
   configurable: true,
-  value: () => ({
-    fillRect: () => undefined,
-    fillText: () => undefined,
-    clearRect: () => undefined,
-    setTransform: () => undefined,
-    font: '',
-    fillStyle: '',
-  }),
+  value: () => createMockCanvasContext(),
 })
 
 Object.defineProperty(window, 'matchMedia', {
