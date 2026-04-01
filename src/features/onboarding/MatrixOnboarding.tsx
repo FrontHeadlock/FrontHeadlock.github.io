@@ -9,8 +9,6 @@ import {
 } from './koreaPeninsulaCoords'
 import '../../shared/styles/onboarding.css'
 
-const DESTINATION_URL = 'https://frontheadlock.github.io/'
-
 const CODE_RAIN_CHARSET = 'アイウエオカキクケコ0123456789{}[]<>/\\+-=*&#$'
 const GLYPH_SOURCE = '01{}[]<>/\\|+-=*#%ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const HERO_DECODE_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]{}<>/\\|'
@@ -472,7 +470,6 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
 
     finishTimeoutRef.current = window.setTimeout(() => {
       onComplete()
-      window.location.assign(DESTINATION_URL)
     }, 420)
   }, [onComplete])
 
