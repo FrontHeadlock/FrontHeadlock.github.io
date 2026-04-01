@@ -1085,7 +1085,7 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
       <div className="onboarding-underlay" aria-hidden="true">
         <iframe
           className="onboarding-underlay__iframe"
-          src={DESTINATION_URL}
+          src="https://frontheadlock.github.io/"
           title="Resume Preview"
           tabIndex={-1}
           loading="eager"
