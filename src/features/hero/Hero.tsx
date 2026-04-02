@@ -14,7 +14,7 @@ export function Hero() {
       <Reveal>
         <div className="flex flex-col gap-6 xl:min-h-[33rem] xl:justify-between">
           <div data-testid="hero-copy" className="space-y-3 md:space-y-4">
-            <AsciiHero text={profile.nameEn} className="max-w-4xl" />
+            <AsciiHero text={profile.nameEn} className="-mt-8 max-w-4xl md:-mt-10" />
             <p className="max-w-2xl text-base leading-7 text-[var(--color-text-muted)] md:text-lg md:leading-8">{profile.heroSummary}</p>
           </div>
           <div className="space-y-5 xl:pt-2">
