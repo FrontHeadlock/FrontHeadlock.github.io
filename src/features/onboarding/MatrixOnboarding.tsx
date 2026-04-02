@@ -522,7 +522,8 @@ function createCodeGlyphParticles(block: CodeBlock, width: number, height: numbe
 
   for (let lineIndex = 0; lineIndex < block.lines.length; lineIndex += 1) {
     const line = block.lines[lineIndex]!
-    for (let charIndex = 0; charIndex < line.length; charIndex += 1) {
+    const charStride = line.length > 84 ? 2 : 1
+    for (let charIndex = 0; charIndex < line.length; charIndex += charStride) {
       const finalChar = line[charIndex] ?? ' '
       if (finalChar === ' ' || finalChar === '\t') {
         continue
@@ -702,6 +703,8 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
     let maskDrawStep = 2
     let rainColumnStep = 1
     let mapDotStep = 1
+    let mapMotionStep = 1
+    let codeParticleStep = 1
     let blockHoverIntensity = 0
     let hubHoverIntensity = 0
     let mapHoverIntensity = 0
@@ -716,7 +719,14 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
     const toPointerX = gsap.quickTo(smoothPointer, 'x', { duration: 0.22, ease: 'power2.out' })
     const toPointerY = gsap.quickTo(smoothPointer, 'y', { duration: 0.22, ease: 'power2.out' })
 
-    const particleCount = window.innerWidth < 900 ? 3200 : 5000
+    const viewportArea = Math.max(1, window.innerWidth * window.innerHeight)
+    const particleCount = Math.floor(
+      clamp(
+        viewportArea / 420,
+        window.innerWidth < 900 ? 1700 : 2300,
+        window.innerWidth < 900 ? 2500 : 3600,
+      ),
+    )
     const particleX = new Float32Array(particleCount)
     const particleY = new Float32Array(particleCount)
     const particleHomeX = new Float32Array(particleCount)
@@ -735,6 +745,8 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
         maskDrawStep = 2
         rainColumnStep = 1
         mapDotStep = 1
+        mapMotionStep = 1
+        codeParticleStep = 1
         return
       }
       if (qualityLevel === 1) {
@@ -742,12 +754,16 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
         maskDrawStep = 3
         rainColumnStep = 1
         mapDotStep = 1
+        mapMotionStep = 2
+        codeParticleStep = 2
         return
       }
       particleDrawStep = 3
       maskDrawStep = 4
       rainColumnStep = 2
       mapDotStep = 2
+      mapMotionStep = 2
+      codeParticleStep = 2
     }
 
     const tuneQuality = (deltaMs: number) => {
@@ -836,7 +852,7 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
     const resize = () => {
       width = stage.clientWidth
       height = stage.clientHeight
-      dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 900 ? 1.25 : 1.75)
+      dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 900 ? 1.22 : 1.62)
 
       canvas.width = Math.max(1, Math.floor(width * dpr))
       canvas.height = Math.max(1, Math.floor(height * dpr))
@@ -953,7 +969,7 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
       const mapRadius = 118
       const mapForce = 2.7
 
-      for (let index = 0; index < mapLayer.dots.length; index += 1) {
+      for (let index = 0; index < mapLayer.dots.length; index += mapMotionStep) {
         const dot = mapLayer.dots[index]!
         const currentX = dot.x + mapOffsetX[index]!
         const currentY = dot.y + mapOffsetY[index]!
@@ -1003,9 +1019,11 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
         sceneContext.textAlign = 'center'
         sceneContext.textBaseline = 'middle'
         sceneContext.shadowColor = `rgba(54, 255, 118, ${0.34 + localHover * 0.22})`
-        sceneContext.shadowBlur = 7 + localHover * 6
+        const codeBlurEnabled = (Math.floor(timeMs / 34) + index) % 10 !== 0
+        sceneContext.shadowBlur = codeBlurEnabled ? 8 + localHover * 6 : 0
+        const particleStep = isHoveredBlock ? 1 : codeParticleStep
 
-        for (let particleIndex = 0; particleIndex < particles.length; particleIndex += 1) {
+        for (let particleIndex = 0; particleIndex < particles.length; particleIndex += particleStep) {
           const particle = particles[particleIndex]!
           const tx = centerX + particle.localX * cos - particle.localY * sin
           const ty = centerY + particle.localX * sin + particle.localY * cos
@@ -1066,7 +1084,8 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
       sceneContext.textBaseline = 'middle'
       sceneContext.font = `${12 + hoverIntensity * 1.8}px "JetBrains Mono", "SF Mono", monospace`
       sceneContext.shadowColor = `rgba(52, 255, 120, ${0.62 + hoverIntensity * 0.24})`
-      sceneContext.shadowBlur = 13 + hoverIntensity * 8
+      const mapBlurEnabled = Math.floor(timeMs / 34) % 10 !== 0
+      sceneContext.shadowBlur = mapBlurEnabled ? 12 + hoverIntensity * 6 : 0
       for (let index = 0; index < mapLayer.dots.length; index += mapDotStep) {
         const dot = mapLayer.dots[index]!
         const pulse = 0.38 + (Math.sin(timeMs * 0.004 + dot.phase) + 1) * 0.27
@@ -1132,7 +1151,8 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
       sceneContext.font = `600 ${fontSize}px "JetBrains Mono", "SF Mono", monospace`
       sceneContext.textBaseline = 'middle'
       sceneContext.shadowColor = 'rgba(80, 255, 132, 0.74)'
-      sceneContext.shadowBlur = 10
+      const particleBlurEnabled = Math.floor(timeMs / 34) % 10 !== 0
+      sceneContext.shadowBlur = particleBlurEnabled ? 10 : 0
 
       maskContext.save()
       maskContext.globalCompositeOperation = 'destination-out'

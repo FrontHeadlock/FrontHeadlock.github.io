@@ -38,6 +38,7 @@ export function useMatrixRain() {
     let lastFrameTime = performance.now()
     let columns: RainColumn[] = []
     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ{}[]<>/\\=+-*%$#@'
+    let cachedFontSize = -1
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -66,7 +67,10 @@ export function useMatrixRain() {
       const charsetLength = characters.length
 
       columns.forEach((column) => {
-        context.font = `400 ${column.size}px "JetBrains Mono", monospace`
+        if (cachedFontSize !== column.size) {
+          cachedFontSize = column.size
+          context.font = `400 ${column.size}px "JetBrains Mono", monospace`
+        }
         const baseIndex = (Math.floor((column.y + timeMs * 0.05) / Math.max(column.size, 1)) + column.charShift) % charsetLength
 
         for (let tailIndex = 0; tailIndex < column.tailLength; tailIndex += 1) {
