@@ -13,10 +13,11 @@ afterEach(() => {
 })
 
 describe('App', () => {
-  it('renders the primary navigation and hero identity', () => {
+  it('renders the header and hero identity', () => {
     const { container } = render(<App />)
 
-    expect(screen.getByRole('navigation')).toBeInTheDocument()
+    expect(screen.getByRole('banner')).toBeInTheDocument()
+    expect(screen.getByText(/status online/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /KyuminPark/i })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /박규민/i })).not.toBeInTheDocument()
     expect(screen.getByText(/Deployment Time/i)).toBeInTheDocument()
