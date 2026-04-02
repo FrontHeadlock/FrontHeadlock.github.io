@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="mx-auto grid max-w-7xl gap-8 px-5 pb-16 pt-12 md:px-8 md:pb-24 md:pt-20 xl:grid-cols-[1.15fr_0.85fr] xl:items-end"
+      className="mx-auto grid max-w-7xl gap-8 px-5 pb-16 pt-12 md:px-8 md:pb-24 md:pt-20 xl:grid-cols-[1.15fr_0.85fr] xl:items-start"
     >
       <Reveal>
         <div className="flex flex-col gap-6 xl:min-h-[33rem] xl:justify-between">
