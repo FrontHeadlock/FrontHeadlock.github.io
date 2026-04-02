@@ -1,54 +1,24 @@
-import { Menu } from 'lucide-react'
-import { useMemo, useState } from 'react'
-import { cn } from '../../shared/lib/cn'
-import { useActiveSection } from '../../shared/hooks/useActiveSection'
-import { MobileNav } from './MobileNav'
-
-const sections = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-]
-
 export function Header() {
-  const [open, setOpen] = useState(false)
-  const activeSection = useActiveSection(useMemo(() => sections.map((section) => section.id), []))
-
   return (
     <header className="sticky top-0 z-40 border-b border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.78)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
-        <a href="#home" className="font-mono text-sm uppercase tracking-[0.24em] text-[var(--color-accent)]">
-          kyumin.log
-        </a>
+        <div className="group flex items-center gap-3" aria-label="Resume status">
+          <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_14px_rgba(0,255,65,0.95)] transition group-hover:scale-110" />
+          <span className="flex flex-col leading-none">
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-accent)]">resume.node</span>
+            <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.13em] text-[var(--color-text-muted)]">status online</span>
+          </span>
+        </div>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 rounded-full border border-[var(--color-border)] bg-[rgba(255,255,255,0.02)] p-1 md:flex">
-          {sections.map((section) => (
-            <a
-              key={section.id}
-              href={`#${section.id}`}
-              className={cn(
-                'rounded-full px-4 py-2 text-sm text-[var(--color-text-muted)] transition',
-                activeSection === section.id && 'bg-[rgba(0,255,65,0.1)] font-medium text-[var(--color-accent)]',
-              )}
-            >
-              {section.label}
-            </a>
-          ))}
-        </nav>
-
-        <button
-          type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-main)] md:hidden"
-          onClick={() => setOpen((value) => !value)}
-          aria-label="메뉴 열기"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-        >
-          <Menu size={18} />
-        </button>
+        <div className="hidden items-center gap-2 md:flex">
+          <span className="rounded-full border border-[var(--color-border)] bg-[rgba(0,255,65,0.06)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-accent)]">
+            live rain
+          </span>
+          <span className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
+            stream 60hz
+          </span>
+        </div>
       </div>
-      <MobileNav open={open} onClose={() => setOpen(false)} sections={sections} activeSection={activeSection} />
     </header>
   )
 }

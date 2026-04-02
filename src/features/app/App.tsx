@@ -10,6 +10,7 @@ import '../../shared/styles/matrix-effects.css'
 function ResumeScreen() {
   return (
     <div className="relative isolate min-h-screen overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text-main)]">
+      <div className="matrix-backdrop -z-20" aria-hidden="true" />
       <MatrixRainCanvas />
       <a href="#main-content" className="sr-only focus:not-sr-only">
         본문으로 건너뛰기
