@@ -29,7 +29,7 @@ export function Hero() {
             <div className="space-y-1.5">
               <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">Core Results</p>
               <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-                배포, 인증, 서비스 지연 구간에서 실제 수치로 개선 결과를 남긴 프로젝트를 중심으로 포트폴리오를 구성했습니다.
+                This portfolio is centered on projects where deployment, authentication, and service-latency bottlenecks were improved with measurable results.
               </p>
             </div>
             <MetricGrid metrics={profile.metrics} />

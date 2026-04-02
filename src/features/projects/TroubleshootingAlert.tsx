@@ -13,19 +13,19 @@ export function TroubleshootingAlert({ item }: TroubleshootingAlertProps) {
       </div>
       <dl className="grid gap-4">
         <div>
-          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">문제</dt>
+          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">Problem</dt>
           <dd className="mt-2 text-sm leading-7 text-[var(--color-text-main)]">{item.problem}</dd>
         </div>
         <div>
-          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">원인 분석</dt>
+          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">Root Cause</dt>
           <dd className="mt-2 text-sm leading-7 text-[var(--color-text-main)]">{item.analysis}</dd>
         </div>
         <div>
-          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">조치</dt>
+          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">Action</dt>
           <dd className="mt-2 text-sm leading-7 text-[var(--color-text-main)]">{item.action}</dd>
         </div>
         <div>
-          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">결과</dt>
+          <dt className="font-mono text-xs uppercase tracking-[0.18em] text-[#ff8c82]">Result</dt>
           <dd className="mt-2 text-sm leading-7 text-[var(--color-text-main)]">{item.result}</dd>
         </div>
       </dl>

@@ -17,8 +17,8 @@ export function ProjectsSection() {
           <SectionHeading
             id="projects-title"
             eyebrow="Projects"
-            title="성과와 구조적 판단이 먼저 보이도록 프로젝트를 배치했습니다."
-            description="대표 프로젝트는 Geulda, OldYoung, Kubernetes, CATXI 순으로 배치하고, 카드를 선택하면 같은 흐름 안에서 상세 이력서가 열리도록 구성합니다."
+            title="Projects are arranged so outcomes and structural judgment appear first."
+            description="Featured projects are ordered as Geulda, OldYoung, Kubernetes, and CATXI. Selecting a card opens detailed resume context within the same flow."
           />
 
           <div className="grid gap-4 lg:grid-cols-2">

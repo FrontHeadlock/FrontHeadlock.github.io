@@ -11,8 +11,8 @@ export function TechStack() {
           <SectionHeading
             id="tech-stack-title"
             eyebrow="Tech Stack"
-            title="기술은 나열하지 않고 운영 맥락 안에서 분류했습니다."
-            description="클라우드, CI/CD, 컨테이너, 인증, 모니터링, 협업 도구를 운영 흐름 기준으로 묶었습니다."
+            title="Technologies are categorized by operational context, not listed in isolation."
+            description="Cloud, CI/CD, containers, authentication, monitoring, and collaboration tools are grouped by delivery workflow."
           />
           <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
             {skillCategories.map((category) => (

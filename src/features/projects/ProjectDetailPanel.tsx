@@ -59,22 +59,22 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
               ))}
             </div>
             <div className="mt-6 space-y-2">
-              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">맡은 역할</h4>
+              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Role</h4>
               <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.role}</p>
             </div>
           </div>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          <DetailBlock title="프로젝트 개요" items={[project.overview]} />
-          <DetailBlock title="문제 상황" items={project.problem} />
-          <DetailBlock title="해결 방식" items={project.approach} />
-          <DetailBlock title="성과 / 수치" items={project.outcomes} />
-          <DetailBlock title="배운 점" items={project.learnings} />
+          <DetailBlock title="Overview" items={[project.overview]} />
+          <DetailBlock title="Problem Context" items={project.problem} />
+          <DetailBlock title="Approach" items={project.approach} />
+          <DetailBlock title="Outcomes / Metrics" items={project.outcomes} />
+          <DetailBlock title="Learnings" items={project.learnings} />
         </div>
 
         <section className="space-y-4">
-          <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">트러블슈팅 경험</h4>
+          <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Troubleshooting</h4>
           <div className="grid gap-4">
             {project.troubleshooting.map((item) => (
               <TroubleshootingAlert key={item.title} item={item} />

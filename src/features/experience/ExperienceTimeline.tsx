@@ -11,8 +11,8 @@ export function ExperienceTimeline() {
           <SectionHeading
             id="experience-title"
             eyebrow="Experience"
-            title="프로젝트와 운영 흐름을 로그처럼 읽을 수 있게 정리했습니다."
-            description="제공된 날짜와 역할 정보만 사용해 실제 경험 항목을 정리했습니다. 기간 정보가 없는 항목은 순서 기반 로그처럼 표현합니다."
+            title="Project and operations flow are organized so they read like a log."
+            description="Experience entries are structured using provided date and role data. Items without period metadata are shown in sequence-log order."
           />
           <div className="space-y-4">
             {experience.map((entry) => (

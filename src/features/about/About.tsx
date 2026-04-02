@@ -11,8 +11,8 @@ export function About() {
           <SectionHeading
             id="about-title"
             eyebrow="About"
-            title="운영 병목을 구조로 분리하고, 자동화로 되돌아오지 않게 만듭니다."
-            description="장애 대응보다 먼저 구조를 정리하고, 수동 작업보다 먼저 재현 가능한 흐름을 설계하는 방식으로 문제를 해결합니다."
+            title="I isolate operational bottlenecks by structure and prevent recurrence with automation."
+            description="I solve problems by organizing architecture before incident response and designing reproducible flows before manual work."
           />
 
           <TerminalFrame label="Problem Solving">

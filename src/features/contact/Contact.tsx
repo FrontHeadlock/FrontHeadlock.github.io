@@ -13,8 +13,8 @@ export function Contact() {
           <SectionHeading
             id="contact-title"
             eyebrow="Contact"
-            title="핵심 정보와 운영 결과를 빠르게 검토할 수 있는 포트폴리오로 구성했습니다."
-            description="연락처는 실제 값만 사용했고, 이력서 PDF는 아직 연결하지 않았습니다."
+            title="This portfolio is structured for fast review of key details and operational outcomes."
+            description="Contact details use real values, and resume PDF linkage is not enabled yet."
           />
           <div className="space-y-5">
             <HeroLinks links={profile.links} />
@@ -22,7 +22,7 @@ export function Contact() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-[var(--color-text-main)]">
                   <ServerCog size={18} className="text-[var(--color-accent)]" />
-                  <p className="font-medium">이 포트폴리오의 인프라 구성</p>
+                  <p className="font-medium">Infrastructure setup for this portfolio</p>
                 </div>
                 <ul className="grid gap-2">
                   {profile.deliveryMeta.map((item) => (
