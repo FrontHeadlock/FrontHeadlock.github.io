@@ -1,4 +1,4 @@
-import { layoutNextLine, prepareWithSegments, type LayoutCursor, type PreparedTextWithSegments } from '@chenglou/pretext'
+import { prepareWithSegments } from '@chenglou/pretext'
 import { gsap } from 'gsap'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SkipButton } from './SkipButton'
@@ -39,7 +39,7 @@ const CODE_POOL = [
   'result = repository.findByUserIdAndStatus(userId, Status.ACTIVE);',
 ]
 
-const CODE_BLOCK_TEMPLATES = [
+const JAVA_CODE_BLOCK_TEMPLATES = [
   [
     'func (s *RouteService) ReconcileFrame(ctx context.Context, req ReconcileRequest) error {',
     '  frame, err := s.repo.AllocFrame(ctx, req.NodeID)',
@@ -81,6 +81,49 @@ const CODE_BLOCK_TEMPLATES = [
     '}',
   ],
 ]
+
+const GO_CODE_BLOCK_TEMPLATES = [
+  [
+    'func checksum(frame *Frame, seed uint32) uint32 {',
+    '  crc := ^uint32(0)',
+    '  for _, b := range frame.Payload {',
+    '    crc ^= uint32(b)',
+    '    for i := 0; i < 8; i++ {',
+    '      if crc&1 == 1 {',
+    '        crc = (crc >> 1) ^ 0xEDB88320',
+    '      } else {',
+    '        crc >>= 1',
+    '      }',
+    '    }',
+    '  }',
+    '  return ^crc',
+  ].map((line) => ` ${line}`),
+  [
+    'func routeEvent(ctx context.Context, payload MessagePayload) error {',
+    '  if err := validator.Struct(payload); err != nil {',
+    '    return fmt.Errorf("invalid payload: %w", err)',
+    '  }',
+    '  return bus.Dispatch(ctx, Event{',
+    '    Name: payload.Name,',
+    '    Value: payload.Value,',
+    '    Meta: payload.Meta,',
+    '  })',
+  ].map((line) => ` ${line}`),
+  [
+    'func connectNode(node string) (*grpc.ClientConn, error) {',
+    '  conn, err := grpc.Dial(node, grpc.WithTransportCredentials(insecure.NewCredentials()))',
+    '  if err != nil {',
+    '    return nil, err',
+    '  }',
+    '  return conn, nil',
+  ].map((line) => ` ${line}`),
+]
+
+const CODE_BLOCK_LINE_PLAN: number[] = [13, 13, 9, 11, 11, 12, 13, 9]
+
+const LEFT_BLOCK_COUNT = 4
+const CENTER_BLOCK_COUNT = 2
+const RIGHT_BLOCK_COUNT = 0
 
 type MatrixOnboardingProps = {
   onComplete: () => void
@@ -178,25 +221,6 @@ function pointInPolygon(x: number, y: number, polygon: Array<[number, number]>) 
   return inside
 }
 
-function layoutLines(prepared: PreparedTextWithSegments, maxWidth: number, maxLines: number) {
-  const lines: string[] = []
-  let cursor: LayoutCursor = { segmentIndex: 0, graphemeIndex: 0 }
-
-  while (lines.length < maxLines) {
-    const next = layoutNextLine(prepared, cursor, maxWidth)
-    if (next === null) {
-      break
-    }
-    lines.push(next.text)
-    if (next.end.segmentIndex === cursor.segmentIndex && next.end.graphemeIndex === cursor.graphemeIndex) {
-      break
-    }
-    cursor = next.end
-  }
-
-  return lines
-}
-
 function createGlyphPalette(font: string, targetWidth: number) {
   const ranked = GLYPH_SOURCE.split('').map((char) => {
     const prepared = prepareWithSegments(char, font)
@@ -212,10 +236,10 @@ function createGlyphPalette(font: string, targetWidth: number) {
 
 function createRainColumns(width: number, height: number) {
   const tiers = [
-    { size: 9, speed: 40, alpha: 0.16, depth: 0.16, spacing: 15 },
-    { size: 11, speed: 62, alpha: 0.2, depth: 0.3, spacing: 18 },
-    { size: 13, speed: 92, alpha: 0.27, depth: 0.46, spacing: 22 },
-    { size: 16, speed: 130, alpha: 0.36, depth: 0.62, spacing: 28 },
+    { size: 10, speed: 40, alpha: 0.16, depth: 0.16, spacing: 15 },
+    { size: 12, speed: 62, alpha: 0.2, depth: 0.3, spacing: 18 },
+    { size: 14, speed: 92, alpha: 0.27, depth: 0.46, spacing: 22 },
+    { size: 17, speed: 130, alpha: 0.36, depth: 0.62, spacing: 28 },
   ]
 
   const columns: RainColumn[] = []
@@ -239,68 +263,207 @@ function createRainColumns(width: number, height: number) {
 }
 
 function createCodeBlocks(width: number, height: number) {
-  const count = 11
+  const count = LEFT_BLOCK_COUNT + CENTER_BLOCK_COUNT + RIGHT_BLOCK_COUNT
   const blocks: CodeBlock[] = []
-  const prepareCache = new Map<string, PreparedTextWithSegments>()
+  const blockRects: Array<{ left: number; top: number; right: number; bottom: number }> = []
+  const leftBoundary = 0.03
+  const leftLimit = 0.46
+  const centerLimit = 0.84
+  const rightLimit = 0.46
+
   const anchors: Array<[number, number]> = [
-    [0.12, 0.16],
-    [0.74, 0.14],
-    [0.26, 0.36],
-    [0.84, 0.38],
+    [0.06, 0.14],
+    [0.12, 0.24],
+    [0.14, 0.46],
     [0.12, 0.62],
-    [0.56, 0.72],
-    [0.86, 0.8],
-    [0.4, 0.14],
-    [0.58, 0.42],
-    [0.34, 0.84],
-    [0.72, 0.64],
+    [0.66, 0.2],
+    [0.58, 0.36],
+    [0.63, 0.31],
+    [0.67, 0.60],
   ]
 
+  const leftSkew = (idx: number) => {
+    if (idx % 2 === 0) {
+      return (Math.random() - 0.5) * 0.02
+    }
+    if (idx % 3 === 0) {
+      return (Math.random() - 0.5) * 0.04
+    }
+    return 0
+  }
+
+  const lineLengthBias: Array<number> = [0, 1, 2, 3, 0, 1, 2, 3, 4]
+  const jitterX = (Math.random() - 0.5) * width * 0.008
+  const jitterY = (Math.random() - 0.5) * height * 0.008
+
+  const hasOverlap = (
+    rect: { left: number; top: number; right: number; bottom: number },
+    margin: number,
+    others: Array<{ left: number; top: number; right: number; bottom: number }>,
+  ) => {
+    const expandedTop = rect.top - margin
+    const expandedBottom = rect.bottom + margin
+    const expandedLeft = rect.left - margin
+    const expandedRight = rect.right + margin
+    return others.some(
+      (other) =>
+        expandedLeft < other.right &&
+        expandedRight > other.left &&
+        expandedTop < other.bottom &&
+        expandedBottom > other.top,
+    )
+  }
+
+  const resolveBlockRect = (
+    baseX: number,
+    baseY: number,
+    blockW: number,
+    blockH: number,
+    margin: number,
+    zoneRight: number,
+    maxY: number,
+  ) => {
+    const minX = leftBoundary + 2
+    const maxX = Math.max(minX, zoneRight - blockW - 8)
+    let x = clamp(baseX, minX, maxX)
+    let rect = { left: x, top: baseY, right: x + blockW, bottom: baseY + blockH }
+
+    if (!hasOverlap(rect, margin, blockRects)) {
+      return rect
+    }
+
+    const maxAttempts = 48
+    const baseStep = Math.max(height * 0.045, 10)
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const direction = attempt % 2 === 0 ? 1 : -1
+      const step = Math.floor(attempt / 2) + 1
+      const candidateY = clamp(baseY + direction * step * baseStep, 8, maxY)
+      const candidateX = clamp(baseX + direction * (step % 3) * 6 + (Math.sin(attempt * 0.5) * 8), minX, maxX)
+      const candidate = {
+        left: candidateX,
+        top: candidateY,
+        right: candidateX + blockW,
+        bottom: candidateY + blockH,
+      }
+      if (!hasOverlap(candidate, margin, blockRects)) {
+        return candidate
+      }
+      rect = candidate
+    }
+
+    const fallbackY = clamp(baseY + Math.max(24, height * 0.08), 8, maxY)
+    const fallback: { left: number; top: number; right: number; bottom: number } = {
+      left: x,
+      top: fallbackY,
+      right: x + blockW,
+      bottom: fallbackY + blockH,
+    }
+    return fallback
+  }
+
+  const normalizeCodeLine = (line: string, maxChars: number) => {
+    const sanitized = line.replace(/\t/g, '  ').trimEnd()
+    if (sanitized.length <= maxChars) {
+      return sanitized
+    }
+    const hardLimit = Math.max(24, maxChars)
+    const sliced = sanitized.slice(0, hardLimit)
+    const breakpoints = [' ', ',', ')', '{', '}', '.', ':']
+    let cutIndex = -1
+    for (let index = 0; index < breakpoints.length; index += 1) {
+      cutIndex = Math.max(cutIndex, sliced.lastIndexOf(breakpoints[index]!))
+    }
+    const minNaturalCut = Math.floor(maxChars * 0.58)
+    return cutIndex >= minNaturalCut ? sliced.slice(0, cutIndex).trimEnd() : sliced.trimEnd()
+  }
+
   for (let index = 0; index < count; index += 1) {
-    const fontSize = clamp(Math.round(12 + Math.random() * 5), 12, 17)
-    const fontWeight = Math.random() > 0.56 ? 600 : 500
-    const font = `${fontWeight} ${fontSize}px "JetBrains Mono", "SF Mono", monospace`
-    const lineHeight = Math.round(fontSize * 1.2)
-    const maxLineWidth = clamp(width * (0.2 + Math.random() * 0.14), 240, 430)
-    const template = CODE_BLOCK_TEMPLATES[Math.floor(Math.random() * CODE_BLOCK_TEMPLATES.length)]!
+    const isLeftBlock = index < LEFT_BLOCK_COUNT
+    const isCenterBlock = index >= LEFT_BLOCK_COUNT && index < LEFT_BLOCK_COUNT + CENTER_BLOCK_COUNT
+    const isRightBlock = !isLeftBlock && !isCenterBlock
+    const maxChars = isLeftBlock ? 72 : isCenterBlock ? 78 : 82
+    const templatePool = isRightBlock ? GO_CODE_BLOCK_TEMPLATES : JAVA_CODE_BLOCK_TEMPLATES
+    const template = templatePool[Math.floor(Math.random() * templatePool.length)]!
+    const targetLines = CODE_BLOCK_LINE_PLAN[index] ?? 8
     const injected = template.map((line, lineIndex) => {
       if (lineIndex === 0 && Math.random() > 0.5) {
         return line.replace('(', `_${Math.floor(Math.random() * 90 + 10)}(`)
       }
       if (Math.random() > 0.74) {
-        return `${line} // ${CODE_POOL[Math.floor(Math.random() * CODE_POOL.length)]}`
+        return `${line} // trace`
       }
       return line
     })
-    const variant = injected.join('\n')
-    const key = `${variant}|${font}|${maxLineWidth}`
-    const prepared = prepareCache.get(key) ?? prepareWithSegments(variant, font, { whiteSpace: 'pre-wrap' })
-    prepareCache.set(key, prepared)
-    const lines = layoutLines(prepared, maxLineWidth, 7)
-    const widthEstimate = clamp(Math.max(...lines.map((line) => line.length * fontSize * 0.57), 180), 180, maxLineWidth)
-    const blockWidth = widthEstimate + 10
-    const blockHeight = lines.length * lineHeight + 8
-    const [ax, ay] = anchors[index] ?? [Math.random(), Math.random()]
-    const jitterX = (Math.random() - 0.5) * width * 0.06
-    const jitterY = (Math.random() - 0.5) * height * 0.06
+    const lines = injected.slice(0, targetLines)
+    for (let lineIndex = lines.length; lineIndex < targetLines; lineIndex += 1) {
+      const poolLine = CODE_POOL[(lineIndex + index * 3) % CODE_POOL.length] ?? 'NOP_OP'
+      lines.push(poolLine.replace(/\s+/g, ' ').trim())
+    }
 
-    blocks.push({
+    const maxAllowedLines = targetLines + 3
+    const finalLines = lines
+      .map((line) => line.replace(/\s+/g, ' ').trim())
+      .map((line) => normalizeCodeLine(line, maxChars))
+      .slice(0, maxAllowedLines)
+    while (finalLines.length < targetLines) {
+      finalLines.push('// sync()')
+    }
+
+    const widthJitter = 1 - (index % 3) * 0.03
+    const fontSize = clamp(Math.round(isLeftBlock ? 11 + Math.random() * 3 : 12 + Math.random() * 5), isLeftBlock ? 11 : 12, isLeftBlock ? 14 : 17)
+    const lineHeight = Math.round(fontSize * 1.2)
+    const zoneLimit = isLeftBlock ? leftLimit : isCenterBlock ? centerLimit : rightLimit
+    const maxLineWidth = clamp(
+      width * (isLeftBlock ? 0.24 + Math.random() * 0.06 : isCenterBlock ? 0.27 + Math.random() * 0.06 : 0.3 + Math.random() * 0.08) -
+        widthJitter * 3,
+      isLeftBlock ? 250 : isCenterBlock ? 280 : 320,
+      isLeftBlock ? 420 : isCenterBlock ? 460 : 520,
+    )
+    const fontWeight = Math.random() > 0.56 ? 600 : 500
+    const font = `${fontWeight} ${fontSize}px "JetBrains Mono", "SF Mono", monospace`
+    const variant = finalLines.join('\n')
+    const widthEstimate = clamp(Math.max(...finalLines.map((line) => line.length * fontSize * 0.57), 170), 170, maxLineWidth)
+    const blockWidth = widthEstimate + 10
+    const blockHeight = finalLines.length * lineHeight + 8
+    const [ax, ay] = anchors[index % anchors.length] ?? [Math.random(), Math.random()]
+    const skew = leftSkew(index)
+    const targetX = width * (ax + skew) - blockWidth * 0.5 + jitterX
+    const targetY = height * (ay - 0.03) - blockHeight * 0.45 + jitterY
+    const rect = resolveBlockRect(
+      targetX,
+      targetY,
+      blockWidth,
+      blockHeight,
+      isLeftBlock ? 9 : 11,
+      width * zoneLimit,
+      height - blockHeight - 8,
+    )
+
+    const nextBlock = {
       id: index,
       text: variant,
-      lines,
+      lines: finalLines,
       font,
       fontSize,
       charAdvance: fontSize * 0.58,
       lineHeight,
-      x: clamp(width * ax - blockWidth * 0.5 + jitterX, 8, width - blockWidth - 8),
-      y: clamp(height * ay - blockHeight * 0.5 + jitterY, 8, height - blockHeight - 8),
+      x: rect.left,
+      y: rect.top,
       width: blockWidth,
       height: blockHeight,
-      angle: ((Math.random() * 36 - 18) * Math.PI) / 180,
+      angle: index >= 7 ? ((Math.random() * 10 - 5) * Math.PI) / 180 : ((Math.random() * 18 - 10) * Math.PI) / 180,
       driftX: (Math.random() - 0.5) * 6,
       driftY: (Math.random() - 0.5) * 6,
-      phase: Math.random() * Math.PI * 2,
-      jitter: 0.35 + Math.random() * 0.9,
+      phase: (index % 6) * 0.38 + Math.random() * 0.3,
+      jitter: 0.35 + lineLengthBias[index % lineLengthBias.length] * 0.05 + Math.random() * 0.45,
+    }
+
+    blocks.push(nextBlock)
+    blockRects.push({
+      left: nextBlock.x,
+      top: nextBlock.y,
+      right: nextBlock.x + nextBlock.width,
+      bottom: nextBlock.y + nextBlock.height,
     })
   }
 
@@ -308,10 +471,10 @@ function createCodeBlocks(width: number, height: number) {
 }
 
 function createMapLayer(width: number, height: number): MapLayer {
-  const mapWidth = width * 0.34
-  const mapHeight = height * 0.52
-  const anchorX = width * 0.24
-  const anchorY = height * 0.66
+  const mapWidth = width * 0.35
+  const mapHeight = height * 0.35
+  const anchorX = width * 0.65
+  const anchorY = height * 0.7
   const spacing = clamp(Math.floor(mapWidth / 42), 6, 10)
   const dots: DotNode[] = []
 
@@ -345,6 +508,14 @@ function createMapLayer(width: number, height: number): MapLayer {
   }
 }
 
+function createWireHub(width: number, height: number): WireHub {
+  return {
+    centerX: width * 0.86,
+    centerY: height * 0.2,
+    radiusX: Math.min(width, height) * 0.17,
+    radiusY: Math.min(width, height) * 0.14,
+  }
+}
 function createCodeGlyphParticles(block: CodeBlock, width: number, height: number): CodeGlyphParticle[] {
   const particles: CodeGlyphParticle[] = []
   const maxLineLength = Math.max(1, ...block.lines.map((line) => line.length))
@@ -377,15 +548,6 @@ function createCodeGlyphParticles(block: CodeBlock, width: number, height: numbe
   }
 
   return particles
-}
-
-function createWireHub(width: number, height: number): WireHub {
-  return {
-    centerX: width * 0.77,
-    centerY: height * 0.45,
-    radiusX: Math.min(width, height) * 0.22,
-    radiusY: Math.min(width, height) * 0.18,
-  }
 }
 
 function drawWireHub(
@@ -459,6 +621,7 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
   const finishTimeoutRef = useRef<number | null>(null)
   const [isExiting, setIsExiting] = useState(false)
   const [accessVisible, setAccessVisible] = useState(false)
+  const [loadingProgress, setLoadingProgress] = useState(0)
 
   const finish = useCallback(() => {
     if (completeRef.current) {
@@ -478,8 +641,19 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
       setAccessVisible(true)
     }, 5000)
 
+    const loadingStart = performance.now()
+    const loadingTicker = window.setInterval(() => {
+      const elapsed = performance.now() - loadingStart
+      const progress = clamp(elapsed / 5000, 0, 1)
+      setLoadingProgress(progress)
+      if (progress >= 1) {
+        window.clearInterval(loadingTicker)
+      }
+    }, 50)
+
     return () => {
       window.clearTimeout(showAccessTimer)
+      window.clearInterval(loadingTicker)
       if (finishTimeoutRef.current !== null) {
         window.clearTimeout(finishTimeoutRef.current)
       }
@@ -881,13 +1055,16 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
     }
 
     const drawMap = (timeMs: number, parallaxX: number, parallaxY: number, hoverIntensity: number) => {
-      const anchorX = width * 0.26 + parallaxX * 0.6
-      const anchorY = height * 0.66 + parallaxY * 0.6 - hoverIntensity * 6
+      const anchorX = mapLayer.centerX + parallaxX * 0.45
+      const anchorY = mapLayer.centerY + parallaxY * 0.23 - hoverIntensity * 4
 
       sceneContext.save()
       sceneContext.translate(anchorX, anchorY)
       sceneContext.rotate(-0.26)
       sceneContext.translate(-anchorX, -anchorY)
+      sceneContext.textAlign = 'center'
+      sceneContext.textBaseline = 'middle'
+      sceneContext.font = `${12 + hoverIntensity * 1.8}px "JetBrains Mono", "SF Mono", monospace`
       sceneContext.shadowColor = `rgba(52, 255, 120, ${0.62 + hoverIntensity * 0.24})`
       sceneContext.shadowBlur = 13 + hoverIntensity * 8
       for (let index = 0; index < mapLayer.dots.length; index += mapDotStep) {
@@ -899,7 +1076,7 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
         sceneContext.fillStyle = `rgba(70, 255, 118, ${0.92 + hoverIntensity * 0.06})`
         const ox = mapOffsetX[index] ?? 0
         const oy = mapOffsetY[index] ?? 0
-        sceneContext.fillRect(dot.x + ox - 2, dot.y + oy - 2, 4, 4)
+        sceneContext.fillText('.', dot.x + ox, dot.y + oy)
       }
       sceneContext.globalAlpha = 1
       sceneContext.shadowBlur = 0
@@ -971,9 +1148,10 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
           continue
         }
 
-        const glyph = glyphPalette[particleGlyph[index]!] ?? '0'
+        const group = particleGroup[index] ?? 0
+        const glyph = group === 3 ? '.' : glyphPalette[particleGlyph[index]!] ?? '0'
         const glow = clamp(0.24 + displacement * 0.024 + Math.sin(timeMs * 0.004 + particlePhase[index]!) * 0.22, 0.18, 0.98)
-        sceneContext.fillStyle = `rgba(92, 255, 132, ${glow})`
+        sceneContext.fillStyle = group === 3 ? `rgba(116, 255, 154, ${glow})` : `rgba(92, 255, 132, ${glow})`
         sceneContext.fillText(glyph, particleX[index]!, particleY[index]!)
 
         if (displacement > 2.4 && index % maskDrawStep === 0) {
@@ -1095,6 +1273,19 @@ export function MatrixOnboarding({ onComplete }: MatrixOnboardingProps) {
       <canvas ref={canvasRef} className="onboarding-canvas" aria-hidden="true" />
       <div className="onboarding-crt-overlay" aria-hidden="true" />
       <SkipButton visible={accessVisible} onClick={finish} label="[ ACCESS ]" />
+      <div
+        className="onboarding-loading-bar"
+        role="progressbar"
+        aria-label="loading"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(loadingProgress * 100)}
+      >
+        <span className="onboarding-loading-label">Loading</span>
+        <div className="onboarding-loading-track">
+          <div className="onboarding-loading-track__fill" style={{ transform: `scaleX(${loadingProgress})` }} />
+        </div>
+      </div>
     </section>
   )
 }

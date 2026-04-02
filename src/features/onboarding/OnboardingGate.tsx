@@ -12,21 +12,25 @@ export function OnboardingGate({ children }: OnboardingGateProps) {
   const [showOnboarding, setShowOnboarding] = useState(true)
 
   useEffect(() => {
-    const isRootPath = window.location.pathname === '/' || window.location.pathname === ''
-    const seen = window.sessionStorage.getItem(ONBOARDING_KEY) === '1'
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const syncFromPath = () => {
+      const isRootPath = window.location.pathname === '/' || window.location.pathname === ''
+      const seen = window.sessionStorage.getItem(ONBOARDING_KEY) === '1'
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    if (isRootPath) {
-      setShowOnboarding(true)
+      if (isRootPath) {
+        setShowOnboarding(true)
+      } else if (seen || reducedMotion) {
+        setShowOnboarding(false)
+      }
+
       setReady(true)
-      return
     }
 
-    if (seen || reducedMotion) {
-      setShowOnboarding(false)
+    syncFromPath()
+    window.addEventListener('popstate', syncFromPath)
+    return () => {
+      window.removeEventListener('popstate', syncFromPath)
     }
-
-    setReady(true)
   }, [])
 
   const completeOnboarding = () => {
