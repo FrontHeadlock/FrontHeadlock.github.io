@@ -2,6 +2,8 @@
 
 Matrix-inspired interactive resume with a Canvas onboarding sequence.
 
+⚡️ Live Demo : https://frontheadlock.github.io/
+
 ## What This Project Includes
 
 - 5-second Matrix-style onboarding (`/`) with interactive fragmentation effects
@@ -16,6 +18,11 @@ Matrix-inspired interactive resume with a Canvas onboarding sequence.
 - Canvas 2D API
 
 ## Run Locally
+
+```bash
+git clone https://github.com/FrontHeadlock/FrontHeadlock.github.io.git
+cd FrontHeadlock.github.io
+```
 
 ```bash
 npm install
