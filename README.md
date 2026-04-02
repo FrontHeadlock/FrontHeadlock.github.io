@@ -2,6 +2,8 @@
 
 Matrix-inspired interactive resume with a Canvas onboarding sequence.
 
+⚡️ Live Demo : https://frontheadlock.github.io/
+
 ## Tech Stack
 
 - React 19 + Vite + TypeScript
