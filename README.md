@@ -22,23 +22,19 @@ Matrix-inspired interactive resume with a Canvas onboarding sequence.
 ```bash
 git clone https://github.com/FrontHeadlock/FrontHeadlock.github.io.git
 cd FrontHeadlock.github.io
-```
-
-```bash
 npm install
 npm run dev
 ```
 
 Open: `http://127.0.0.1:5173/` (or the port shown in terminal)
 
-## Build / Preview
+## Build
 
 ```bash
 npm run build
-npm run preview
 ```
 
-## Route Behavior
+## Route
 
 - `/` : onboarding first, then resume
 - `/resume` : resume-focused entry
