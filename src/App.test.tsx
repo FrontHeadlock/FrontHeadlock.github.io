@@ -4,8 +4,7 @@ import App from './App'
 
 beforeEach(() => {
   window.sessionStorage.clear()
-  window.sessionStorage.setItem('fh_onboarding_seen_v1', '1')
-  window.history.pushState({}, '', '/resume')
+  window.history.pushState({}, '', '/')
 })
 
 afterEach(() => {
@@ -13,12 +12,14 @@ afterEach(() => {
 })
 
 describe('App', () => {
-  it('renders the header and hero identity', () => {
+  it('renders the resume directly on the root path', () => {
     const { container } = render(<App />)
 
     expect(screen.getByRole('banner')).toBeInTheDocument()
     expect(screen.getByText(/status online/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /KyuminPark/i })).toBeInTheDocument()
+    expect(screen.queryByLabelText(/Matrix access onboarding/i)).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /\[ ACCESS \]/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /박규민/i })).not.toBeInTheDocument()
     expect(screen.getByText(/Deployment Time/i)).toBeInTheDocument()
     expect(
