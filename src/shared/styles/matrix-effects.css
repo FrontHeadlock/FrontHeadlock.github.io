@@ -1,6 +1,6 @@
 .matrix-backdrop {
   pointer-events: none;
-  position: absolute;
+  position: fixed;
   inset: 0;
   background:
     radial-gradient(80% 60% at 20% 18%, rgba(0, 255, 115, 0.08), transparent 62%),
@@ -10,7 +10,7 @@
 
 .matrix-layer {
   pointer-events: none;
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
