@@ -1,5 +1,6 @@
 import { m } from 'framer-motion'
 import type { Project } from '../../entities/project/types'
+import { useStrings } from '../../shared/i18n/strings'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
 
@@ -23,6 +24,8 @@ function DetailBlock({ title, items }: { title: string; items: string[] }) {
 }
 
 export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
+  const strings = useStrings()
+
   return (
     <m.div
       id={`project-panel-${project.slug}`}
@@ -40,7 +43,7 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">{project.title}</p>
             <h3 className="text-2xl font-semibold text-white md:text-3xl">{project.subtitle}</h3>
             <div className="space-y-2">
-              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Overview</h4>
+              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">{strings.projectDetail.overview}</h4>
               <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.overview}</p>
             </div>
             {project.architectureNotes ? (
@@ -54,26 +57,26 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
             ) : null}
           </m.div>
           <div className="rounded-3xl border border-[var(--color-border)] bg-[rgba(18,22,20,0.72)] p-5">
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Tech Stack</p>
+            <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">{strings.projectDetail.techStack}</p>
             <div className="mt-4">
               <TechStackChips items={project.techStack} tone="main" />
             </div>
             <div className="mt-6 space-y-2">
-              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Role</h4>
+              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">{strings.projectDetail.role}</h4>
               <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.role}</p>
             </div>
           </div>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          <DetailBlock title="Problem Context" items={project.problem} />
-          <DetailBlock title="Approach" items={project.approach} />
-          <DetailBlock title="Outcomes / Metrics" items={project.outcomes} />
-          <DetailBlock title="Learnings" items={project.learnings} />
+          <DetailBlock title={strings.projectDetail.problemContext} items={project.problem} />
+          <DetailBlock title={strings.projectDetail.approach} items={project.approach} />
+          <DetailBlock title={strings.projectDetail.outcomes} items={project.outcomes} />
+          <DetailBlock title={strings.projectDetail.learnings} items={project.learnings} />
         </div>
 
         <section className="space-y-4">
-          <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Troubleshooting</h4>
+          <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">{strings.projectDetail.troubleshooting}</h4>
           <div className="grid gap-4">
             {project.troubleshooting.map((item) => (
               <TroubleshootingAlert key={item.title} item={item} />

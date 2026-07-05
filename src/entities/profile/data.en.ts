@@ -1,8 +1,7 @@
 import type { Profile } from './types'
 
-export const profile: Profile = {
-  nameKo: 'Kyumin Park',
-  nameEn: 'KyuminPark',
+export const profileEn: Profile = {
+  name: 'KyuminPark',
   role: 'DevOps Engineer / Cloud & CI/CD Engineer',
   heroSummary: 'I am a DevOps engineer who solves deployment, authentication, and operations bottlenecks at the architecture level.',
   aboutSummary: [

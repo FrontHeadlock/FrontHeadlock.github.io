@@ -2,21 +2,25 @@ import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { useActiveSection } from '../../shared/hooks/useActiveSection'
 import { useRainPreference } from '../../shared/hooks/useRainPreference'
+import { useLocale } from '../../shared/i18n/LocaleContext'
+import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 import { MobileNav } from './MobileNav'
 
-const SECTIONS = [
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-]
-
-const SECTION_IDS = SECTIONS.map((section) => section.id)
+const SECTION_IDS = ['about', 'experience', 'projects']
 
 export function Header() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const activeSection = useActiveSection(SECTION_IDS)
   const { enabled: rainEnabled, toggle: toggleRain } = useRainPreference()
+  const { locale, toggleLocale } = useLocale()
+  const strings = useStrings()
+
+  const sections = [
+    { id: 'about', label: strings.nav.about },
+    { id: 'experience', label: strings.nav.experience },
+    { id: 'projects', label: strings.nav.projects },
+  ]
 
   return (
     <header className="sticky top-0 z-40 border-b border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.78)] backdrop-blur-xl">
@@ -36,7 +40,7 @@ export function Header() {
         </div>
 
         <nav aria-label="Section" className="hidden items-center gap-1 md:flex">
-          {SECTIONS.map((section) => (
+          {sections.map((section) => (
             <a
               key={section.id}
               href={`#${section.id}`}
@@ -50,10 +54,18 @@ export function Header() {
           ))}
           <button
             type="button"
+            onClick={toggleLocale}
+            aria-pressed={locale === 'ko'}
+            className="ml-2 rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
+          >
+            {locale === 'ko' ? '[KO]' : '[EN]'}
+          </button>
+          <button
+            type="button"
             onClick={toggleRain}
             aria-pressed={rainEnabled}
             className={cn(
-              'ml-2 rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] transition',
+              'rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] transition',
               rainEnabled
                 ? 'border-[var(--color-border)] bg-[rgba(0,255,65,0.06)] text-[var(--color-accent)]'
                 : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-accent)]',
@@ -78,7 +90,7 @@ export function Header() {
       <MobileNav
         open={mobileNavOpen}
         onClose={() => setMobileNavOpen(false)}
-        sections={SECTIONS}
+        sections={sections}
         activeSection={activeSection}
       />
     </header>

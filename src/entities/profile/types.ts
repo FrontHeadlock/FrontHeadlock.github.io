@@ -12,8 +12,7 @@ export type ProfileLink = {
 }
 
 export type Profile = {
-  nameKo: string
-  nameEn: string
+  name: string
   role: string
   heroSummary: string
   aboutSummary: string[]

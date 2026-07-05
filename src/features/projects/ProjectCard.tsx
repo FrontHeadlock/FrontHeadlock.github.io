@@ -1,5 +1,6 @@
 import { m } from 'framer-motion'
 import type { Project } from '../../entities/project/types'
+import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 
@@ -10,6 +11,8 @@ type ProjectCardProps = {
 }
 
 export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
+  const strings = useStrings()
+
   return (
     <m.button
       type="button"
@@ -32,7 +35,7 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
             <h3 className="text-xl font-semibold text-white">{project.subtitle}</h3>
           </div>
           <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
-            {isActive ? 'Expanded' : 'Open'}
+            {isActive ? strings.projects.expanded : strings.projects.open}
           </span>
         </div>
         <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.summary}</p>

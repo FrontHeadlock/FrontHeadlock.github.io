@@ -10,14 +10,18 @@ import { ProjectsSection } from '../projects/ProjectsSection'
 import { MatrixRainCanvas } from '../../shared/ui/MatrixRainCanvas'
 import { RainPreferenceProvider } from '../../shared/hooks/useRainPreference'
 import { useCommandPalette } from '../../shared/hooks/useCommandPalette'
+import { LocaleProvider } from '../../shared/i18n/LocaleContext'
+import { useStrings } from '../../shared/i18n/strings'
 import '../../shared/styles/matrix-effects.css'
 import '../../shared/styles/print.css'
 
 const loadFramerFeatures = () => import('../../shared/lib/framerFeatures').then((mod) => mod.default)
 const CommandPalette = lazy(() => import('../../shared/ui/CommandPalette').then((mod) => ({ default: mod.CommandPalette })))
 
-export function ResumePage() {
+function ResumePageContent() {
   const { open, setOpen, search, setSearch, selectedIndex, filtered } = useCommandPalette()
+  const strings = useStrings()
+
   return (
     <LazyMotion features={loadFramerFeatures} strict>
       <RainPreferenceProvider>
@@ -25,7 +29,7 @@ export function ResumePage() {
           <div className="matrix-backdrop -z-20" aria-hidden="true" />
           <MatrixRainCanvas />
           <a href="#main-content" className="sr-only focus:not-sr-only">
-            Skip to content
+            {strings.skipToContent}
           </a>
           <Header />
           <main id="main-content" className="relative z-10">
@@ -54,5 +58,13 @@ export function ResumePage() {
         </div>
       </RainPreferenceProvider>
     </LazyMotion>
+  )
+}
+
+export function ResumePage() {
+  return (
+    <LocaleProvider>
+      <ResumePageContent />
+    </LocaleProvider>
   )
 }

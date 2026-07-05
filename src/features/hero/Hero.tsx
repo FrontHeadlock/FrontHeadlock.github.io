@@ -1,11 +1,17 @@
-import { profile } from '../../entities/profile/data'
+import { useProfile } from '../../entities/profile/useProfile'
+import { useStrings } from '../../shared/i18n/strings'
 import { Reveal } from '../../shared/ui/Reveal'
 import { TerminalFrame } from '../../shared/ui/TerminalFrame'
 import { AsciiHero } from './AsciiHero'
 import { HeroLinks } from './HeroLinks'
 import { MetricGrid } from './MetricGrid'
 
+const HERO_NAME = 'KyuminPark'
+
 export function Hero() {
+  const profile = useProfile()
+  const strings = useStrings()
+
   return (
     <section
       id="home"
@@ -14,7 +20,7 @@ export function Hero() {
       <Reveal>
         <div className="flex flex-col gap-6 xl:min-h-[33rem] xl:justify-between">
           <div data-testid="hero-copy" className="space-y-3 md:space-y-4">
-            <AsciiHero text={profile.nameEn} className="-mt-8 max-w-4xl md:-mt-10" />
+            <AsciiHero text={HERO_NAME} srOnlyText={profile.name} className="-mt-8 max-w-4xl md:-mt-10" />
             <p className="max-w-2xl text-base leading-7 text-[var(--color-text-muted)] md:text-lg md:leading-8">{profile.heroSummary}</p>
           </div>
           <div className="space-y-5 xl:pt-2">
@@ -24,13 +30,11 @@ export function Hero() {
       </Reveal>
 
       <Reveal delay={0.08}>
-        <TerminalFrame label="Operational Metrics" className="xl:mb-2">
+        <TerminalFrame label={strings.hero.metricsLabel} className="xl:mb-2">
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">Core Results</p>
-              <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-                This portfolio is centered on projects where deployment, authentication, and service-latency bottlenecks were improved with measurable results.
-              </p>
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">{strings.hero.coreResults}</p>
+              <p className="text-sm leading-6 text-[var(--color-text-muted)]">{strings.hero.coreResultsDescription}</p>
             </div>
             <MetricGrid metrics={profile.metrics} />
           </div>

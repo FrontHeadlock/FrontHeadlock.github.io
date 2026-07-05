@@ -1,6 +1,6 @@
 import type { ExperienceEntry } from './types'
 
-export const experience: ExperienceEntry[] = [
+export const experienceEn: ExperienceEntry[] = [
   {
     title: 'Geulda Bucheon Tourism Promotion Application',
     dateLabel: '25.10 - 11',

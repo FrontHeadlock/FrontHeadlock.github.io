@@ -1,12 +1,15 @@
 import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { projects } from '../../entities/project/data'
+import { useProjects } from '../../entities/project/useProjects'
+import { useStrings } from '../../shared/i18n/strings'
 import { Reveal } from '../../shared/ui/Reveal'
 import { SectionHeading } from '../../shared/ui/SectionHeading'
 import { ProjectCard } from './ProjectCard'
 import { ProjectDetailPanel } from './ProjectDetailPanel'
 
 export function ProjectsSection() {
+  const projects = useProjects()
+  const strings = useStrings()
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const activeProject = projects.find((project) => project.slug === selectedSlug) ?? null
 
@@ -16,9 +19,9 @@ export function ProjectsSection() {
         <div className="space-y-8">
           <SectionHeading
             id="projects-title"
-            eyebrow="Projects"
-            title="Projects are arranged so outcomes and structural judgment appear first."
-            description="Featured projects are ordered as Geulda, OldYoung, Kubernetes, and CATXI. Selecting a card opens detailed resume context within the same flow."
+            eyebrow={strings.projects.eyebrow}
+            title={strings.projects.title}
+            description={strings.projects.description}
           />
 
           <div className="grid gap-4 lg:grid-cols-2">

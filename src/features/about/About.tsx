@@ -1,21 +1,25 @@
-import { profile } from '../../entities/profile/data'
+import { useProfile } from '../../entities/profile/useProfile'
+import { useStrings } from '../../shared/i18n/strings'
 import { Reveal } from '../../shared/ui/Reveal'
 import { SectionHeading } from '../../shared/ui/SectionHeading'
 import { TerminalFrame } from '../../shared/ui/TerminalFrame'
 
 export function About() {
+  const profile = useProfile()
+  const strings = useStrings()
+
   return (
     <section id="about" aria-labelledby="about-title" className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
       <Reveal>
         <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
           <SectionHeading
             id="about-title"
-            eyebrow="About"
-            title="I isolate operational bottlenecks by structure and prevent recurrence with automation."
-            description="I solve problems by organizing architecture before incident response and designing reproducible flows before manual work."
+            eyebrow={strings.about.eyebrow}
+            title={strings.about.title}
+            description={strings.about.description}
           />
 
-          <TerminalFrame label="Problem Solving">
+          <TerminalFrame label={strings.about.problemSolvingLabel}>
             <div className="space-y-5">
               {profile.aboutSummary.map((paragraph) => (
                 <p key={paragraph} className="text-sm leading-7 text-[var(--color-text-main)] md:text-base">

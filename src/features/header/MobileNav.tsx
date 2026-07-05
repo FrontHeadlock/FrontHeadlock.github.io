@@ -1,4 +1,5 @@
 import { AnimatePresence, m } from 'framer-motion'
+import { useLocale } from '../../shared/i18n/LocaleContext'
 import { cn } from '../../shared/lib/cn'
 
 type MobileNavProps = {
@@ -9,6 +10,8 @@ type MobileNavProps = {
 }
 
 export function MobileNav({ open, onClose, sections, activeSection }: MobileNavProps) {
+  const { locale, toggleLocale } = useLocale()
+
   return (
     <AnimatePresence>
       {open ? (
@@ -34,6 +37,14 @@ export function MobileNav({ open, onClose, sections, activeSection }: MobileNavP
                 {section.label}
               </a>
             ))}
+            <button
+              type="button"
+              onClick={toggleLocale}
+              aria-pressed={locale === 'ko'}
+              className="rounded-2xl border border-transparent px-4 py-3 text-left text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)]"
+            >
+              {locale === 'ko' ? '[KO]' : '[EN]'}
+            </button>
           </div>
         </m.nav>
       ) : null}

@@ -3,10 +3,11 @@ import { useAsciiHero } from '../../shared/hooks/useAsciiHero'
 
 type AsciiHeroProps = {
   text: string
+  srOnlyText?: string
   className?: string
 }
 
-export function AsciiHero({ text, className }: AsciiHeroProps) {
+export function AsciiHero({ text, srOnlyText, className }: AsciiHeroProps) {
   const { canvasRef, isReady, reducedMotion } = useAsciiHero(text)
 
   return (
@@ -17,7 +18,7 @@ export function AsciiHero({ text, className }: AsciiHeroProps) {
           !reducedMotion && isReady && 'sr-only',
         )}
       >
-        {text}
+        {srOnlyText ?? text}
       </h1>
       <canvas
         ref={canvasRef}

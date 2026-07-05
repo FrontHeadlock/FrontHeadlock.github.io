@@ -1,6 +1,6 @@
 import type { Project } from './types'
 
-export const projects: Project[] = [
+export const projectsEn: Project[] = [
   {
     slug: 'geulda',
     title: 'Geulda',

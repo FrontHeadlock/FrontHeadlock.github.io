@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { profile } from '../../entities/profile/data'
+import { profileEn } from '../../entities/profile/data.en'
 
 export type Command = {
   id: string
@@ -9,7 +9,7 @@ export type Command = {
   shortcut?: string
 }
 
-const emailLink = profile.links.find((link) => link.kind === 'email')
+const emailLink = profileEn.links.find((link) => link.kind === 'email')
 
 const COMMANDS: Command[] = [
   {
