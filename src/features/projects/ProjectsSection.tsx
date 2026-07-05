@@ -11,7 +11,7 @@ export function ProjectsSection() {
   const activeProject = projects.find((project) => project.slug === selectedSlug) ?? null
 
   return (
-    <section id="projects" aria-labelledby="projects-title" className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+    <section id="projects" aria-labelledby="projects-title" className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
       <Reveal>
         <div className="space-y-8">
           <SectionHeading

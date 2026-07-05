@@ -5,7 +5,7 @@ import { TerminalFrame } from '../../shared/ui/TerminalFrame'
 
 export function About() {
   return (
-    <section id="about" aria-labelledby="about-title" className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+    <section id="about" aria-labelledby="about-title" className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
       <Reveal>
         <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
           <SectionHeading
