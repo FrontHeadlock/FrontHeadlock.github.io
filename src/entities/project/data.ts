@@ -74,6 +74,10 @@ export const projects: Project[] = [
       'In recommendation products, a clear input experience often matters more than model sophistication.',
       'Aligning planning, design, backend, and deployment together accelerates both user flow quality and operational readiness.',
     ],
+    architectureNotes: [
+      'User Input -> Income Decile Calculation -> Welfare Match',
+      'Chatbot Response and Benefit Lookup share the same input-driven flow',
+    ],
     troubleshooting: [
       {
         title: 'Preventing Split Between Recommendation and Lookup Flows',
@@ -110,6 +114,10 @@ export const projects: Project[] = [
       'Latency improvements are stronger when consistency and failure boundaries are designed first.',
       'Operational quality is revealed more clearly in failure scenarios than in happy-path flows.',
     ],
+    architectureNotes: [
+      'Service A -> Saga Orchestrator -> Service B (compensating transaction on failure)',
+      'Circuit Breaker isolates high-latency zones from cascading failure',
+    ],
     troubleshooting: [
       {
         title: 'Separating Latency Zones from Failure Propagation',
@@ -145,6 +153,10 @@ export const projects: Project[] = [
     learnings: [
       'For auth optimization, exception handling location often matters more than token storage selection.',
       'Completing token reissue within the same request path improves both performance and client simplicity.',
+    ],
+    architectureNotes: [
+      'Client -> JwtFilter -> (expired) Redis RefreshToken Validate -> Reissue',
+      'New AccessToken / RefreshToken returned in response headers, SecurityContext rebuilt in-chain',
     ],
     troubleshooting: [
       {

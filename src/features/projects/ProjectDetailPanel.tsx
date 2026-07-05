@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import type { Project } from '../../entities/project/types'
+import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
 
 type ProjectDetailPanelProps = {
@@ -38,7 +39,10 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
           <motion.div layoutId={`project-card-${project.slug}`} className="space-y-4">
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">{project.title}</p>
             <h3 className="text-2xl font-semibold text-white md:text-3xl">{project.subtitle}</h3>
-            <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.overview}</p>
+            <div className="space-y-2">
+              <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Overview</h4>
+              <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.overview}</p>
+            </div>
             {project.architectureNotes ? (
               <div className="rounded-2xl border border-[var(--color-border)] bg-[#0b0f0c] p-4 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-subtle)]">
                 {project.architectureNotes.map((note) => (
@@ -51,12 +55,8 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
           </motion.div>
           <div className="rounded-3xl border border-[var(--color-border)] bg-[rgba(18,22,20,0.72)] p-5">
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Tech Stack</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {project.techStack.map((stack) => (
-                <span key={stack} className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-main)]">
-                  {stack}
-                </span>
-              ))}
+            <div className="mt-4">
+              <TechStackChips items={project.techStack} tone="main" />
             </div>
             <div className="mt-6 space-y-2">
               <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">Role</h4>
@@ -66,7 +66,6 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          <DetailBlock title="Overview" items={[project.overview]} />
           <DetailBlock title="Problem Context" items={project.problem} />
           <DetailBlock title="Approach" items={project.approach} />
           <DetailBlock title="Outcomes / Metrics" items={project.outcomes} />

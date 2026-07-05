@@ -1,4 +1,5 @@
 import type { ExperienceEntry } from '../../entities/experience/types'
+import { TechStackChips } from '../../shared/ui/TechStackChips'
 
 type TimelineEntryProps = {
   entry: ExperienceEntry
@@ -17,13 +18,7 @@ export function TimelineEntry({ entry }: TimelineEntryProps) {
           <p className="text-sm leading-6 text-[var(--color-text-muted)]">{entry.role}</p>
         </div>
         <p className="text-sm leading-7 text-[var(--color-text-main)]">{entry.summary}</p>
-        <div className="flex flex-wrap gap-2">
-          {entry.techStack.map((stack) => (
-            <span key={stack} className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-subtle)]">
-              {stack}
-            </span>
-          ))}
-        </div>
+        <TechStackChips items={entry.techStack} />
       </div>
     </article>
   )

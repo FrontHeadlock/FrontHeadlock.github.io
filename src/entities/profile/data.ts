@@ -33,7 +33,7 @@ export const profile: Profile = {
     },
     {
       label: 'Service Latency',
-      value: 'about 30% down',
+      value: '−30%',
       detail: 'Reduced response delay by restructuring services and isolating latency zones',
     },
   ],

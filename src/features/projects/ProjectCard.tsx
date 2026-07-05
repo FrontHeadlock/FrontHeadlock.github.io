@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import type { Project } from '../../entities/project/types'
 import { cn } from '../../shared/lib/cn'
+import { TechStackChips } from '../../shared/ui/TechStackChips'
 
 type ProjectCardProps = {
   project: Project
@@ -38,13 +39,7 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
         <p className="rounded-2xl border border-[var(--color-border)] bg-[rgba(24,30,27,0.82)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
           {project.focus}
         </p>
-        <div className="flex flex-wrap gap-2">
-          {project.techStack.map((stack) => (
-            <span key={stack} className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-subtle)]">
-              {stack}
-            </span>
-          ))}
-        </div>
+        <TechStackChips items={project.techStack} />
       </div>
     </motion.button>
   )
