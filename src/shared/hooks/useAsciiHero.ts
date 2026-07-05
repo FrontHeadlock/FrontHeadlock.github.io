@@ -79,7 +79,7 @@ export function useAsciiHero(text: string) {
       width = Math.max(parentWidth, 280)
       fontSize = isMobile ? Math.max(64, Math.floor(width * 0.14)) : Math.max(110, Math.floor(width * 0.15))
       height = Math.max(180, Math.ceil(fontSize * (isMobile ? 1.7 : 1.55)))
-      step = isMobile ? 4 : 5
+      step = isMobile ? 3 : 5
       charSize = isMobile ? 5 : 7
       mouseRadius = isMobile ? 64 : 96
       mouseForce = isMobile ? 3.8 : 3.2
@@ -113,14 +113,14 @@ export function useAsciiHero(text: string) {
         return
       }
 
-      measureContext.font = `700 ${fontSize}px "JetBrains Mono", monospace`
+      measureContext.font = `700 ${fontSize}px "JetBrains Mono Variable", monospace`
       const measuredWidth = measureContext.measureText(text).width || width
       const scaleRatio = Math.min(1, (width * 0.96) / measuredWidth)
       const scaledFontSize = Math.floor(fontSize * scaleRatio)
-      measureContext.font = `700 ${scaledFontSize}px "JetBrains Mono", monospace`
+      measureContext.font = `700 ${scaledFontSize}px "JetBrains Mono Variable", monospace`
 
       offscreenContext.clearRect(0, 0, width, height)
-      offscreenContext.font = `700 ${scaledFontSize}px "JetBrains Mono", monospace`
+      offscreenContext.font = `700 ${scaledFontSize}px "JetBrains Mono Variable", monospace`
       offscreenContext.fillStyle = '#ffffff'
       offscreenContext.textAlign = 'left'
       offscreenContext.textBaseline = 'middle'
@@ -197,7 +197,7 @@ export function useAsciiHero(text: string) {
       const characters = window.innerWidth < 768 ? MOBILE_CHARACTERS : DESKTOP_CHARACTERS
 
       context.clearRect(0, 0, width, height)
-      context.font = `600 ${charSize}px "JetBrains Mono", monospace`
+      context.font = `600 ${charSize}px "JetBrains Mono Variable", monospace`
       context.textAlign = 'center'
       context.textBaseline = 'middle'
       context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#00ff41'
@@ -239,6 +239,8 @@ export function useAsciiHero(text: string) {
       animationFrame = window.requestAnimationFrame(draw)
     }
 
+    let cancelled = false
+
     buildParticles()
     animationFrame = window.requestAnimationFrame(draw)
     window.addEventListener('resize', buildParticles)
@@ -248,7 +250,17 @@ export function useAsciiHero(text: string) {
     canvas.addEventListener('touchmove', handleTouch, { passive: true })
     canvas.addEventListener('touchend', handleTouchEnd)
 
+    // The initial buildParticles() call may sample text rendered in a fallback
+    // font if the self-hosted webfont hasn't finished loading yet. Re-sample
+    // once it's ready so particles match the intended glyph shapes.
+    document.fonts?.ready?.then(() => {
+      if (!cancelled) {
+        buildParticles()
+      }
+    })
+
     return () => {
+      cancelled = true
       window.cancelAnimationFrame(animationFrame)
       window.removeEventListener('resize', buildParticles)
       mediaQuery.removeEventListener?.('change', updateMotionPreference)

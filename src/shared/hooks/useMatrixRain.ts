@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { advanceColumn } from '../lib/matrixRain'
+import { useRainPreference } from './useRainPreference'
 
 type RainColumn = {
   x: number
@@ -15,10 +16,17 @@ type RainColumn = {
 
 export function useMatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const { enabled } = useRainPreference()
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!canvas) {
+      return
+    }
+
+    if (!enabled || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const idleContext = canvas.getContext('2d')
+      idleContext?.clearRect(0, 0, canvas.width, canvas.height)
       return
     }
 
@@ -42,7 +50,7 @@ export function useMatrixRain() {
 
     const resize = () => {
       canvas.width = window.innerWidth
-      canvas.height = Math.max(window.innerHeight, document.documentElement.scrollHeight)
+      canvas.height = window.innerHeight
       const spacing = 17
       const columnCount = Math.floor(canvas.width / spacing) + 1
       columns = Array.from({ length: columnCount }, (_, index) => ({
@@ -69,7 +77,7 @@ export function useMatrixRain() {
       columns.forEach((column) => {
         if (cachedFontSize !== column.size) {
           cachedFontSize = column.size
-          context.font = `400 ${column.size}px "JetBrains Mono", monospace`
+          context.font = `400 ${column.size}px "JetBrains Mono Variable", monospace`
         }
         const baseIndex = (Math.floor((column.y + timeMs * 0.05) / Math.max(column.size, 1)) + column.charShift) % charsetLength
 
@@ -107,15 +115,27 @@ export function useMatrixRain() {
       animationFrame = window.requestAnimationFrame(draw)
     }
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(animationFrame)
+        return
+      }
+
+      lastFrameTime = performance.now()
+      animationFrame = window.requestAnimationFrame(draw)
+    }
+
     resize()
     animationFrame = window.requestAnimationFrame(draw)
     window.addEventListener('resize', resize)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
       window.cancelAnimationFrame(animationFrame)
       window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [])
+  }, [enabled])
 
   return canvasRef
 }

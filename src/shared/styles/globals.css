@@ -1,3 +1,6 @@
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,10 +15,10 @@
   --color-border-strong: rgba(0, 255, 65, 0.38);
   --color-text-main: #e0e0e0;
   --color-text-muted: #aab4ab;
-  --color-text-subtle: #708070;
+  --color-text-subtle: #8a9a8c;
   --color-danger: #ff5f56;
   --color-warning: #ffbd2e;
-  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
 html {
@@ -30,7 +33,7 @@ body {
     radial-gradient(circle at top, rgba(0, 255, 65, 0.08), transparent 26%),
     linear-gradient(180deg, #0a0a0a 0%, #0a0d0b 100%);
   color: var(--color-text-main);
-  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
 #root {
