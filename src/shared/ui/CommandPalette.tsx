@@ -1,118 +1,7 @@
-import { useEffect, useState } from 'react'
+import type { Command } from '../hooks/useCommandPalette'
 import { cn } from '../lib/cn'
 
-type Command = {
-  id: string
-  label: string
-  description?: string
-  action: () => void
-  shortcut?: string
-}
-
-export function useCommandPalette() {
-  const [open, setOpen] = useState(false)
-  const [search, setSearch] = useState('')
-  const [selectedIndex, setSelectedIndex] = useState(0)
-
-  const commands: Command[] = [
-    {
-      id: 'goto-home',
-      label: 'Go to Home',
-      description: 'Navigate to the top of the page',
-      action: () => document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth' }),
-      shortcut: 'g h',
-    },
-    {
-      id: 'goto-about',
-      label: 'Go to About',
-      description: 'Jump to the About section',
-      action: () => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }),
-      shortcut: 'g a',
-    },
-    {
-      id: 'goto-experience',
-      label: 'Go to Experience',
-      description: 'Jump to the Experience section',
-      action: () => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' }),
-      shortcut: 'g e',
-    },
-    {
-      id: 'goto-projects',
-      label: 'Go to Projects',
-      description: 'Jump to the Projects section',
-      action: () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }),
-      shortcut: 'g p',
-    },
-    {
-      id: 'goto-contact',
-      label: 'Go to Contact',
-      description: 'Jump to the Contact section',
-      action: () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }),
-      shortcut: 'g c',
-    },
-    {
-      id: 'toggle-rain',
-      label: 'Toggle Rain',
-      description: 'Turn the matrix rain animation on or off',
-      action: () => document.querySelector('button[aria-pressed]')?.dispatchEvent(new MouseEvent('click', { bubbles: true })),
-      shortcut: 't r',
-    },
-    {
-      id: 'copy-email',
-      label: 'Copy Email',
-      description: 'Copy email address to clipboard',
-      action: () => {
-        const email = 'southvi1@naver.com'
-        navigator.clipboard.writeText(email)
-      },
-      shortcut: 'c e',
-    },
-  ]
-
-  const filtered = commands.filter((cmd) => cmd.label.toLowerCase().includes(search.toLowerCase()) || cmd.description?.toLowerCase().includes(search.toLowerCase()))
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setOpen(!open)
-        setSearch('')
-        setSelectedIndex(0)
-      }
-
-      if ((e.metaKey || e.ctrlKey) && e.key === '`') {
-        e.preventDefault()
-        setOpen(!open)
-        setSearch('')
-        setSelectedIndex(0)
-      }
-
-      if (open) {
-        if (e.key === 'Escape') {
-          setOpen(false)
-        } else if (e.key === 'ArrowDown') {
-          e.preventDefault()
-          setSelectedIndex((prev) => (prev + 1) % filtered.length)
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault()
-          setSelectedIndex((prev) => (prev - 1 + filtered.length) % filtered.length)
-        } else if (e.key === 'Enter') {
-          e.preventDefault()
-          filtered[selectedIndex]?.action()
-          setOpen(false)
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [open, search, selectedIndex, filtered])
-
-  return { open, setOpen, search, setSearch, selectedIndex, setSelectedIndex, filtered }
-}
-
 type CommandPaletteProps = {
-  open: boolean
   onClose: () => void
   search: string
   onSearchChange: (value: string) => void
@@ -121,9 +10,7 @@ type CommandPaletteProps = {
   onSelect: (command: Command) => void
 }
 
-export function CommandPalette({ open, onClose, search, onSearchChange, selectedIndex, commands, onSelect }: CommandPaletteProps) {
-  if (!open) return null
-
+export function CommandPalette({ onClose, search, onSearchChange, selectedIndex, commands, onSelect }: CommandPaletteProps) {
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
@@ -146,10 +33,8 @@ export function CommandPalette({ open, onClose, search, onSearchChange, selected
             commands.map((cmd, idx) => (
               <button
                 key={cmd.id}
-                onClick={() => {
-                  cmd.action()
-                  onClose()
-                }}
+                type="button"
+                onClick={() => onSelect(cmd)}
                 className={cn(
                   'w-full border-b border-[var(--color-border)] px-4 py-3 text-left transition',
                   idx === selectedIndex ? 'bg-[rgba(0,255,65,0.12)] text-[var(--color-accent)]' : 'text-[var(--color-text-main)] hover:bg-[rgba(0,255,65,0.06)]',
