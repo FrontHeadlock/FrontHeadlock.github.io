@@ -15,10 +15,10 @@ export function MobileNav({ open, onClose, sections, activeSection }: MobileNavP
         <motion.nav
           id="mobile-nav"
           aria-label="Mobile"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          className="border-t border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.96)] px-5 py-4 md:hidden"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="absolute inset-x-0 top-full border-t border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.96)] px-5 py-4 md:hidden"
         >
           <div className="grid gap-2">
             {sections.map((section) => (

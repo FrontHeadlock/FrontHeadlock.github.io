@@ -33,18 +33,22 @@ describe('App', () => {
         /I am a DevOps engineer who solves deployment, authentication, and operations bottlenecks at the architecture level\./i,
       ),
     )
-    expect(screen.getAllByRole('link', { name: /GitHub|Blog|Email|LinkedIn/i })).toHaveLength(4)
-    expect(screen.getByRole('link', { name: /GitHub/i })).toHaveAttribute('href', expect.stringContaining('github.com'))
+    expect(screen.getAllByRole('link', { name: /GitHub|Blog|Email|LinkedIn/i })).toHaveLength(8)
+    expect(screen.getAllByRole('link', { name: /GitHub/i })[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
     expect(screen.queryByRole('button', { name: /Resume PDF/i })).not.toBeInTheDocument()
     expect(screen.queryByText(/DevOps Portfolio/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/whoami/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Tech Stack/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /Contact/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /^Contact$/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^\[about\]$/i })).toHaveAttribute('href', '#about')
+    expect(screen.getByRole('link', { name: /^\[experience\]$/i })).toHaveAttribute('href', '#experience')
+    expect(screen.getByRole('link', { name: /^\[projects\]$/i })).toHaveAttribute('href', '#projects')
+    expect(screen.getByText(/session closed/i)).toBeInTheDocument()
     expect(container.firstChild).toHaveClass('relative', 'isolate')
     expect(container.querySelector('.matrix-layer')).toHaveClass('-z-10')
   })
 
-  it('renders project cards and expandable project details without tech/contact sections', async () => {
+  it('renders project cards and expandable project details without a tech-stack section', async () => {
     const user = userEvent.setup()
 
     render(<App />)
@@ -63,7 +67,7 @@ describe('App', () => {
       screen.queryByText(/Technologies are categorized by operational context, not listed in isolation\./i),
     ).not.toBeInTheDocument()
     expect(
-      screen.queryByText(/This portfolio is structured for fast review of key details and operational outcomes\./i),
-    ).not.toBeInTheDocument()
+      screen.getByText(/This portfolio is structured for fast review of key details and operational outcomes\./i),
+    ).toBeInTheDocument()
   })
 })
