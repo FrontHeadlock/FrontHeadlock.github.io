@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import type { Project } from '../../entities/project/types'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
@@ -24,7 +24,7 @@ function DetailBlock({ title, items }: { title: string; items: string[] }) {
 
 export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
   return (
-    <motion.div
+    <m.div
       id={`project-panel-${project.slug}`}
       layout
       layoutId={`project-panel-${project.slug}`}
@@ -36,7 +36,7 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
     >
       <div className="space-y-8">
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <motion.div layoutId={`project-card-${project.slug}`} className="space-y-4">
+          <m.div layoutId={`project-card-${project.slug}`} className="space-y-4">
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">{project.title}</p>
             <h3 className="text-2xl font-semibold text-white md:text-3xl">{project.subtitle}</h3>
             <div className="space-y-2">
@@ -52,7 +52,7 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
                 ))}
               </div>
             ) : null}
-          </motion.div>
+          </m.div>
           <div className="rounded-3xl border border-[var(--color-border)] bg-[rgba(18,22,20,0.72)] p-5">
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Tech Stack</p>
             <div className="mt-4">
@@ -81,6 +81,6 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
           </div>
         </section>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

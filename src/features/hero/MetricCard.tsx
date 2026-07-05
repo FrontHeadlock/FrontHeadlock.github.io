@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import type { ProfileMetric } from '../../entities/profile/types'
 
@@ -74,7 +74,7 @@ export function MetricCard({ metric, isLead = false, index }: MetricCardProps) {
   }
 
   return (
-    <motion.article
+    <m.article
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.42, delay: isLead ? 0.12 : 0.2 + index * 0.05 }}
@@ -89,6 +89,6 @@ export function MetricCard({ metric, isLead = false, index }: MetricCardProps) {
       <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-accent)]">{metric.label}</p>
       <p className="mt-3 text-xl font-semibold text-white transition duration-200 group-hover:text-[var(--color-accent)]">{displayValue}</p>
       <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">{metric.detail}</p>
-    </motion.article>
+    </m.article>
   )
 }

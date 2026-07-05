@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import type { Project } from '../../entities/project/types'
 import { cn } from '../../shared/lib/cn'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
@@ -11,7 +11,7 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
   return (
-    <motion.button
+    <m.button
       type="button"
       layout
       layoutId={`project-card-${project.slug}`}
@@ -41,6 +41,6 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
         </p>
         <TechStackChips items={project.techStack} />
       </div>
-    </motion.button>
+    </m.button>
   )
 }

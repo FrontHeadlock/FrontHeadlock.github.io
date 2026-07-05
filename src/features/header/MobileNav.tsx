@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { cn } from '../../shared/lib/cn'
 
 type MobileNavProps = {
@@ -12,7 +12,7 @@ export function MobileNav({ open, onClose, sections, activeSection }: MobileNavP
   return (
     <AnimatePresence>
       {open ? (
-        <motion.nav
+        <m.nav
           id="mobile-nav"
           aria-label="Mobile"
           initial={{ opacity: 0, y: -8 }}
@@ -35,7 +35,7 @@ export function MobileNav({ open, onClose, sections, activeSection }: MobileNavP
               </a>
             ))}
           </div>
-        </motion.nav>
+        </m.nav>
       ) : null}
     </AnimatePresence>
   )
