@@ -1,6 +1,4 @@
-import { useDecodeText } from '../hooks/useDecodeText'
-import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { DecodeLabel } from './DecodeLabel'
 
 type SectionHeadingProps = {
   id?: string
@@ -10,15 +8,10 @@ type SectionHeadingProps = {
 }
 
 export function SectionHeading({ id, eyebrow, title, description }: SectionHeadingProps) {
-  const { ref, revealed } = useScrollReveal()
-  const reducedMotion = usePrefersReducedMotion()
-  const decodedEyebrow = useDecodeText(eyebrow, revealed && !reducedMotion)
-
   return (
-    <div ref={ref} className="space-y-3">
+    <div className="space-y-3">
       <p className="font-mono text-xs uppercase tracking-[0.28em] text-[var(--color-accent)]">
-        <span className="sr-only">{eyebrow}</span>
-        <span aria-hidden="true">{decodedEyebrow}</span>
+        <DecodeLabel text={eyebrow} />
       </p>
       <div className="space-y-2">
         <h2 id={id} className="text-3xl font-semibold tracking-tight text-white md:text-4xl">

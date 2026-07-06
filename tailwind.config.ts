@@ -6,7 +6,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Pretendard Variable"', '"Apple SD Gothic Neo"', '"Noto Sans KR"', 'sans-serif'],
-        mono: ['"JetBrains Mono Variable"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        mono: ['"JetBrains Mono Variable"', '"Pretendard Variable"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

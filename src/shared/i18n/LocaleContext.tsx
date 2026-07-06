@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { documentMeta } from './meta'
 
 export type Locale = 'ko' | 'en'
 
@@ -30,6 +31,8 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale
+    document.title = documentMeta[locale].title
+    document.querySelector('meta[name="description"]')?.setAttribute('content', documentMeta[locale].description)
 
     try {
       window.localStorage.setItem(STORAGE_KEY, locale)

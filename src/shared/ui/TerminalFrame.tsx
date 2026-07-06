@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { DecodeLabel } from './DecodeLabel'
 
 type TerminalFrameProps = {
   label: string
@@ -15,7 +16,7 @@ export function TerminalFrame({ label, children, className }: TerminalFrameProps
           <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-warning)]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent)]" />
         </div>
-        <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">{label}</span>
+        <DecodeLabel text={label} className="font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--color-text-subtle)]" />
       </div>
       {children}
     </div>

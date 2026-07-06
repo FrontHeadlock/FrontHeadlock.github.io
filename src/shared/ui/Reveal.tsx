@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { cn } from '../lib/cn'
+import { REVEAL } from '../lib/motion'
 
 type RevealProps = {
   children: ReactNode
@@ -14,9 +15,9 @@ export function Reveal({ children, delay = 0 }: RevealProps) {
     <div
       ref={ref}
       data-reveal={revealed ? 'revealed' : 'pending'}
-      style={{ transitionDelay: `${delay}s` }}
+      style={{ transitionDelay: `${delay}s`, transitionDuration: `${REVEAL.duration}s` }}
       className={cn(
-        'transition duration-300 ease-out motion-reduce:!opacity-100 motion-reduce:!translate-y-0',
+        'transition ease-out motion-reduce:!opacity-100 motion-reduce:!translate-y-0',
         revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3',
       )}
     >

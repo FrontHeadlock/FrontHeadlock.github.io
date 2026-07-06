@@ -1,6 +1,7 @@
 import { m } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import type { ProfileMetric } from '../../entities/profile/types'
+import { REVEAL, staggerDelay } from '../../shared/lib/motion'
 
 type MetricCardProps = {
   metric: ProfileMetric
@@ -75,10 +76,10 @@ export function MetricCard({ metric, isLead = false, index }: MetricCardProps) {
 
   return (
     <m.article
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 0, y: REVEAL.distance }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.42, delay: isLead ? 0.12 : 0.2 + index * 0.05 }}
-      whileHover={{ y: -6 }}
+      transition={{ duration: REVEAL.duration, ease: REVEAL.ease, delay: staggerDelay(index) }}
+      whileHover={{ y: -2 }}
       onMouseEnter={playValueAnimation}
       onFocus={playValueAnimation}
       onMouseLeave={resetValue}
@@ -87,7 +88,9 @@ export function MetricCard({ metric, isLead = false, index }: MetricCardProps) {
       data-metric-card={isLead ? 'lead' : 'default'}
     >
       <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-accent)]">{metric.label}</p>
-      <p className="mt-3 text-xl font-semibold text-white transition duration-200 group-hover:text-[var(--color-accent)]">{displayValue}</p>
+      <p className="mt-3 font-mono text-2xl font-semibold tabular-nums tracking-tight text-white transition duration-200 group-hover:text-[var(--color-accent)]">
+        {displayValue}
+      </p>
       <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">{metric.detail}</p>
     </m.article>
   )

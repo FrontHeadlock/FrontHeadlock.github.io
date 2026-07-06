@@ -10,6 +10,8 @@
   --color-bg: #0a0a0a;
   --color-surface: #101312;
   --color-surface-strong: #131716;
+  --color-surface-card: rgba(18, 22, 20, 0.72);
+  --color-surface-deep: #0b0f0c;
   --color-accent: #00ff41;
   --color-border: rgba(224, 224, 224, 0.12);
   --color-border-strong: rgba(0, 255, 65, 0.38);
@@ -17,12 +19,26 @@
   --color-text-muted: #aab4ab;
   --color-text-subtle: #8a9a8c;
   --color-danger: #ff5f56;
+  --color-danger-soft: #ff8c82;
+  --color-danger-border: rgba(255, 95, 86, 0.3);
+  --color-danger-bg: rgba(255, 95, 86, 0.06);
   --color-warning: #ffbd2e;
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* 라틴 대문자용 광폭 자간(0.18~0.28em)은 한글 라벨에서 어색하게 벌어지므로 KO 로케일에서 축소 */
+html[lang='ko'] .font-mono {
+  letter-spacing: 0.05em;
 }
 
 body {

@@ -54,9 +54,9 @@ describe('App', () => {
     render(<App />)
 
     expect(screen.getByText(/Geulda Bucheon Tourism Promotion Application/i).closest('article')).toHaveClass(
-      'bg-[rgba(18,22,20,0.72)]',
+      'bg-[var(--color-surface-card)]',
     )
-    expect(screen.getByRole('button', { name: /Geulda/i })).toHaveClass('bg-[rgba(18,22,20,0.72)]')
+    expect(screen.getByRole('button', { name: /Geulda/i })).toHaveClass('bg-[var(--color-surface-card)]')
 
     await user.click(screen.getByRole('button', { name: /Geulda/i }))
 

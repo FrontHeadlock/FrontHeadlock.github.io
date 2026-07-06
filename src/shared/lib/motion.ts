@@ -1,5 +1,19 @@
-export const sectionReveal = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+/**
+ * 진입(reveal) 모션의 단일 기준값.
+ * CSS 기반 Reveal과 framer-motion 기반 컴포넌트(MetricCard 등)가
+ * 같은 타이밍 언어를 쓰도록 여기서만 정의한다.
+ */
+export const REVEAL = {
+  duration: 0.3,
+  distance: 12,
+  ease: 'easeOut',
+} as const
+
+export const STAGGER = {
+  step: 0.07,
+  max: 0.28,
+} as const
+
+export function staggerDelay(index: number) {
+  return Math.min(index * STAGGER.step, STAGGER.max)
 }

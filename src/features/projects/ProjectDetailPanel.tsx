@@ -14,7 +14,7 @@ function DetailBlock({ title, items }: { title: string; items: string[] }) {
       <h4 className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">{title}</h4>
       <ul className="grid gap-3">
         {items.map((item) => (
-          <li key={item} className="rounded-2xl border border-[var(--color-border)] bg-[rgba(18,22,20,0.72)] px-4 py-3 text-sm leading-7 text-[var(--color-text-main)]">
+          <li key={item} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-card)] px-4 py-3 text-sm leading-7 text-[var(--color-text-main)]">
             {item}
           </li>
         ))}
@@ -47,7 +47,7 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
               <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.overview}</p>
             </div>
             {project.architectureNotes ? (
-              <div className="rounded-2xl border border-[var(--color-border)] bg-[#0b0f0c] p-4 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-subtle)]">
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-deep)] p-4 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-subtle)]">
                 {project.architectureNotes.map((note) => (
                   <p key={note} className="leading-7">
                     {note}
@@ -56,7 +56,7 @@ export function ProjectDetailPanel({ project }: ProjectDetailPanelProps) {
               </div>
             ) : null}
           </m.div>
-          <div className="rounded-3xl border border-[var(--color-border)] bg-[rgba(18,22,20,0.72)] p-5">
+          <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface-card)] p-5">
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">{strings.projectDetail.techStack}</p>
             <div className="mt-4">
               <TechStackChips items={project.techStack} tone="main" />
