@@ -118,6 +118,40 @@ Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   value: () => createMockCanvasContext(),
 })
 
+class MemoryStorage implements Storage {
+  private store = new Map<string, string>()
+
+  get length() {
+    return this.store.size
+  }
+
+  clear() {
+    this.store.clear()
+  }
+
+  getItem(key: string) {
+    return this.store.has(key) ? (this.store.get(key) ?? null) : null
+  }
+
+  key(index: number) {
+    return [...this.store.keys()][index] ?? null
+  }
+
+  removeItem(key: string) {
+    this.store.delete(key)
+  }
+
+  setItem(key: string, value: string) {
+    this.store.set(key, String(value))
+  }
+}
+
+Object.defineProperty(window, 'localStorage', {
+  writable: true,
+  configurable: true,
+  value: new MemoryStorage(),
+})
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   configurable: true,
@@ -164,6 +198,7 @@ vi.mock('framer-motion', () => {
   return {
     AnimatePresence: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
     LazyMotion: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+    MotionConfig: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
     motion,
     m: motion,
     domMax: {},

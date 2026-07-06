@@ -5,7 +5,7 @@ type StringDictionary = {
   nav: { about: string; experience: string; projects: string }
   hero: { metricsLabel: string; coreResults: string; coreResultsDescription: string }
   about: { eyebrow: string; title: string; description: string; problemSolvingLabel: string }
-  experience: { eyebrow: string; title: string; description: string }
+  experience: { eyebrow: string; title: string; description: string; sequenceLog: string }
   projects: { eyebrow: string; title: string; description: string; open: string; expanded: string }
   projectDetail: {
     overview: string
@@ -19,6 +19,23 @@ type StringDictionary = {
   }
   contact: { eyebrow: string; title: string; description: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
+  palette: {
+    placeholder: string
+    noResults: string
+    hintToggle: string
+    hintNavigate: string
+    openAriaLabel: string
+    dialogLabel: string
+    commands: {
+      home: { label: string; description: string }
+      about: { label: string; description: string }
+      experience: { label: string; description: string }
+      projects: { label: string; description: string }
+      contact: { label: string; description: string }
+      rain: { label: string; description: string }
+      email: { label: string; description: string }
+    }
+  }
 }
 
 const en: StringDictionary = {
@@ -42,6 +59,7 @@ const en: StringDictionary = {
     title: 'Project and operations flow are organized so they read like a log.',
     description:
       'Experience entries are structured using provided date and role data. Items without period metadata are shown in sequence-log order.',
+    sequenceLog: 'Sequence log',
   },
   projects: {
     eyebrow: 'Projects',
@@ -73,6 +91,23 @@ const en: StringDictionary = {
     reachMeAt: ' reach me at ',
     backToTop: 'back to top ↑',
   },
+  palette: {
+    placeholder: 'Type a command or search...',
+    noResults: 'No commands found',
+    hintToggle: 'Cmd+K or Cmd+` to toggle',
+    hintNavigate: '↑↓ to navigate, Enter to select, Esc to close',
+    openAriaLabel: 'Open command palette',
+    dialogLabel: 'Command palette',
+    commands: {
+      home: { label: 'Go to Home', description: 'Navigate to the top of the page' },
+      about: { label: 'Go to About', description: 'Jump to the About section' },
+      experience: { label: 'Go to Experience', description: 'Jump to the Experience section' },
+      projects: { label: 'Go to Projects', description: 'Jump to the Projects section' },
+      contact: { label: 'Go to Contact', description: 'Jump to the Contact section' },
+      rain: { label: 'Toggle Rain', description: 'Turn the matrix rain animation on or off' },
+      email: { label: 'Copy Email', description: 'Copy email address to clipboard' },
+    },
+  },
 }
 
 const ko: StringDictionary = {
@@ -95,6 +130,7 @@ const ko: StringDictionary = {
     title: '프로젝트와 운영 흐름을 로그처럼 읽히도록 구성했습니다.',
     description:
       '경력 항목은 제공된 기간·역할 데이터를 기준으로 구성됩니다. 기간 정보가 없는 항목은 시퀀스 로그 순서로 표시됩니다.',
+    sequenceLog: '시퀀스 로그',
   },
   projects: {
     eyebrow: '프로젝트',
@@ -125,6 +161,23 @@ const ko: StringDictionary = {
     sessionClosed: '> 세션 종료.',
     reachMeAt: ' 연락처: ',
     backToTop: '맨 위로 ↑',
+  },
+  palette: {
+    placeholder: '명령어를 입력하거나 검색하세요...',
+    noResults: '일치하는 명령이 없습니다',
+    hintToggle: 'Cmd+K 또는 Cmd+` 로 열기/닫기',
+    hintNavigate: '↑↓ 이동, Enter 실행, Esc 닫기',
+    openAriaLabel: '커맨드 팔레트 열기',
+    dialogLabel: '커맨드 팔레트',
+    commands: {
+      home: { label: '홈으로 이동', description: '페이지 맨 위로 이동합니다' },
+      about: { label: '소개로 이동', description: '소개 섹션으로 이동합니다' },
+      experience: { label: '경력으로 이동', description: '경력 섹션으로 이동합니다' },
+      projects: { label: '프로젝트로 이동', description: '프로젝트 섹션으로 이동합니다' },
+      contact: { label: '연락처로 이동', description: '연락처 섹션으로 이동합니다' },
+      rain: { label: '매트릭스 비 전환', description: '매트릭스 비 애니메이션을 켜거나 끕니다' },
+      email: { label: '이메일 복사', description: '이메일 주소를 클립보드에 복사합니다' },
+    },
   },
 }
 

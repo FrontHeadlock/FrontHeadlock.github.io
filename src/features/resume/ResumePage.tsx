@@ -1,4 +1,4 @@
-import { LazyMotion } from 'framer-motion'
+import { LazyMotion, MotionConfig } from 'framer-motion'
 import { Suspense, lazy } from 'react'
 import { About } from '../about/About'
 import { Contact } from '../contact/Contact'
@@ -24,14 +24,14 @@ function ResumePageContent() {
 
   return (
     <LazyMotion features={loadFramerFeatures} strict>
-      <RainPreferenceProvider>
+      <MotionConfig reducedMotion="user">
         <div className="relative isolate min-h-screen overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text-main)]">
           <div className="matrix-backdrop -z-20" aria-hidden="true" />
           <MatrixRainCanvas />
           <a href="#main-content" className="sr-only focus:not-sr-only">
             {strings.skipToContent}
           </a>
-          <Header />
+          <Header onOpenPalette={() => setOpen(true)} />
           <main id="main-content" className="relative z-10">
             <Hero />
             <About />
@@ -56,7 +56,7 @@ function ResumePageContent() {
             </Suspense>
           ) : null}
         </div>
-      </RainPreferenceProvider>
+      </MotionConfig>
     </LazyMotion>
   )
 }
@@ -64,7 +64,9 @@ function ResumePageContent() {
 export function ResumePage() {
   return (
     <LocaleProvider>
-      <ResumePageContent />
+      <RainPreferenceProvider>
+        <ResumePageContent />
+      </RainPreferenceProvider>
     </LocaleProvider>
   )
 }

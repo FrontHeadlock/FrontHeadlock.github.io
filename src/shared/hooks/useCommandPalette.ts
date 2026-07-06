@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { profileEn } from '../../entities/profile/data.en'
+import { useProfile } from '../../entities/profile/useProfile'
+import { useStrings } from '../i18n/strings'
+import { useRainPreference } from './useRainPreference'
 
 export type Command = {
   id: string
@@ -9,81 +11,58 @@ export type Command = {
   shortcut?: string
 }
 
-const emailLink = profileEn.links.find((link) => link.kind === 'email')
-
-const COMMANDS: Command[] = [
-  {
-    id: 'goto-home',
-    label: 'Go to Home',
-    description: 'Navigate to the top of the page',
-    action: () => document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth' }),
-    shortcut: 'g h',
-  },
-  {
-    id: 'goto-about',
-    label: 'Go to About',
-    description: 'Jump to the About section',
-    action: () => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }),
-    shortcut: 'g a',
-  },
-  {
-    id: 'goto-experience',
-    label: 'Go to Experience',
-    description: 'Jump to the Experience section',
-    action: () => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' }),
-    shortcut: 'g e',
-  },
-  {
-    id: 'goto-projects',
-    label: 'Go to Projects',
-    description: 'Jump to the Projects section',
-    action: () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }),
-    shortcut: 'g p',
-  },
-  {
-    id: 'goto-contact',
-    label: 'Go to Contact',
-    description: 'Jump to the Contact section',
-    action: () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }),
-    shortcut: 'g c',
-  },
-  {
-    id: 'toggle-rain',
-    label: 'Toggle Rain',
-    description: 'Turn the matrix rain animation on or off',
-    action: () => document.querySelector('button[aria-pressed]')?.dispatchEvent(new MouseEvent('click', { bubbles: true })),
-    shortcut: 't r',
-  },
-  ...(emailLink
-    ? [
-        {
-          id: 'copy-email',
-          label: 'Copy Email',
-          description: 'Copy email address to clipboard',
-          action: () => {
-            navigator.clipboard.writeText(emailLink.value)
-          },
-          shortcut: 'c e',
-        },
-      ]
-    : []),
-]
+function scrollToSection(id: string) {
+  const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  document.getElementById(id)?.scrollIntoView({ behavior })
+}
 
 export function useCommandPalette() {
+  const strings = useStrings()
+  const profile = useProfile()
+  const { toggle: toggleRain } = useRainPreference()
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
 
+  const commands = useMemo<Command[]>(() => {
+    const labels = strings.palette.commands
+    const emailLink = profile.links.find((link) => link.kind === 'email')
+
+    return [
+      { id: 'goto-home', ...labels.home, action: () => scrollToSection('main-content'), shortcut: 'g h' },
+      { id: 'goto-about', ...labels.about, action: () => scrollToSection('about'), shortcut: 'g a' },
+      { id: 'goto-experience', ...labels.experience, action: () => scrollToSection('experience'), shortcut: 'g e' },
+      { id: 'goto-projects', ...labels.projects, action: () => scrollToSection('projects'), shortcut: 'g p' },
+      { id: 'goto-contact', ...labels.contact, action: () => scrollToSection('contact'), shortcut: 'g c' },
+      { id: 'toggle-rain', ...labels.rain, action: toggleRain, shortcut: 't r' },
+      ...(emailLink
+        ? [
+            {
+              id: 'copy-email',
+              ...labels.email,
+              action: () => {
+                navigator.clipboard.writeText(emailLink.value)
+              },
+              shortcut: 'c e',
+            },
+          ]
+        : []),
+    ]
+  }, [strings, profile, toggleRain])
+
   const filtered = useMemo(
     () =>
-      COMMANDS.filter(
+      commands.filter(
         (cmd) => cmd.label.toLowerCase().includes(search.toLowerCase()) || cmd.description?.toLowerCase().includes(search.toLowerCase()),
       ),
-    [search],
+    [commands, search],
   )
 
   const latest = useRef({ open, filtered, selectedIndex })
-  latest.current = { open, filtered, selectedIndex }
+
+  useEffect(() => {
+    latest.current = { open, filtered, selectedIndex }
+  })
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

@@ -9,7 +9,11 @@ import { MobileNav } from './MobileNav'
 
 const SECTION_IDS = ['about', 'experience', 'projects']
 
-export function Header() {
+type HeaderProps = {
+  onOpenPalette: () => void
+}
+
+export function Header({ onOpenPalette }: HeaderProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const activeSection = useActiveSection(SECTION_IDS)
   const { enabled: rainEnabled, toggle: toggleRain } = useRainPreference()
@@ -25,7 +29,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.78)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
-        <div className="group flex items-center gap-3" aria-label="Resume status">
+        <div className="group flex items-center gap-3">
           <span className="relative flex h-2.5 w-2.5">
             <span
               aria-hidden="true"
@@ -73,18 +77,36 @@ export function Header() {
           >
             {rainEnabled ? 'live rain' : 'rain off'}
           </button>
+          <button
+            type="button"
+            onClick={onOpenPalette}
+            aria-label={strings.palette.openAriaLabel}
+            className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
+          >
+            ⌘K
+          </button>
         </nav>
 
-        <button
-          type="button"
-          aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileNavOpen}
-          aria-controls="mobile-nav"
-          onClick={() => setMobileNavOpen((open) => !open)}
-          className="text-[var(--color-text-main)] md:hidden"
-        >
-          {mobileNavOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex items-center gap-3 md:hidden">
+          <button
+            type="button"
+            onClick={onOpenPalette}
+            aria-label={strings.palette.openAriaLabel}
+            className="rounded-full border border-[var(--color-border)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]"
+          >
+            ⌘K
+          </button>
+          <button
+            type="button"
+            aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileNavOpen}
+            aria-controls="mobile-nav"
+            onClick={() => setMobileNavOpen((open) => !open)}
+            className="text-[var(--color-text-main)]"
+          >
+            {mobileNavOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       <MobileNav
