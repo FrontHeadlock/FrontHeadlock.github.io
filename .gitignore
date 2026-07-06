@@ -5,3 +5,4 @@ docs/
 *.tsbuildinfo
 src/features/onboarding/
 src/shared/styles/onboarding.css
+.omc/

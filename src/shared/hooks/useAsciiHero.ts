@@ -69,6 +69,9 @@ export function useAsciiHero(text: string) {
     let charSize = 7
     let mouseRadius = 90
     let mouseForce = 3.2
+    let accentColor = '#00ff41'
+    let running = false
+    let inViewport = true
     const startedAt = performance.now()
 
     const buildParticles = () => {
@@ -89,6 +92,8 @@ export function useAsciiHero(text: string) {
       canvas.width = Math.floor(width * dpr)
       canvas.height = Math.floor(height * dpr)
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+      accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#00ff41'
 
       const offscreenCanvas = document.createElement('canvas')
       offscreenCanvas.width = width
@@ -200,7 +205,7 @@ export function useAsciiHero(text: string) {
       context.font = `600 ${charSize}px "JetBrains Mono Variable", monospace`
       context.textAlign = 'center'
       context.textBaseline = 'middle'
-      context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#00ff41'
+      context.fillStyle = accentColor
 
       particles.forEach((particle) => {
         particle.vx += (particle.tx - particle.x) * SPRING
@@ -236,14 +241,65 @@ export function useAsciiHero(text: string) {
       })
 
       context.globalAlpha = 1
+
+      if (running) {
+        animationFrame = window.requestAnimationFrame(draw)
+      }
+    }
+
+    const startLoop = () => {
+      if (running) {
+        return
+      }
+
+      running = true
       animationFrame = window.requestAnimationFrame(draw)
+    }
+
+    const stopLoop = () => {
+      running = false
+      window.cancelAnimationFrame(animationFrame)
+    }
+
+    const syncLoop = () => {
+      if (document.hidden || !inViewport) {
+        stopLoop()
+      } else {
+        startLoop()
+      }
+    }
+
+    const viewportObserver =
+      typeof IntersectionObserver === 'function'
+        ? new IntersectionObserver(([entry]) => {
+            inViewport = entry?.isIntersecting ?? true
+            syncLoop()
+          })
+        : null
+
+    // 모바일 주소창 show/hide가 스크롤 중 resize를 연발하므로,
+    // 폭이 실제로 변한 경우에만 150ms 트레일링으로 재샘플링한다.
+    let resizeTimer = 0
+    let lastInnerWidth = window.innerWidth
+    const handleResize = () => {
+      if (window.innerWidth === lastInnerWidth) {
+        return
+      }
+
+      window.clearTimeout(resizeTimer)
+      resizeTimer = window.setTimeout(() => {
+        lastInnerWidth = window.innerWidth
+        buildParticles()
+      }, 150)
     }
 
     let cancelled = false
 
     buildParticles()
-    animationFrame = window.requestAnimationFrame(draw)
-    window.addEventListener('resize', buildParticles)
+    startLoop()
+    viewportObserver?.observe(canvas)
+    document.addEventListener('visibilitychange', syncLoop)
+    window.addEventListener('resize', handleResize)
     canvas.addEventListener('mousemove', handlePointerMove, { passive: true })
     canvas.addEventListener('mouseleave', handlePointerLeave)
     canvas.addEventListener('touchstart', handleTouch, { passive: true })
@@ -261,8 +317,11 @@ export function useAsciiHero(text: string) {
 
     return () => {
       cancelled = true
-      window.cancelAnimationFrame(animationFrame)
-      window.removeEventListener('resize', buildParticles)
+      stopLoop()
+      window.clearTimeout(resizeTimer)
+      viewportObserver?.disconnect()
+      document.removeEventListener('visibilitychange', syncLoop)
+      window.removeEventListener('resize', handleResize)
       mediaQuery.removeEventListener?.('change', updateMotionPreference)
       canvas.removeEventListener('mousemove', handlePointerMove)
       canvas.removeEventListener('mouseleave', handlePointerLeave)
@@ -270,7 +329,7 @@ export function useAsciiHero(text: string) {
       canvas.removeEventListener('touchmove', handleTouch)
       canvas.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [text])
+  }, [text, reducedMotion])
 
   return { canvasRef, isReady, reducedMotion }
 }

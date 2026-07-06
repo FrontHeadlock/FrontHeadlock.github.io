@@ -125,14 +125,36 @@ export function useMatrixRain() {
       animationFrame = window.requestAnimationFrame(draw)
     }
 
+    // 컬럼 재생성은 비싼 작업 — 모바일 주소창 show/hide가 만드는 높이만의 잔변화는
+    // 무시하고, 실제 레이아웃 변화만 150ms 트레일링으로 반영한다.
+    let resizeTimer = 0
+    let lastInnerWidth = window.innerWidth
+    let lastInnerHeight = window.innerHeight
+    const handleResize = () => {
+      const widthChanged = window.innerWidth !== lastInnerWidth
+      const heightChanged = Math.abs(window.innerHeight - lastInnerHeight) > 140
+
+      if (!widthChanged && !heightChanged) {
+        return
+      }
+
+      window.clearTimeout(resizeTimer)
+      resizeTimer = window.setTimeout(() => {
+        lastInnerWidth = window.innerWidth
+        lastInnerHeight = window.innerHeight
+        resize()
+      }, 150)
+    }
+
     resize()
     animationFrame = window.requestAnimationFrame(draw)
-    window.addEventListener('resize', resize)
+    window.addEventListener('resize', handleResize)
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
       window.cancelAnimationFrame(animationFrame)
-      window.removeEventListener('resize', resize)
+      window.clearTimeout(resizeTimer)
+      window.removeEventListener('resize', handleResize)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [enabled])
