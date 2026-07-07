@@ -16,7 +16,9 @@ describe('BootSequence', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /KyuminPark/i })).toBeInTheDocument()
     // 첫 줄이 디코드를 마치고 원문으로 resolve되는지 확인 (~0.58s).
-    expect(await screen.findByText('> boot resume.node --target=portfolio')).toBeInTheDocument()
+    // 기본 findBy 타임아웃(1000ms)은 느린 CI 러너에서 실시간 setInterval 기반
+    // 디코드 애니메이션에 여유가 부족해 간헐적으로 실패했다 — 여유를 넉넉히 둔다.
+    expect(await screen.findByText('> boot resume.node --target=portfolio', {}, { timeout: 5000 })).toBeInTheDocument()
   })
 
   it('dismisses via the skip button and stays hidden for the rest of the session', async () => {
