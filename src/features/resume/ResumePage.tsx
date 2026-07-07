@@ -1,6 +1,7 @@
 import { LazyMotion, MotionConfig } from 'framer-motion'
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { About } from '../about/About'
+import { BootSequence, shouldShowBootSequence } from '../boot/BootSequence'
 import { Contact } from '../contact/Contact'
 import { ExperienceTimeline } from '../experience/ExperienceTimeline'
 import { Footer } from '../footer/Footer'
@@ -21,6 +22,8 @@ const CommandPalette = lazy(() => import('../../shared/ui/CommandPalette').then(
 function ResumePageContent() {
   const { open, setOpen, search, setSearch, selectedIndex, filtered } = useCommandPalette()
   const strings = useStrings()
+  // 첫 렌더에서 동기 판정 — 이력서가 먼저 보였다가 오버레이가 덮는 플래시를 막는다.
+  const [bootActive, setBootActive] = useState(() => shouldShowBootSequence())
 
   return (
     <LazyMotion features={loadFramerFeatures} strict>
@@ -55,6 +58,7 @@ function ResumePageContent() {
               />
             </Suspense>
           ) : null}
+          {bootActive ? <BootSequence onDone={() => setBootActive(false)} /> : null}
         </div>
       </MotionConfig>
     </LazyMotion>

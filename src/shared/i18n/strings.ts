@@ -19,6 +19,7 @@ type StringDictionary = {
   }
   contact: { eyebrow: string; title: string; description: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
+  boot: { ariaLabel: string; skip: string; skipAriaLabel: string; lines: string[] }
   palette: {
     placeholder: string
     noResults: string
@@ -91,6 +92,17 @@ const en: StringDictionary = {
     reachMeAt: ' reach me at ',
     backToTop: 'back to top ↑',
   },
+  boot: {
+    ariaLabel: 'Boot sequence',
+    skip: '[ skip ]',
+    skipAriaLabel: 'Skip intro',
+    lines: [
+      '> boot resume.node --target=portfolio',
+      '> loading modules … [experience] [projects]',
+      '> integrity check … ok',
+      '> access granted — rendering interface',
+    ],
+  },
   palette: {
     placeholder: 'Type a command or search...',
     noResults: 'No commands found',
@@ -161,6 +173,17 @@ const ko: StringDictionary = {
     sessionClosed: '> 세션 종료.',
     reachMeAt: ' 연락처: ',
     backToTop: '맨 위로 ↑',
+  },
+  boot: {
+    ariaLabel: '부팅 시퀀스',
+    skip: '[ 건너뛰기 ]',
+    skipAriaLabel: '인트로 건너뛰기',
+    lines: [
+      '> resume.node 부팅 --target=portfolio',
+      '> 모듈 로딩 … [경력] [프로젝트]',
+      '> 무결성 검사 … ok',
+      '> 접속 승인 — 인터페이스 렌더링',
+    ],
   },
   palette: {
     placeholder: '명령어를 입력하거나 검색하세요...',

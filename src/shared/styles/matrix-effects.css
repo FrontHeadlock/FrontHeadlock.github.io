@@ -16,3 +16,128 @@
   height: 100%;
   opacity: 0.9;
 }
+
+/* 로그 텍스트가 동일 색의 볼텍스 선 위에서도 판독되도록 하는 박스리스 스크림 —
+   테두리 있는 패널은 금지 (오버레이는 "UI"가 아니라 "공간"으로 읽혀야 함) */
+.boot-scrim {
+  background: radial-gradient(ellipse, rgba(10, 10, 10, 0.94) 35%, rgba(10, 10, 10, 0.7) 60%, transparent 78%);
+}
+
+/* 화면 가장자리를 어둡게 감싸 소용돌이가 캔버스 경계에서 뚝 끊기지 않고
+   중심으로 시선이 모이도록 하는 비네트 (박스 테두리 없이 "공간감"만 추가) */
+.boot-vignette {
+  background: radial-gradient(ellipse at 50% 46%, transparent 45%, rgba(2, 4, 3, 0.55) 85%, rgba(2, 4, 3, 0.8) 100%);
+}
+
+.boot-cursor {
+  animation: boot-cursor-blink 0.9s steps(1, end) infinite;
+}
+
+@keyframes boot-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 마운트 첫 프레임에 터진 뒤 빠르게 잦아드는 화이트-그린 섬광 — "시스템 기동" 순간의 충격. */
+.boot-flash {
+  background: radial-gradient(circle at 50% 46%, rgba(235, 255, 245, 1) 4%, rgba(0, 255, 65, 0.55) 42%, transparent 76%);
+  mix-blend-mode: screen;
+  animation: boot-flash 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes boot-flash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 신호 간섭처럼 깜빡이는 스캔라인 — 매트릭스 레인 없이도 "해킹 침투" 인상을 준다.
+   버스트 구간(~0.85s)에만 겹치고 이후엔 정지 상태로 남아 텍스트 판독을 방해하지 않는다. */
+.boot-glitch {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 65, 0.5) 0px,
+    rgba(0, 255, 65, 0.5) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: boot-glitch 1.3s steps(1, end) forwards;
+}
+
+@keyframes boot-glitch {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  5% {
+    opacity: 0.6;
+    transform: translateX(-9px);
+  }
+  8% {
+    opacity: 0.15;
+    transform: translateX(6px);
+  }
+  13% {
+    opacity: 0.55;
+    transform: translateX(-5px);
+  }
+  17% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.4;
+    transform: translateX(7px);
+  }
+  34% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.28;
+    transform: translateX(-5px);
+  }
+  54% {
+    opacity: 0;
+  }
+}
+
+/* 진입 순간 카메라가 터널 속으로 훅 밀고 들어오는 펀치인 — 정지 이미지를 순식간에 깨운다. */
+.boot-punch-in {
+  animation: boot-punch-in 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes boot-punch-in {
+  0% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 부팅 오버레이는 reduced-motion에서 마운트 자체를 막지만, CSS 단독 방어선도 유지한다 */
+@media (prefers-reduced-motion: reduce) {
+  .boot-cursor {
+    animation: none;
+  }
+
+  .boot-flash,
+  .boot-glitch,
+  .boot-punch-in {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* 부트 재생 중 인쇄 시 오버레이가 찍히지 않도록 방어 */
+@media print {
+  .boot-overlay {
+    display: none;
+  }
+}

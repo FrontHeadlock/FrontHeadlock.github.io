@@ -17,3 +17,14 @@ export const STAGGER = {
 export function staggerDelay(index: number) {
   return Math.min(index * STAGGER.step, STAGGER.max)
 }
+
+/**
+ * 부팅 시퀀스 오버레이 타이밍. lineStagger는 useDecodeText의 고정 파라미터
+ * (18프레임 × 32ms ≈ 0.576s/줄)를 기준 단위로 겹쳐 리듬을 만든다.
+ */
+export const BOOT = {
+  lineStagger: 0.36,
+  autoDismiss: 10,
+  fade: 0.35,
+  exitSpeedRamp: 3,
+} as const
