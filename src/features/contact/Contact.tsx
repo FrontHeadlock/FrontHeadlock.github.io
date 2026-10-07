@@ -30,7 +30,7 @@ export function Contact() {
                 </div>
                 <ul className="grid gap-2">
                   {profile.deliveryMeta.map((item) => (
-                    <li key={item} className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-text-subtle)]">
+                    <li key={item} className="font-mono text-label uppercase tracking-label text-[var(--color-text-subtle)]">
                       {item}
                     </li>
                   ))}

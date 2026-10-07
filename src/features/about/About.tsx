@@ -28,8 +28,8 @@ export function About() {
               ))}
               <ul className="grid gap-3 pt-2">
                 {profile.strengths.map((strength, index) => (
-                  <li key={strength} className="flex gap-3 rounded-2xl border border-[var(--color-border)] px-4 py-3">
-                    <span className="font-mono text-xs text-[var(--color-accent)]">{`0${index + 1}`}</span>
+                  <li key={strength} className="flex gap-3 rounded-inner border border-[var(--color-border)] px-4 py-3">
+                    <span className="font-mono text-label text-[var(--color-accent)]">{`0${index + 1}`}</span>
                     <span className="text-sm leading-6 text-[var(--color-text-muted)]">{strength}</span>
                   </li>
                 ))}

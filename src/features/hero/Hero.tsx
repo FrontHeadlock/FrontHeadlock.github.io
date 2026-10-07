@@ -33,7 +33,7 @@ export function Hero() {
         <TerminalFrame label={strings.hero.metricsLabel} className="xl:mb-2">
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">{strings.hero.coreResults}</p>
+              <p className="font-mono text-label uppercase tracking-label text-[var(--color-text-subtle)]">{strings.hero.coreResults}</p>
               <p className="text-sm leading-6 text-[var(--color-text-muted)]">{strings.hero.coreResultsDescription}</p>
             </div>
             <MetricGrid metrics={profile.metrics} />

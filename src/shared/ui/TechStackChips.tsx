@@ -10,7 +10,7 @@ export function TechStackChips({ items, tone = 'subtle', visibleCount = 5 }: Tec
   const visible = items.slice(0, visibleCount)
   const overflow = items.slice(visibleCount)
   const toneClass = tone === 'main' ? 'text-[var(--color-text-main)]' : 'text-[var(--color-text-subtle)]'
-  const chipClass = 'rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-xs uppercase tracking-[0.12em]'
+  const chipClass = 'rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-label tracking-label-tight'
 
   return (
     <div className="flex flex-wrap gap-2">

@@ -84,10 +84,10 @@ export function MetricCard({ metric, isLead = false, index }: MetricCardProps) {
       onFocus={playValueAnimation}
       onMouseLeave={resetValue}
       onBlur={resetValue}
-      className="group rounded-2xl border border-[var(--color-border)] bg-[rgba(255,255,255,0.03)] p-4 transition duration-300 hover:border-[var(--color-border-strong)] hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]"
+      className="group rounded-inner border border-[var(--color-border)] bg-[rgba(255,255,255,0.03)] p-4 transition duration-300 hover:border-[var(--color-border-strong)] hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]"
       data-metric-card={isLead ? 'lead' : 'default'}
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-accent)]">{metric.label}</p>
+      <p className="font-mono text-label-sm uppercase tracking-label text-[var(--color-accent)]">{metric.label}</p>
       <p className="mt-3 font-mono text-2xl font-semibold tabular-nums tracking-tight text-white transition duration-200 group-hover:text-[var(--color-accent)]">
         {displayValue}
       </p>

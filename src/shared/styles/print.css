@@ -135,8 +135,8 @@
     transform: none !important;
   }
 
-  .rounded-3xl,
-  .rounded-2xl,
+  .rounded-card,
+  .rounded-inner,
   .rounded-full {
     border-radius: 0;
   }

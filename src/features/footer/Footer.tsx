@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="border-t border-[rgba(255,255,255,0.06)] px-5 py-8 md:px-8">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 text-center">
-        <p className="font-mono text-xs text-[var(--color-text-subtle)]">
+        <p className="font-mono text-label text-[var(--color-text-subtle)]">
           {strings.footer.sessionClosed}
           {emailLink ? (
             <>
@@ -22,7 +22,7 @@ export function Footer() {
         </p>
         <a
           href="#main-content"
-          className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-subtle)] transition hover:text-[var(--color-accent)]"
+          className="font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)] transition hover:text-[var(--color-accent)]"
         >
           {strings.footer.backToTop}
         </a>

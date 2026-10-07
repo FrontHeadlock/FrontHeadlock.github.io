@@ -69,7 +69,7 @@ export function CommandPalette({ onClose, search, onSearchChange, selectedIndex,
         role="dialog"
         aria-modal="true"
         aria-label={strings.palette.dialogLabel}
-        className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-strong)] shadow-lg"
+        className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-inner border border-[var(--color-border-strong)] bg-[var(--color-surface-strong)] shadow-lg"
       >
         <div className="border-b border-[var(--color-border)] px-4 py-3">
           <input
@@ -110,14 +110,14 @@ export function CommandPalette({ onClose, search, onSearchChange, selectedIndex,
                     <div className="font-mono text-sm">{cmd.label}</div>
                     {cmd.description && <div className="text-xs text-[var(--color-text-muted)]">{cmd.description}</div>}
                   </div>
-                  {cmd.shortcut && <div className="font-mono text-[10px] text-[var(--color-text-subtle)]">{cmd.shortcut}</div>}
+                  {cmd.shortcut && <div className="font-mono text-label-sm text-[var(--color-text-subtle)]">{cmd.shortcut}</div>}
                 </div>
               </button>
             ))
           )}
         </div>
 
-        <div className="border-t border-[var(--color-border)] px-4 py-2 text-[10px] text-[var(--color-text-subtle)]">
+        <div className="border-t border-[var(--color-border)] px-4 py-2 text-label-sm text-[var(--color-text-subtle)]">
           <div className="flex justify-between">
             <span>{strings.palette.hintToggle}</span>
             <span>{strings.palette.hintNavigate}</span>

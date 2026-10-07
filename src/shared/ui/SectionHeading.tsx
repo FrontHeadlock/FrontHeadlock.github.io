@@ -10,7 +10,7 @@ type SectionHeadingProps = {
 export function SectionHeading({ id, eyebrow, title, description }: SectionHeadingProps) {
   return (
     <div className="space-y-3">
-      <p className="font-mono text-xs uppercase tracking-[0.28em] text-[var(--color-accent)]">
+      <p className="font-mono text-label uppercase tracking-label-wide text-[var(--color-accent)]">
         <DecodeLabel text={eyebrow} />
       </p>
       <div className="space-y-2">
