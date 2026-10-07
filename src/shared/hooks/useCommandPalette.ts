@@ -81,6 +81,7 @@ export function useCommandPalette() {
       }
 
       if (e.key === 'Escape') {
+        e.preventDefault()
         setOpen(false)
       } else if (e.key === 'ArrowDown') {
         e.preventDefault()

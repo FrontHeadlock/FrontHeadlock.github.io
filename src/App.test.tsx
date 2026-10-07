@@ -69,4 +69,25 @@ describe('App', () => {
       screen.getByText(/This portfolio is structured for fast review of key details and operational outcomes\./i),
     ).toBeInTheDocument()
   })
+
+  it('closes the expanded project panel from its close button or Escape and returns focus to the card', async () => {
+    const user = userEvent.setup()
+
+    render(<App />)
+
+    const card = screen.getByRole('button', { name: /Geulda/i })
+    await user.click(card)
+    expect(screen.getByText(/Overview/)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /^\[ Close \]$/ }))
+    expect(screen.queryByText(/Overview/)).not.toBeInTheDocument()
+    expect(card).toHaveFocus()
+
+    await user.click(card)
+    expect(screen.getByText(/Overview/)).toBeInTheDocument()
+
+    await user.keyboard('{Escape}')
+    expect(screen.queryByText(/Overview/)).not.toBeInTheDocument()
+    expect(card).toHaveFocus()
+  })
 })

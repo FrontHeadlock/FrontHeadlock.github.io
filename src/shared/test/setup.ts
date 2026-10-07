@@ -185,13 +185,24 @@ vi.mock('framer-motion', () => {
     return rest
   }
 
+  // 태그별로 컴포넌트를 캐시해 실제 framer처럼 컴포넌트 identity를 고정한다.
+  // 접근할 때마다 새 forwardRef를 만들면 리렌더마다 DOM이 교체되어 포커스·ref가 끊긴다.
+  const componentCache = new Map<string, React.ComponentType<React.HTMLAttributes<HTMLElement>>>()
   const motion = new Proxy(
     {},
     {
-      get: (_, tag: string) =>
-        React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(({ children, ...props }, ref) =>
+      get: (_, tag: string) => {
+        const cached = componentCache.get(tag)
+        if (cached) {
+          return cached
+        }
+
+        const component = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(({ children, ...props }, ref) =>
           React.createElement(tag, { ...stripMotionProps(props), ref }, children),
-        ),
+        )
+        componentCache.set(tag, component)
+        return component
+      },
     },
   )
 

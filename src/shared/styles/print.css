@@ -135,6 +135,16 @@
     transform: none !important;
   }
 
+  /* 타임라인 레일·노드는 화면 전용 장식 — 스크롤 노출 상태와 무관하게 인쇄에서는 제거 */
+  .timeline-rail,
+  .timeline-node {
+    display: none;
+  }
+
+  .timeline {
+    padding-left: 0;
+  }
+
   .rounded-card,
   .rounded-inner,
   .rounded-full {
