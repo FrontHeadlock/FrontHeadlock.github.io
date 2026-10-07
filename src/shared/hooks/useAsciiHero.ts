@@ -16,8 +16,18 @@ type AsciiParticle = {
 // 글자 형태는 particle 위치(텍스트 알파 마스크 샘플링)가 만들고, 글리프 자체는 0/1만 쓴다.
 // 디코드 중에는 0↔1이 프레임마다 뒤바뀌고, 정착 후에는 particle마다 고정된 비트로 남는다.
 const CHARACTERS = '01'
-const SPRING = 0.042
-const DAMPING = 0.88
+// 스프링 상수는 60fps 1프레임 기준값. draw()에서 경과 시간으로 보정하므로 프레임이 떨어져도 같은 속도로 수렴한다.
+const SPRING = 0.06
+const DAMPING = 0.86
+const FRAME_MS = 1000 / 60
+// 왼쪽→오른쪽 디코드 스윕과 글자별 스크램블 유지 시간(초). 마지막 글자가 약 1초 안에 자리 잡는다.
+const REVEAL_SWEEP = 0.5
+const REVEAL_JITTER = 0.12
+const SCRAMBLE_WINDOW = 0.4
+// 샘플링에 쓰는 웹폰트. 준비 전에 빌드하면 폴백 폰트 모양으로 샘플링했다가 폰트 도착 후 다시 흩뿌려야 하므로
+// 준비될 때까지(최대 FONT_WAIT_MS) 일반 h1을 그대로 보여 주고 한 번만 빌드한다.
+const HERO_FONT = '700 16px "JetBrains Mono Variable"'
+const FONT_WAIT_MS = 1500
 
 export function useAsciiHero(text: string) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -73,9 +83,14 @@ export function useAsciiHero(text: string) {
     let accentColor = '#00ff41'
     let running = false
     let inViewport = true
-    const startedAt = performance.now()
+    let cancelled = false
+    let fontTimer = 0
+    let startedAt = performance.now()
+    let lastFrameTime = startedAt
 
-    const buildParticles = () => {
+    // initial=true: 흩어진 위치에서 모여드는 인트로. false(리사이즈 재샘플링): 현재 자리 근처에서 바로 정착해
+    // 재흩뿌림이 보이지 않고, 디코드 타이밍도 되감지 않는다.
+    const buildParticles = (initial: boolean) => {
       const parentWidth = canvas.parentElement?.clientWidth ?? canvas.clientWidth ?? 640
       const isMobile = window.innerWidth < 768
 
@@ -123,7 +138,6 @@ export function useAsciiHero(text: string) {
       const measuredWidth = measureContext.measureText(text).width || width
       const scaleRatio = Math.min(1, (width * 0.96) / measuredWidth)
       const scaledFontSize = Math.floor(fontSize * scaleRatio)
-      measureContext.font = `700 ${scaledFontSize}px "JetBrains Mono Variable", monospace`
 
       offscreenContext.clearRect(0, 0, width, height)
       offscreenContext.font = `700 ${scaledFontSize}px "JetBrains Mono Variable", monospace`
@@ -144,8 +158,8 @@ export function useAsciiHero(text: string) {
           }
 
           particles.push({
-            x: x + (Math.random() - 0.5) * width * 0.42,
-            y: y + (Math.random() - 0.5) * height * 1.9,
+            x: initial ? x + (Math.random() - 0.5) * width * 0.42 : x + (Math.random() - 0.5) * 12,
+            y: initial ? y + (Math.random() - 0.5) * height * 1.9 : y + (Math.random() - 0.5) * 12,
             tx: x,
             ty: y,
             vx: 0,
@@ -153,9 +167,14 @@ export function useAsciiHero(text: string) {
             char: CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
             finalChar: CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
             phase: Math.random() * Math.PI * 2,
-            revealDelay: (x / width) * 0.9 + Math.random() * 0.16,
+            revealDelay: (x / width) * REVEAL_SWEEP + Math.random() * REVEAL_JITTER,
           })
         }
+      }
+
+      if (initial) {
+        startedAt = performance.now()
+        lastFrameTime = startedAt
       }
 
       setIsReady(particles.length > 0)
@@ -191,6 +210,11 @@ export function useAsciiHero(text: string) {
     }
 
     const draw = (timestamp: number) => {
+      // 프레임 간격을 60fps 배수로 환산해 물리를 보정한다. 탭 복귀 등 큰 공백은 34ms로 잘라 튀지 않게 한다.
+      const delta = Math.max(8, Math.min(34, timestamp - lastFrameTime))
+      lastFrameTime = timestamp
+      const steps = delta / FRAME_MS
+      const damping = DAMPING ** steps
       const elapsed = (timestamp - startedAt) / 1000
 
       context.clearRect(0, 0, width, height)
@@ -200,29 +224,29 @@ export function useAsciiHero(text: string) {
       context.fillStyle = accentColor
 
       particles.forEach((particle) => {
-        particle.vx += (particle.tx - particle.x) * SPRING
-        particle.vy += (particle.ty - particle.y) * SPRING
+        particle.vx += (particle.tx - particle.x) * SPRING * steps
+        particle.vy += (particle.ty - particle.y) * SPRING * steps
 
         const dx = particle.x - pointerX
         const dy = particle.y - pointerY
         const distance = Math.sqrt(dx * dx + dy * dy)
 
         if (distance < mouseRadius && distance > 0) {
-          const force = ((1 - distance / mouseRadius) ** 2) * mouseForce
+          const force = ((1 - distance / mouseRadius) ** 2) * mouseForce * steps
           particle.vx += (dx / distance) * force
           particle.vy += (dy / distance) * force
         }
 
-        particle.vx *= DAMPING
-        particle.vy *= DAMPING
-        particle.x += particle.vx
-        particle.y += particle.vy
+        particle.vx *= damping
+        particle.vy *= damping
+        particle.x += particle.vx * steps
+        particle.y += particle.vy * steps
 
         const revealed = Math.max(0, elapsed - particle.revealDelay)
         const decodeAlpha = Math.min(1, revealed / 0.16)
         const idleJitter = Math.sin(elapsed * 1.2 + particle.phase) * 0.8
 
-        if (revealed < 0.72) {
+        if (revealed < SCRAMBLE_WINDOW) {
           particle.char = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]
         } else {
           particle.char = particle.finalChar
@@ -245,6 +269,7 @@ export function useAsciiHero(text: string) {
       }
 
       running = true
+      lastFrameTime = performance.now()
       animationFrame = window.requestAnimationFrame(draw)
     }
 
@@ -281,14 +306,39 @@ export function useAsciiHero(text: string) {
       window.clearTimeout(resizeTimer)
       resizeTimer = window.setTimeout(() => {
         lastInnerWidth = window.innerWidth
-        buildParticles()
+        buildParticles(false)
       }, 150)
     }
 
-    let cancelled = false
+    const start = () => {
+      if (cancelled) {
+        return
+      }
 
-    buildParticles()
-    startLoop()
+      buildParticles(true)
+      startLoop()
+    }
+
+    // 폰트가 이미 있으면 즉시, 아니면 로드를 명시적으로 요청하고 도착(또는 FONT_WAIT_MS 초과) 후 한 번만 빌드한다.
+    // document.fonts가 없는 환경(jsdom 등)은 바로 진행한다.
+    const fonts = document.fonts
+    if (!fonts || typeof fonts.check !== 'function' || fonts.check(HERO_FONT)) {
+      start()
+    } else {
+      const timeout = new Promise<void>((resolve) => {
+        fontTimer = window.setTimeout(resolve, FONT_WAIT_MS)
+      })
+      const loaded = fonts.load(HERO_FONT).then(
+        () => undefined,
+        () => undefined,
+      )
+
+      Promise.race([loaded, timeout]).then(() => {
+        window.clearTimeout(fontTimer)
+        start()
+      })
+    }
+
     viewportObserver?.observe(canvas)
     document.addEventListener('visibilitychange', syncLoop)
     window.addEventListener('resize', handleResize)
@@ -298,18 +348,10 @@ export function useAsciiHero(text: string) {
     canvas.addEventListener('touchmove', handleTouch, { passive: true })
     canvas.addEventListener('touchend', handleTouchEnd)
 
-    // The initial buildParticles() call may sample text rendered in a fallback
-    // font if the self-hosted webfont hasn't finished loading yet. Re-sample
-    // once it's ready so particles match the intended glyph shapes.
-    document.fonts?.ready?.then(() => {
-      if (!cancelled) {
-        buildParticles()
-      }
-    })
-
     return () => {
       cancelled = true
       stopLoop()
+      window.clearTimeout(fontTimer)
       window.clearTimeout(resizeTimer)
       viewportObserver?.disconnect()
       document.removeEventListener('visibilitychange', syncLoop)
