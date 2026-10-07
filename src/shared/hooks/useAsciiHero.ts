@@ -13,8 +13,9 @@ type AsciiParticle = {
   revealDelay: number
 }
 
-const DESKTOP_CHARACTERS = '.:+-=*#@&~<>{}[]|/\\01'
-const MOBILE_CHARACTERS = '01'
+// 글자 형태는 particle 위치(텍스트 알파 마스크 샘플링)가 만들고, 글리프 자체는 0/1만 쓴다.
+// 디코드 중에는 0↔1이 프레임마다 뒤바뀌고, 정착 후에는 particle마다 고정된 비트로 남는다.
+const CHARACTERS = '01'
 const SPRING = 0.042
 const DAMPING = 0.88
 
@@ -132,9 +133,6 @@ export function useAsciiHero(text: string) {
       offscreenContext.fillText(text, 0, height / 2)
 
       const imageData = offscreenContext.getImageData(0, 0, width, height)
-      const characters = isMobile ? MOBILE_CHARACTERS : DESKTOP_CHARACTERS
-
-      const resolvedTextWidth = measureContext.measureText(text).width || measuredWidth
 
       particles = []
 
@@ -145,11 +143,6 @@ export function useAsciiHero(text: string) {
             continue
           }
 
-          const charIndex = Math.min(
-            text.length - 1,
-            Math.max(0, Math.floor((x / Math.max(resolvedTextWidth, 1)) * text.length)),
-          )
-
           particles.push({
             x: x + (Math.random() - 0.5) * width * 0.42,
             y: y + (Math.random() - 0.5) * height * 1.9,
@@ -157,8 +150,8 @@ export function useAsciiHero(text: string) {
             ty: y,
             vx: 0,
             vy: 0,
-            char: characters[Math.floor(Math.random() * characters.length)],
-            finalChar: text[charIndex] ?? text[text.length - 1] ?? 'K',
+            char: CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
+            finalChar: CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
             phase: Math.random() * Math.PI * 2,
             revealDelay: (x / width) * 0.9 + Math.random() * 0.16,
           })
@@ -199,7 +192,6 @@ export function useAsciiHero(text: string) {
 
     const draw = (timestamp: number) => {
       const elapsed = (timestamp - startedAt) / 1000
-      const characters = window.innerWidth < 768 ? MOBILE_CHARACTERS : DESKTOP_CHARACTERS
 
       context.clearRect(0, 0, width, height)
       context.font = `600 ${charSize}px "JetBrains Mono Variable", monospace`
@@ -231,7 +223,7 @@ export function useAsciiHero(text: string) {
         const idleJitter = Math.sin(elapsed * 1.2 + particle.phase) * 0.8
 
         if (revealed < 0.72) {
-          particle.char = characters[Math.floor(Math.random() * characters.length)]
+          particle.char = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]
         } else {
           particle.char = particle.finalChar
         }
