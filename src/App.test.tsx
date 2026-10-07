@@ -1,12 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
-import { BOOT_STORAGE_KEY } from './features/boot/BootSequence'
 
 beforeEach(() => {
-  window.sessionStorage.clear()
-  // 부팅 오버레이는 BootSequence.test에서 검증한다 — 이 스위트는 "루트 직접 렌더" 의도를 고정.
-  window.sessionStorage.setItem(BOOT_STORAGE_KEY, 'true')
   window.history.pushState({}, '', '/')
 })
 
