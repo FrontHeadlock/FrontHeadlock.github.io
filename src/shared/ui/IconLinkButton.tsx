@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useStrings } from '../i18n/strings'
 
 type IconLinkButtonProps = {
   href?: string
@@ -9,8 +10,9 @@ type IconLinkButtonProps = {
 }
 
 export function IconLinkButton({ href, icon, label, value, disabled = false }: IconLinkButtonProps) {
+  const strings = useStrings()
   const baseClassName =
-    'group flex min-h-16 items-center justify-between rounded-2xl border px-4 py-3 text-left transition duration-200'
+    'group flex min-h-16 items-center justify-between rounded-inner border px-4 py-3 text-left transition duration-200'
 
   if (disabled) {
     return (
@@ -26,7 +28,7 @@ export function IconLinkButton({ href, icon, label, value, disabled = false }: I
             <span className="block text-xs">{value}</span>
           </span>
         </span>
-        <span className="font-mono text-[11px] uppercase tracking-[0.22em]">Placeholder</span>
+        <span className="font-mono text-label-sm uppercase tracking-label">{strings.links.placeholder}</span>
       </button>
     )
   }
@@ -47,8 +49,8 @@ export function IconLinkButton({ href, icon, label, value, disabled = false }: I
           <span className="block text-xs text-[var(--color-text-muted)]">{value}</span>
         </span>
       </span>
-      <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-text-subtle)] transition duration-200 group-hover:translate-x-1 group-hover:text-[var(--color-accent)] group-focus-visible:translate-x-1 group-focus-visible:text-[var(--color-accent)]">
-        Open
+      <span className="font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)] transition duration-200 group-hover:translate-x-1 group-hover:text-[var(--color-accent)] group-focus-visible:translate-x-1 group-focus-visible:text-[var(--color-accent)]">
+        {strings.links.open}
       </span>
     </a>
   )

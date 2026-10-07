@@ -6,7 +6,7 @@ type StringDictionary = {
   hero: { metricsLabel: string; coreResults: string; coreResultsDescription: string }
   about: { eyebrow: string; title: string; description: string; problemSolvingLabel: string }
   experience: { eyebrow: string; title: string; description: string; sequenceLog: string }
-  projects: { eyebrow: string; title: string; description: string; open: string; expanded: string }
+  projects: { eyebrow: string; title: string; description: string; open: string; expanded: string; close: string }
   projectDetail: {
     overview: string
     role: string
@@ -19,6 +19,11 @@ type StringDictionary = {
   }
   contact: { eyebrow: string; title: string; description: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
+  // 시스템 토큰처럼 보이는 짧은 문구(resume.node, status online, ⌘K)는 테마 요소로 영어를 유지하고,
+  // 내용을 설명하는 라벨은 아래 사전에서 번역한다.
+  header: { rainOn: string; rainOff: string; openMenu: string; closeMenu: string }
+  links: { open: string; placeholder: string }
+  troubleshooting: { badge: string; problem: string; rootCause: string; action: string; result: string }
   palette: {
     placeholder: string
     noResults: string
@@ -68,6 +73,7 @@ const en: StringDictionary = {
       'Featured projects are ordered as Geulda, OldYoung, Kubernetes, and CATXI. Selecting a card opens detailed resume context within the same flow.',
     open: 'Open',
     expanded: 'Expanded',
+    close: 'Close',
   },
   projectDetail: {
     overview: 'Overview',
@@ -91,6 +97,9 @@ const en: StringDictionary = {
     reachMeAt: ' reach me at ',
     backToTop: 'back to top ↑',
   },
+  header: { rainOn: 'live rain', rainOff: 'rain off', openMenu: 'Open menu', closeMenu: 'Close menu' },
+  links: { open: 'Open', placeholder: 'Placeholder' },
+  troubleshooting: { badge: 'System Alert', problem: 'Problem', rootCause: 'Root Cause', action: 'Action', result: 'Result' },
   palette: {
     placeholder: 'Type a command or search...',
     noResults: 'No commands found',
@@ -139,6 +148,7 @@ const ko: StringDictionary = {
       '주요 프로젝트는 Geulda, OldYoung, Kubernetes, CATXI 순으로 정렬되어 있습니다. 카드를 선택하면 같은 흐름 안에서 상세 이력 정보가 펼쳐집니다.',
     open: '열기',
     expanded: '펼침',
+    close: '닫기',
   },
   projectDetail: {
     overview: '개요',
@@ -162,6 +172,9 @@ const ko: StringDictionary = {
     reachMeAt: ' 연락처: ',
     backToTop: '맨 위로 ↑',
   },
+  header: { rainOn: '레인 켜짐', rainOff: '레인 꺼짐', openMenu: '메뉴 열기', closeMenu: '메뉴 닫기' },
+  links: { open: '열기', placeholder: '준비 중' },
+  troubleshooting: { badge: '시스템 경고', problem: '문제', rootCause: '원인', action: '조치', result: '결과' },
   palette: {
     placeholder: '명령어를 입력하거나 검색하세요...',
     noResults: '일치하는 명령이 없습니다',
