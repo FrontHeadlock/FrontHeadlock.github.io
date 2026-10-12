@@ -11,7 +11,12 @@ export function Contact() {
   const strings = useStrings()
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' }}
+    >
       <Reveal>
         <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
           <SectionHeading
