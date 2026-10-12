@@ -54,9 +54,8 @@ const en: StringDictionary = {
   },
   about: {
     eyebrow: 'About',
-    title: 'I isolate operational bottlenecks by structure and prevent recurrence with automation.',
-    description:
-      'I solve problems by organizing architecture before incident response and designing reproducible flows before manual work.',
+    title: 'I build infrastructure that automates recurring operations and surfaces resource state through metrics first.',
+    description: 'I prefer operations that catch problems early over firefighting, and reversible changes over manual work.',
     problemSolvingLabel: 'Problem Solving',
   },
   experience: {
@@ -130,8 +129,8 @@ const ko: StringDictionary = {
   },
   about: {
     eyebrow: '소개',
-    title: '구조적 설계와 자동화로 운영 병목을 격리하고 재발을 방지합니다.',
-    description: '장애 대응보다 아키텍처 정리를, 수동 작업보다 재현 가능한 플로우 설계를 우선합니다.',
+    title: '반복되는 운영 자동화, 수치 기반의 개선 포인트를 찾아내는 인프라 운영',
+    description: '문제를 수습하기보다 먼저 발견해 개선하고자 노력하며, 안정성을 최우선으로 멱등적인 운영을 추구합니다.',
     problemSolvingLabel: '문제 해결',
   },
   experience: {

@@ -7,14 +7,15 @@ export const profileEn: Profile = {
   heroSummary:
     'I am a DevOps engineer running the development infrastructure for automotive SoC teams, automating recurring operations and making resource state visible through metrics.',
   aboutSummary: [
-    'I avoid temporary patches for recurring operational issues and focus on separating deployment flow and infrastructure ownership to prevent repeat incidents.',
-    'I prioritize high-impact areas directly tied to service quality, such as cloud infrastructure design, reproducible delivery pipelines, and authentication flow optimization.',
+    'I run development infrastructure for automotive SoC teams at Telechips: KVM bare-metal, an OpenStack private cloud, and ONTAP storage for researchers, with accounts, permissions, and SDK access managed through OpenLDAP and Gerrit.',
+    'Recurring work gets moved into code: configuration deployment to about 80 servers now runs through four-stage Ansible playbooks, and repetitive ITSM requests go through an AI agent gated by approval and dry-run.',
+    'I read the tools I use down to the code and contribute when something needs fixing: merged PRs in the official Jenkins Docker image and oh-my-claudecode, and a merged Gerrit change in the OpenStack client.',
   ],
   strengths: [
-    'Ability to isolate and resolve operational bottlenecks structurally',
-    'Strong capability in deployment automation and operations standardization',
-    'Hands-on experience designing cloud infrastructure and reproducible deployment pipelines',
-    'Deep troubleshooting capability from root cause tracing down to tool-level analysis',
+    'Resource visibility: built layered ONTAP capacity metrics and improved volume utilization by about 15% where expansion was blocked',
+    'Change design that assumes failure, such as an Ansible pipeline split into pre-check, staging, deploy, and rollback',
+    'Automation guardrails that separate AI judgment from deterministic execution and require human approval',
+    'Open-source collaboration carried from issue report through review to merge (jenkinsci/docker, oh-my-claudecode)',
   ],
   metrics: [
     {
