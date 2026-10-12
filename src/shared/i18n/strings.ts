@@ -50,7 +50,7 @@ const en: StringDictionary = {
     metricsLabel: 'Operational Metrics',
     coreResults: 'Core Results',
     coreResultsDescription:
-      'This portfolio is centered on projects where deployment, authentication, and service-latency bottlenecks were improved with measurable results.',
+      'Figures measured in in-house infrastructure operations and projects, chosen around repetitive-work automation, storage capacity reclamation, and shorter deployment and authentication latency.',
   },
   about: {
     eyebrow: 'About',
@@ -126,7 +126,7 @@ const ko: StringDictionary = {
     metricsLabel: '운영 지표',
     coreResults: '핵심 성과',
     coreResultsDescription:
-      '이 포트폴리오는 배포, 인증, 서비스 지연 병목을 측정 가능한 성과로 개선한 프로젝트를 중심으로 구성되어 있습니다.',
+      '사내 인프라 운영과 프로젝트에서 측정한 수치입니다. 반복 업무 자동화, 스토리지 용량 회수, 배포와 인증 지연 단축을 중심으로 골랐습니다.',
   },
   about: {
     eyebrow: '소개',

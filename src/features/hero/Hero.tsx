@@ -21,6 +21,11 @@ export function Hero() {
         <div className="flex flex-col gap-6 xl:min-h-[33rem] xl:justify-between">
           <div data-testid="hero-copy" className="space-y-3 md:space-y-4">
             <AsciiHero text={HERO_NAME} srOnlyText={profile.name} className="-mt-8 max-w-4xl md:-mt-10" />
+            {/* 직함 · 소속 한 줄: 직함은 터미널 라벨 톤, 소속은 본문 톤으로 구분한다. */}
+            <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className="font-mono text-label uppercase tracking-label text-[var(--color-accent)]">{profile.role}</span>
+              <span className="text-sm text-[var(--color-text-subtle)]">{profile.affiliation}</span>
+            </p>
             <p className="max-w-2xl text-base leading-7 text-[var(--color-text-muted)] md:text-lg md:leading-8">{profile.heroSummary}</p>
           </div>
           <div className="space-y-5 xl:pt-2">

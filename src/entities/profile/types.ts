@@ -14,6 +14,8 @@ export type ProfileLink = {
 export type Profile = {
   name: string
   role: string
+  /** 히어로에서 직함 옆에 보이는 소속 한 줄 (회사 · 담당 영역). */
+  affiliation: string
   heroSummary: string
   aboutSummary: string[]
   strengths: string[]

@@ -21,17 +21,16 @@ describe('App', () => {
     expect(screen.queryByRole('button', { name: /\[ ACCESS \]/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /박규민/i })).not.toBeInTheDocument()
     expect(screen.getByText(/Deployment Time/i)).toBeInTheDocument()
+    expect(screen.getByText(/Repetitive Ops/i)).toBeInTheDocument()
     expect(
-      screen.getByText(
-        /I am a DevOps engineer who solves deployment, authentication, and operations bottlenecks at the architecture level\./i,
-      ),
+      screen.getByText(/I am a DevOps engineer running the development infrastructure for automotive SoC teams/i),
     ).toBeInTheDocument()
     expect(screen.getByTestId('ascii-hero')).toBeInTheDocument()
     expect(screen.getByTestId('hero-copy')).toContainElement(
-      screen.getByText(
-        /I am a DevOps engineer who solves deployment, authentication, and operations bottlenecks at the architecture level\./i,
-      ),
+      screen.getByText(/I am a DevOps engineer running the development infrastructure for automotive SoC teams/i),
     )
+    expect(screen.getByTestId('hero-copy')).toHaveTextContent('DevOps Engineer')
+    expect(screen.getByTestId('hero-copy')).toHaveTextContent('Telechips · Automotive SoC Development Infrastructure')
     expect(screen.getAllByRole('link', { name: /GitHub|Blog|Email|LinkedIn/i })).toHaveLength(8)
     expect(screen.getAllByRole('link', { name: /GitHub/i })[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
     expect(screen.queryByRole('button', { name: /Resume PDF/i })).not.toBeInTheDocument()
