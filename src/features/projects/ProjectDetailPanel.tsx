@@ -9,7 +9,6 @@ import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { ProjectKindTag } from './ProjectCard'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
 
-export { projectPanelId }
 
 type ProjectDetailPanelProps = {
   project: Project

@@ -12,8 +12,6 @@ type ProjectCardProps = {
   onSelect: (slug: string) => void
 }
 
-export { projectCardId }
-
 /** 사내 · 학부 구분 태그. 카드와 패널 머리에서 라벨 옆에 붙는다. */
 export function ProjectKindTag({ kind }: { kind: string }) {
   return (

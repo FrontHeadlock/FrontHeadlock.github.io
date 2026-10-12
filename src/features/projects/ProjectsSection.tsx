@@ -1,11 +1,12 @@
 import { AnimatePresence } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
+import { projectCardId, projectPanelId } from '../../entities/project/anchors'
 import { useProjects } from '../../entities/project/useProjects'
 import { useStrings } from '../../shared/i18n/strings'
 import { Reveal } from '../../shared/ui/Reveal'
 import { SectionHeading } from '../../shared/ui/SectionHeading'
-import { ProjectCard, projectCardId } from './ProjectCard'
-import { ProjectDetailPanel, projectPanelId } from './ProjectDetailPanel'
+import { ProjectCard } from './ProjectCard'
+import { ProjectDetailPanel } from './ProjectDetailPanel'
 
 /**
  * 해시가 이 카드를 가리키면 지운다. 닫은 뒤 같은 "관련 프로젝트" 링크를 다시 눌러도 hashchange가 나고,
