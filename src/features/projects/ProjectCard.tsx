@@ -4,7 +4,7 @@ import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 import { DecodeLabel } from '../../shared/ui/DecodeLabel'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
-import { projectPanelId } from './ProjectDetailPanel'
+import { projectCardId, projectPanelId } from '../../entities/project/anchors'
 
 type ProjectCardProps = {
   project: Project
@@ -12,7 +12,7 @@ type ProjectCardProps = {
   onSelect: (slug: string) => void
 }
 
-export const projectCardId = (slug: string) => `project-card-${slug}`
+export { projectCardId }
 
 export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
   const strings = useStrings()
@@ -25,7 +25,7 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
       id={projectCardId(project.slug)}
       onClick={() => onSelect(project.slug)}
       className={cn(
-        'group rounded-card border p-6 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-strong)]',
+        'group scroll-mt-24 rounded-card border p-6 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-strong)]',
         isActive
           ? 'border-[var(--color-border-strong)] bg-[rgba(0,255,65,0.08)] shadow-[0_0_40px_rgba(0,255,65,0.12)]'
           : 'border-[var(--color-border)] bg-[var(--color-surface-card)] hover:border-[var(--color-border-strong)] hover:bg-[rgba(24,32,28,0.84)]',

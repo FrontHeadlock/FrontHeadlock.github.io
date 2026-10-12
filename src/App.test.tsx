@@ -20,8 +20,8 @@ describe('App', () => {
     expect(screen.queryByLabelText(/Matrix access onboarding/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /\[ ACCESS \]/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /박규민/i })).not.toBeInTheDocument()
-    expect(screen.getByText(/Deployment Time/i)).toBeInTheDocument()
-    expect(screen.getByText(/Repetitive Ops/i)).toBeInTheDocument()
+    expect(screen.getByText('Deployment Time')).toBeInTheDocument()
+    expect(screen.getByText('Repetitive Ops')).toBeInTheDocument()
     expect(
       screen.getByText(/I am a DevOps engineer running the development infrastructure for automotive SoC teams/i),
     ).toBeInTheDocument()
@@ -31,8 +31,8 @@ describe('App', () => {
     )
     expect(screen.getByTestId('hero-copy')).toHaveTextContent('DevOps Engineer')
     expect(screen.getByTestId('hero-copy')).toHaveTextContent('Telechips · Automotive SoC Development Infrastructure')
-    expect(screen.getAllByRole('link', { name: /GitHub|Blog|Email|LinkedIn/i })).toHaveLength(8)
-    expect(screen.getAllByRole('link', { name: /GitHub/i })[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
+    expect(screen.getAllByRole('link', { name: /^(GitHub|Blog|Email|LinkedIn)/i })).toHaveLength(8)
+    expect(screen.getAllByRole('link', { name: /^GitHub/i })[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
     expect(screen.queryByRole('button', { name: /Resume PDF/i })).not.toBeInTheDocument()
     expect(screen.queryByText(/DevOps Portfolio/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/whoami/i)).not.toBeInTheDocument()
@@ -51,7 +51,7 @@ describe('App', () => {
 
     render(<App />)
 
-    expect(screen.getByText(/Geulda Bucheon Tourism Promotion Application/i).closest('article')).toHaveClass(
+    expect(screen.getByText(/Infrastructure Operations for Automotive SoC Development/i).closest('article')).toHaveClass(
       'bg-[var(--color-surface-card)]',
     )
     expect(screen.getByRole('button', { name: /Geulda/i })).toHaveClass('bg-[var(--color-surface-card)]')
@@ -67,6 +67,37 @@ describe('App', () => {
     expect(
       screen.getByText(/This portfolio is structured for fast review of key details and operational outcomes\./i),
     ).toBeInTheDocument()
+  })
+
+  it('renders experience entries with organization, highlights, and public-record links', () => {
+    render(<App />)
+
+    const entry = screen.getByText(/Open-source Contributions/i).closest('article')
+    expect(entry).toHaveTextContent('jenkinsci/docker · openstack/python-openstackclient')
+    expect(entry).toHaveTextContent(/PR #2268 was merged/)
+
+    const recordLinks = screen.getAllByRole('link', { name: /View public record/i })
+    expect(recordLinks.length).toBeGreaterThanOrEqual(7)
+    expect(recordLinks.some((link) => link.getAttribute('href') === 'https://github.com/jenkinsci/docker/pull/2268')).toBe(true)
+    expect(recordLinks.some((link) => link.getAttribute('href') === 'https://github.com/k8s-Parkflow/park_python')).toBe(true)
+    recordLinks.forEach((link) => {
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveAttribute('rel', 'noreferrer')
+    })
+  })
+
+  it('opens the related project panel from an experience entry link', async () => {
+    const user = userEvent.setup()
+
+    render(<App />)
+
+    expect(screen.queryByText(/Overview/)).not.toBeInTheDocument()
+
+    await user.click(screen.getAllByRole('link', { name: /^Geulda/ })[0])
+
+    expect(window.location.hash).toBe('#project-card-geulda')
+    expect(await screen.findByText(/Overview/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Geulda/i })).toHaveAttribute('aria-expanded', 'true')
   })
 
   it('closes the expanded project panel from its close button or Escape and returns focus to the card', async () => {

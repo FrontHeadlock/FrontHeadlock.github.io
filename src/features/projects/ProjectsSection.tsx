@@ -25,6 +25,21 @@ export function ProjectsSection() {
     [selectedSlug],
   )
 
+  // 경력 카드의 "관련 프로젝트" 링크는 #project-card-<slug>로 이동한다. 카드로 스크롤만 하고 끝나면
+  // 사용자가 다시 눌러야 하므로, 해시가 카드를 가리키면 패널까지 바로 펼친다. 패널의 마운트 효과가 이어서 스크롤·포커스를 맡는다.
+  useEffect(() => {
+    const openFromHash = () => {
+      const match = /^#project-card-(.+)$/.exec(window.location.hash)
+      if (match && projects.some((project) => project.slug === match[1])) {
+        setSelectedSlug(match[1])
+      }
+    }
+
+    openFromHash()
+    window.addEventListener('hashchange', openFromHash)
+    return () => window.removeEventListener('hashchange', openFromHash)
+  }, [projects])
+
   useEffect(() => {
     if (!selectedSlug) {
       return

@@ -5,7 +5,14 @@ type StringDictionary = {
   nav: { about: string; experience: string; projects: string }
   hero: { metricsLabel: string; coreResults: string; coreResultsDescription: string }
   about: { eyebrow: string; title: string; description: string; problemSolvingLabel: string }
-  experience: { eyebrow: string; title: string; description: string; sequenceLog: string }
+  experience: {
+    eyebrow: string
+    title: string
+    description: string
+    sequenceLog: string
+    publicRecord: string
+    relatedProjects: string
+  }
   projects: { eyebrow: string; title: string; description: string; open: string; expanded: string; close: string }
   projectDetail: {
     overview: string
@@ -60,10 +67,11 @@ const en: StringDictionary = {
   },
   experience: {
     eyebrow: 'Experience',
-    title: 'Project and operations flow are organized so they read like a log.',
-    description:
-      'Experience entries are structured using provided date and role data. Items without period metadata are shown in sequence-log order.',
+    title: 'A timeline of problems met in operations and solved through automation and contribution.',
+    description: 'From university to the present, in chronological order. Contribution entries link to their public records.',
     sequenceLog: 'Sequence log',
+    publicRecord: 'View public record',
+    relatedProjects: 'Related projects',
   },
   projects: {
     eyebrow: 'Projects',
@@ -135,10 +143,11 @@ const ko: StringDictionary = {
   },
   experience: {
     eyebrow: '경력',
-    title: '프로젝트와 운영 흐름을 로그처럼 읽히도록 구성했습니다.',
-    description:
-      '경력 항목은 제공된 기간·역할 데이터를 기준으로 구성됩니다. 기간 정보가 없는 항목은 시퀀스 로그 순서로 표시됩니다.',
+    title: '운영에서 만난 문제를 자동화하고 기여하며 풀어 왔습니다.',
+    description: '학부부터 현재까지 시간순으로 정리했습니다. 기여 항목에는 GitHub·Gerrit 링크를 함께 둡니다.',
     sequenceLog: '시퀀스 로그',
+    publicRecord: '공개 기록 보기',
+    relatedProjects: '관련 프로젝트',
   },
   projects: {
     eyebrow: '프로젝트',

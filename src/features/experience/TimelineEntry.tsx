@@ -1,4 +1,7 @@
+import { ExternalLink } from 'lucide-react'
 import type { ExperienceEntry } from '../../entities/experience/types'
+import { projectCardId } from '../../entities/project/anchors'
+import { useProjects } from '../../entities/project/useProjects'
 import { useScrollReveal } from '../../shared/hooks/useScrollReveal'
 import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
@@ -12,10 +15,63 @@ type TimelineEntryProps = {
   isLast: boolean
 }
 
+type RecordLinkProps = {
+  href: string
+  label: string
+  inline?: boolean
+}
+
+/** 공개 기록(PR·change·이슈)으로 나가는 아이콘 링크. 접근성 이름에 호스트를 붙여 같은 라벨이 여러 개여도 구분된다. */
+function RecordLink({ href, label, inline = false }: RecordLinkProps) {
+  const host = new URL(href).hostname
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`${label} (${host})`}
+      title={host}
+      className={cn(
+        'inline-flex items-center text-[var(--color-text-subtle)] transition hover:text-[var(--color-accent)] focus-visible:text-[var(--color-accent)] focus-visible:outline-none',
+        inline ? 'ml-1.5 align-[-2px]' : 'mt-1 shrink-0',
+      )}
+    >
+      <ExternalLink size={inline ? 13 : 16} aria-hidden="true" />
+    </a>
+  )
+}
+
+/** 성과 문장 + 링크 아이콘. 아이콘이 줄 끝에서 혼자 다음 줄로 떨어지지 않도록 마지막 단어와 묶는다. */
+function HighlightText({ text, href, label }: { text: string; href?: string; label: string }) {
+  if (!href) {
+    return <>{text}</>
+  }
+
+  const lastSpace = text.lastIndexOf(' ')
+  const head = lastSpace === -1 ? '' : text.slice(0, lastSpace + 1)
+  const tail = lastSpace === -1 ? text : text.slice(lastSpace + 1)
+
+  return (
+    <>
+      {head}
+      <span className="whitespace-nowrap">
+        {tail}
+        <RecordLink href={href} label={label} inline />
+      </span>
+    </>
+  )
+}
+
 export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryProps) {
   const strings = useStrings()
+  const projects = useProjects()
   const { ref, revealed } = useScrollReveal<HTMLLIElement>()
   const delay = `${staggerDelay(index)}s`
+  // 원고의 slug가 아직 프로젝트 섹션에 없으면 조용히 건너뛴다.
+  const relatedProjects = (entry.relatedProjects ?? [])
+    .map((slug) => projects.find((project) => project.slug === slug))
+    .filter((project) => project !== undefined)
 
   return (
     <li ref={ref} className="relative">
@@ -60,11 +116,42 @@ export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryPr
         </div>
         <div className="space-y-4">
           <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
+              {entry.link ? <RecordLink href={entry.link} label={strings.experience.publicRecord} /> : null}
+            </div>
+            {entry.organization ? (
+              <p className="font-mono text-label-sm tracking-label-tight text-[var(--color-text-subtle)]">{entry.organization}</p>
+            ) : null}
             <p className="text-sm leading-6 text-[var(--color-text-muted)]">{entry.role}</p>
           </div>
           <p className="text-sm leading-7 text-[var(--color-text-main)]">{entry.summary}</p>
-          <TechStackChips items={entry.techStack} />
+          {entry.highlights && entry.highlights.length > 0 ? (
+            <ul className="grid list-disc gap-2 pl-4 marker:text-[var(--color-accent)]">
+              {entry.highlights.map((highlight) => (
+                <li key={highlight.text} className="text-sm leading-6 text-[var(--color-text-muted)]">
+                  <HighlightText text={highlight.text} href={highlight.href} label={strings.experience.publicRecord} />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {entry.techStack.length > 0 ? <TechStackChips items={entry.techStack} /> : null}
+          {relatedProjects.length > 0 ? (
+            <p className="flex flex-wrap items-center gap-2">
+              <span className="mr-1 font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)]">
+                {strings.experience.relatedProjects}
+              </span>
+              {relatedProjects.map((project) => (
+                <a
+                  key={project.slug}
+                  href={`#${projectCardId(project.slug)}`}
+                  className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-label-sm uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:border-[var(--color-border-strong)] hover:text-[var(--color-accent)] focus-visible:border-[var(--color-border-strong)] focus-visible:text-[var(--color-accent)] focus-visible:outline-none"
+                >
+                  {project.title} →
+                </a>
+              ))}
+            </p>
+          ) : null}
         </div>
       </article>
     </li>

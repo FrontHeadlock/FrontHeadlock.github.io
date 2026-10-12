@@ -1,11 +1,12 @@
 import { m } from 'framer-motion'
 import { useEffect, useRef } from 'react'
+import { projectPanelId } from '../../entities/project/anchors'
 import type { Project } from '../../entities/project/types'
 import { useStrings } from '../../shared/i18n/strings'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
 
-export const projectPanelId = (slug: string) => `project-panel-${slug}`
+export { projectPanelId }
 
 type ProjectDetailPanelProps = {
   project: Project
