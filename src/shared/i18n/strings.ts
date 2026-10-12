@@ -23,6 +23,7 @@ type StringDictionary = {
     outcomes: string
     learnings: string
     troubleshooting: string
+    repository: string
   }
   contact: { eyebrow: string; title: string; description: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
@@ -75,9 +76,9 @@ const en: StringDictionary = {
   },
   projects: {
     eyebrow: 'Projects',
-    title: 'Projects are arranged so outcomes and structural judgment appear first.',
+    title: 'Projects are laid out so the problem, the judgment call, and the measured result come first.',
     description:
-      'Featured projects are ordered as Geulda, OldYoung, Kubernetes, and CATXI. Selecting a card opens detailed resume context within the same flow.',
+      'In-house projects from my current role come first, followed by university projects. In-house entries describe only structure and figures that can be shared publicly.',
     open: 'Open',
     expanded: 'Expanded',
     close: 'Close',
@@ -91,6 +92,7 @@ const en: StringDictionary = {
     outcomes: 'Outcomes / Metrics',
     learnings: 'Learnings',
     troubleshooting: 'Troubleshooting',
+    repository: 'Repository',
   },
   contact: {
     eyebrow: 'Contact',
@@ -151,9 +153,9 @@ const ko: StringDictionary = {
   },
   projects: {
     eyebrow: '프로젝트',
-    title: '프로젝트는 성과와 구조적 판단이 먼저 드러나도록 배치했습니다.',
+    title: '프로젝트는 문제와 판단, 측정한 결과가 먼저 보이도록 정리했습니다.',
     description:
-      '주요 프로젝트는 Geulda, OldYoung, Kubernetes, CATXI 순으로 정렬되어 있습니다. 카드를 선택하면 같은 흐름 안에서 상세 이력 정보가 펼쳐집니다.',
+      '재직 중 진행한 사내 프로젝트를 앞에, 학부 프로젝트를 뒤에 두었습니다. 사내 프로젝트는 공개 가능한 범위에서 구조와 수치만 적었습니다.',
     open: '열기',
     expanded: '펼침',
     close: '닫기',
@@ -167,6 +169,7 @@ const ko: StringDictionary = {
     outcomes: '성과 / 지표',
     learnings: '배운 점',
     troubleshooting: '트러블슈팅',
+    repository: '저장소',
   },
   contact: {
     eyebrow: '연락처',

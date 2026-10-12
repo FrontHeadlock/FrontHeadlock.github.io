@@ -1,9 +1,11 @@
 import { m } from 'framer-motion'
+import { ExternalLink, Github } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { projectPanelId } from '../../entities/project/anchors'
 import type { Project } from '../../entities/project/types'
 import { useStrings } from '../../shared/i18n/strings'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
+import { ProjectKindTag } from './ProjectCard'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
 
 export { projectPanelId }
@@ -28,9 +30,25 @@ function DetailBlock({ title, items }: { title: string; items: string[] }) {
   )
 }
 
+const headerControlClassName =
+  'inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-subtle)] transition hover:border-[var(--color-border-strong)] hover:text-[var(--color-accent)] focus-visible:border-[var(--color-border-strong)] focus-visible:text-[var(--color-accent)] focus-visible:outline-none'
+
+/** 공개 저장소 링크. GitHub면 GitHub 아이콘, 그 외 호스트는 외부 링크 아이콘. */
+function RepositoryLink({ href, label }: { href: string; label: string }) {
+  const host = new URL(href).hostname
+  const Icon = host.endsWith('github.com') ? Github : ExternalLink
+
+  return (
+    <a href={href} target="_blank" rel="noreferrer" aria-label={`${label} (${host})`} title={host} className={`${headerControlClassName} min-w-11`}>
+      <Icon size={16} aria-hidden="true" />
+    </a>
+  )
+}
+
 export function ProjectDetailPanel({ project, onClose }: ProjectDetailPanelProps) {
   const strings = useStrings()
   const panelRef = useRef<HTMLDivElement | null>(null)
+  const meta = [project.period, project.teamSize].filter(Boolean).join(' · ')
 
   // 패널은 카드 그리드 전체 아래에 렌더되므로 윗줄 카드를 누르면 화면 밖에 열린다.
   // 마운트 시(프로젝트 전환으로 다시 마운트될 때 포함) 상단이 헤더에 가렸거나 뷰포트 하단 40% 아래면
@@ -75,16 +93,23 @@ export function ProjectDetailPanel({ project, onClose }: ProjectDetailPanelProps
       <div className="space-y-8">
         <m.div layoutId={`project-card-${project.slug}`} className="flex items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-label uppercase tracking-label text-[var(--color-accent)]">{project.title}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="font-mono text-label uppercase tracking-label text-[var(--color-accent)]">{project.title}</p>
+              <ProjectKindTag kind={project.kind} />
+            </div>
             <h3 className="text-2xl font-semibold text-white md:text-3xl">{project.subtitle}</h3>
+            {meta ? <p className="font-mono text-label-sm tracking-label-tight text-[var(--color-text-subtle)]">{meta}</p> : null}
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-[var(--color-border)] px-4 font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)] transition hover:border-[var(--color-border-strong)] hover:text-[var(--color-accent)] focus-visible:border-[var(--color-border-strong)] focus-visible:text-[var(--color-accent)] focus-visible:outline-none"
-          >
-            [ {strings.projects.close} ]
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            {project.repoUrl ? <RepositoryLink href={project.repoUrl} label={strings.projectDetail.repository} /> : null}
+            <button
+              type="button"
+              onClick={onClose}
+              className={`${headerControlClassName} px-4 font-mono text-label-sm uppercase tracking-label`}
+            >
+              [ {strings.projects.close} ]
+            </button>
+          </div>
         </m.div>
 
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">

@@ -55,12 +55,25 @@ describe('App', () => {
       'bg-[var(--color-surface-card)]',
     )
     expect(screen.getByRole('button', { name: /Geulda/i })).toHaveClass('bg-[var(--color-surface-card)]')
+    expect(screen.getAllByText('In-house')).toHaveLength(3)
+    expect(screen.getAllByText('University team project')).toHaveLength(2)
+    expect(screen.getByRole('button', { name: /AI Agent Platform/i })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: /Geulda/i }))
 
     expect(screen.getByText(/Overview/)).toBeInTheDocument()
     expect(screen.getByText(/Troubleshooting/)).toBeInTheDocument()
-    expect(screen.getAllByText(/Kubernetes/)[0]).toBeInTheDocument()
+    expect(screen.getByText(/Jenkins Single-node Memory Exhaustion/)).toBeInTheDocument()
+    expect(screen.getByText('2025.10 – 2025.11')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /^Repository/ })).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /CATXI/i }))
+
+    expect(screen.getByText('2025.05 – 2025.12 · 8 members (4 backend)')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^Repository \(github\.com\)$/ })).toHaveAttribute(
+      'href',
+      'https://github.com/Team-Catxi/Catxi_BackEnd',
+    )
     expect(
       screen.queryByText(/Technologies are categorized by operational context, not listed in isolation\./i),
     ).not.toBeInTheDocument()

@@ -14,6 +14,15 @@ type ProjectCardProps = {
 
 export { projectCardId }
 
+/** 사내 · 학부 구분 태그. 카드와 패널 머리에서 라벨 옆에 붙는다. */
+export function ProjectKindTag({ kind }: { kind: string }) {
+  return (
+    <span className="rounded-full border border-[var(--color-border)] px-2 py-0.5 font-mono text-label-xs uppercase tracking-label-tight text-[var(--color-text-subtle)]">
+      {kind}
+    </span>
+  )
+}
+
 export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
   const strings = useStrings()
 
@@ -36,9 +45,12 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
       <div className="space-y-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-label uppercase tracking-label text-[var(--color-accent)]">
-              <DecodeLabel text={project.title} />
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="font-mono text-label uppercase tracking-label text-[var(--color-accent)]">
+                <DecodeLabel text={project.title} />
+              </p>
+              <ProjectKindTag kind={project.kind} />
+            </div>
             <h3 className="text-xl font-semibold text-white">{project.subtitle}</h3>
           </div>
           <span className="font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)]">
