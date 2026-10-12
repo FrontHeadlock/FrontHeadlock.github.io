@@ -18,7 +18,6 @@ export function Contact() {
             id="contact-title"
             eyebrow={strings.contact.eyebrow}
             title={strings.contact.title}
-            description={strings.contact.description}
           />
           <div className="space-y-5">
             <HeroLinks links={profile.links} />

@@ -78,14 +78,16 @@ describe('App', () => {
       screen.queryByText(/Technologies are categorized by operational context, not listed in isolation\./i),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByText(/This portfolio is structured for fast review of key details and operational outcomes\./i),
+      screen.getByText(/If you want to talk about infrastructure operations, automation, or open-source contributions/i),
     ).toBeInTheDocument()
+    expect(screen.getByText('Static delivery on GitHub Pages')).toBeInTheDocument()
+    expect(screen.queryByText(/resume PDF linkage/i)).not.toBeInTheDocument()
   })
 
   it('renders experience entries with organization, highlights, and public-record links', () => {
     render(<App />)
 
-    const entry = screen.getByText(/Open-source Contributions/i).closest('article')
+    const entry = screen.getByRole('heading', { name: /^Open-source Contributions — Reading the Tools/ }).closest('article')
     expect(entry).toHaveTextContent('jenkinsci/docker · openstack/python-openstackclient')
     expect(entry).toHaveTextContent(/PR #2268 was merged/)
 

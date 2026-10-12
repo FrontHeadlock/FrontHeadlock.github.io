@@ -25,7 +25,7 @@ type StringDictionary = {
     troubleshooting: string
     repository: string
   }
-  contact: { eyebrow: string; title: string; description: string; deliveryLabel: string; deliveryHeading: string }
+  contact: { eyebrow: string; title: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
   // 시스템 토큰처럼 보이는 짧은 문구(resume.node, status online, ⌘K)는 테마 요소로 영어를 유지하고,
   // 내용을 설명하는 라벨은 아래 사전에서 번역한다.
@@ -96,8 +96,7 @@ const en: StringDictionary = {
   },
   contact: {
     eyebrow: 'Contact',
-    title: 'This portfolio is structured for fast review of key details and operational outcomes.',
-    description: 'Contact details use real values, and resume PDF linkage is not enabled yet.',
+    title: 'If you want to talk about infrastructure operations, automation, or open-source contributions, reach me below.',
     deliveryLabel: 'Portfolio Delivery',
     deliveryHeading: 'Infrastructure setup for this portfolio',
   },
@@ -173,8 +172,7 @@ const ko: StringDictionary = {
   },
   contact: {
     eyebrow: '연락처',
-    title: '이 포트폴리오는 핵심 정보와 운영 성과를 빠르게 검토할 수 있도록 구성했습니다.',
-    description: '연락처 정보는 실제 값을 사용하며, 이력서 PDF 연동은 아직 제공되지 않습니다.',
+    title: '인프라 운영과 자동화, 오픈소스 기여에 관해 이야기 나누고 싶다면 아래로 연락 주세요.',
     deliveryLabel: '포트폴리오 배포',
     deliveryHeading: '이 포트폴리오의 인프라 구성',
   },

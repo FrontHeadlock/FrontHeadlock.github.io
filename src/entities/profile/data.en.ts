@@ -65,5 +65,5 @@ export const profileEn: Profile = {
       kind: 'link',
     },
   ],
-  deliveryMeta: ['React SPA', 'Static delivery ready', 'Deployment path configurable'],
+  deliveryMeta: ['React SPA (Vite)', 'Static delivery on GitHub Pages', 'GitHub Actions + Lighthouse CI'],
 }
