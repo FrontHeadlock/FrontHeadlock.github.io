@@ -5,6 +5,7 @@ import { useProjects } from '../../entities/project/useProjects'
 import { useScrollReveal } from '../../shared/hooks/useScrollReveal'
 import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
+import { describeRecordUrl, hostnameOf } from '../../shared/lib/recordUrl'
 import { REVEAL, staggerDelay } from '../../shared/lib/motion'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 
@@ -21,20 +22,21 @@ type RecordLinkProps = {
   inline?: boolean
 }
 
-/** 공개 기록(PR·change·이슈)으로 나가는 아이콘 링크. 접근성 이름에 호스트를 붙여 같은 라벨이 여러 개여도 구분된다. */
+/**
+ * 공개 기록(PR·change·이슈)으로 나가는 아이콘 링크.
+ * 접근성 이름에 호스트+경로를 붙여 같은 라벨의 링크가 여러 개여도 구분되고, 터치 영역은 24px 상자로 확보한다.
+ */
 function RecordLink({ href, label, inline = false }: RecordLinkProps) {
-  const host = new URL(href).hostname
-
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
-      aria-label={`${label} (${host})`}
-      title={host}
+      aria-label={`${label} (${describeRecordUrl(href)})`}
+      title={hostnameOf(href) || undefined}
       className={cn(
-        'inline-flex items-center text-[var(--color-text-subtle)] transition hover:text-[var(--color-accent)] focus-visible:text-[var(--color-accent)] focus-visible:outline-none',
-        inline ? 'ml-1.5 align-[-2px]' : 'mt-1 shrink-0',
+        'inline-flex h-6 w-6 items-center justify-center text-[var(--color-text-subtle)] transition hover:text-[var(--color-accent)] focus-visible:text-[var(--color-accent)] focus-visible:outline-none',
+        inline ? 'ml-1 align-middle' : 'shrink-0',
       )}
     >
       <ExternalLink size={inline ? 13 : 16} aria-hidden="true" />

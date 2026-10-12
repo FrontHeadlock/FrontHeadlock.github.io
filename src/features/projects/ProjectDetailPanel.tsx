@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { projectPanelId } from '../../entities/project/anchors'
 import type { Project } from '../../entities/project/types'
 import { useStrings } from '../../shared/i18n/strings'
+import { describeRecordUrl, hostnameOf } from '../../shared/lib/recordUrl'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { ProjectKindTag } from './ProjectCard'
 import { TroubleshootingAlert } from './TroubleshootingAlert'
@@ -35,11 +36,18 @@ const headerControlClassName =
 
 /** 공개 저장소 링크. GitHub면 GitHub 아이콘, 그 외 호스트는 외부 링크 아이콘. */
 function RepositoryLink({ href, label }: { href: string; label: string }) {
-  const host = new URL(href).hostname
+  const host = hostnameOf(href)
   const Icon = host.endsWith('github.com') ? Github : ExternalLink
 
   return (
-    <a href={href} target="_blank" rel="noreferrer" aria-label={`${label} (${host})`} title={host} className={`${headerControlClassName} min-w-11`}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`${label} (${describeRecordUrl(href)})`}
+      title={host || undefined}
+      className={`${headerControlClassName} min-w-11`}
+    >
       <Icon size={16} aria-hidden="true" />
     </a>
   )

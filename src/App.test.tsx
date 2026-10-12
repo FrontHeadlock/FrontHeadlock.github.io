@@ -70,7 +70,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /CATXI/i }))
 
     expect(screen.getByText('2025.05 – 2025.12 · 8 members (4 backend)')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /^Repository \(github\.com\)$/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Repository \(github\.com\/Team-Catxi\/Catxi_BackEnd\)$/ })).toHaveAttribute(
       'href',
       'https://github.com/Team-Catxi/Catxi_BackEnd',
     )
@@ -113,6 +113,20 @@ describe('App', () => {
     expect(window.location.hash).toBe('#project-card-geulda')
     expect(await screen.findByText(/Overview/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Geulda/i })).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('link', { name: /^View public record \(github\.com\/jenkinsci\/docker\/pull\/2268\)$/ })).toBeInTheDocument()
+
+    // 닫으면 해시도 지워져서 같은 링크를 다시 눌러도 열리고, 새로고침해도 다시 열리지 않는다.
+    await user.click(screen.getByRole('button', { name: /^\[ Close \]$/ }))
+    expect(screen.queryByText(/Overview/)).not.toBeInTheDocument()
+    expect(window.location.hash).toBe('')
+
+    await user.click(screen.getAllByRole('link', { name: /^Geulda/ })[0])
+    expect(await screen.findByText(/Overview/)).toBeInTheDocument()
+
+    // 다른 카드로 바꿔도 이전 카드의 해시는 남지 않는다.
+    await user.click(screen.getByRole('button', { name: /CATXI/i }))
+    expect(screen.getByText('2025.05 – 2025.12 · 8 members (4 backend)')).toBeInTheDocument()
+    expect(window.location.hash).toBe('')
   })
 
   it('closes the expanded project panel from its close button or Escape and returns focus to the card', async () => {

@@ -88,6 +88,12 @@
     content: ' (' attr(href) ')';
     font-size: 8pt;
     color: var(--color-text-subtle);
+    overflow-wrap: anywhere;
+  }
+
+  /* 화면에서 아이콘 링크를 마지막 단어와 묶는 nowrap은 인쇄에서 긴 URL을 한 줄로 밀어내므로 푼다 */
+  .whitespace-nowrap {
+    white-space: normal;
   }
 
   a[href^='#']::after,
