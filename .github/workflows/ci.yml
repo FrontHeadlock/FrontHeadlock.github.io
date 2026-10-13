@@ -1,37 +1,73 @@
-name: Lighthouse CI
+name: CI
 
+# lint → test → build를 한 번만 돌리고 dist를 아티팩트로 남긴다.
+# PR에서는 그대로 검증 게이트로 쓰이고, deploy.yml은 이 워크플로를 호출한 뒤 같은 아티팩트를 배포한다.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_call:
 
-# 리포트 업로드 외에 저장소에 쓰는 일이 없다. 기본 토큰 권한을 읽기로 고정한다.
 permissions:
   contents: read
 
-# 같은 브랜치에 연속 푸시하면 앞선 측정은 의미가 없으니 취소한다.
-concurrency:
-  group: lighthouse-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  lighthouse:
+  build:
+    name: Lint, test, build
     runs-on: ubuntu-latest
+    concurrency:
+      group: ci-build-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build site
         run: npm run build
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse (calibrated, median of 3)
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ci-lighthouse-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       # GitHub 호스티드 러너의 CPU 속도는 실행마다 다르다(이 저장소에서 관측된 Lighthouse benchmarkIndex 454~2453).
       # Lighthouse의 시뮬레이션 스로틀링은 "이 러너에서 잰 CPU 시간 × cpuSlowdownMultiplier(기본 4)"로 점수를 내므로
@@ -39,10 +75,8 @@ jobs:
       # Lighthouse 문서(docs/throttling.md)의 보정 방식대로, 러너의 benchmarkIndex를 먼저 재서
       # 고성능 데스크톱(≈2000)에서 4x가 되도록 배수를 비례 조정하고 [1, 4]로 묶는다. 빠른 러너의 결과는 그대로다.
       - name: Calibrate CPU throttling to this runner
-        id: calibrate
         run: |
-          # Node 18+에서 "localhost"는 ::1로 먼저 풀리므로 러너에서는 127.0.0.1로 명시해 묶는다.
-          npx vite preview --host 127.0.0.1 --port 4173 --strictPort >/dev/null 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/dev/null 2>&1 &
           PREVIEW_PID=$!
           ready=0
           for i in $(seq 1 30); do
