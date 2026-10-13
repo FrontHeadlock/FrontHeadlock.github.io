@@ -41,6 +41,8 @@ describe('App', () => {
     expect(screen.getByRole('link', { name: /^\[about\]$/i })).toHaveAttribute('href', '#about')
     expect(screen.getByRole('link', { name: /^\[experience\]$/i })).toHaveAttribute('href', '#experience')
     expect(screen.getByRole('link', { name: /^\[projects\]$/i })).toHaveAttribute('href', '#projects')
+    expect(screen.getByRole('button', { name: /^Open contents$/ })).toHaveTextContent('[contents]')
+    expect(screen.queryByText('⌘K')).not.toBeInTheDocument()
     expect(screen.getByText(/session closed/i)).toBeInTheDocument()
     expect(container.firstChild).toHaveClass('relative', 'isolate')
     expect(container.querySelector('.matrix-layer')).toHaveClass('-z-10')

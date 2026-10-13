@@ -78,17 +78,18 @@ export function Header({ onOpenPalette }: HeaderProps) {
           >
             {rainEnabled ? strings.header.rainOn : strings.header.rainOff}
           </button>
+          {/* 목차 탭: 섹션 링크와 같은 모양으로 두고, 누르면 목차 오버레이(검색·이동)를 연다. Cmd+K 단축키는 그대로 동작한다. */}
           <button
             type="button"
             onClick={onOpenPalette}
             aria-label={strings.palette.openAriaLabel}
-            className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-label-xs uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
+            className="ml-2 rounded-full border border-transparent px-3 py-1.5 font-mono text-label-sm uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
           >
-            ⌘K
+            [{strings.header.contents}]
           </button>
         </nav>
 
-        {/* 모바일: ⌘K는 키보드 단축키라 터치에서는 의미가 없어 숨긴다. 언어·레인 토글은 메뉴 안에서 제공한다. */}
+        {/* 모바일: 섹션 링크가 햄버거 메뉴 안에 목차 역할로 들어가므로 목차 탭은 숨긴다. 언어·레인 토글은 메뉴 안에서 제공한다. */}
         <button
           type="button"
           aria-label={mobileNavOpen ? strings.header.closeMenu : strings.header.openMenu}

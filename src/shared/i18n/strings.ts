@@ -27,7 +27,7 @@ type StringDictionary = {
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
   // 시스템 토큰처럼 보이는 짧은 문구(resume.node, status online, ⌘K)는 테마 요소로 영어를 유지하고,
   // 내용을 설명하는 라벨은 아래 사전에서 번역한다.
-  header: { rainOn: string; rainOff: string; openMenu: string; closeMenu: string }
+  header: { rainOn: string; rainOff: string; openMenu: string; closeMenu: string; contents: string }
   links: { open: string; placeholder: string }
   troubleshooting: { badge: string; problem: string; rootCause: string; action: string; result: string }
   palette: {
@@ -95,16 +95,16 @@ const en: StringDictionary = {
     reachMeAt: ' reach me at ',
     backToTop: 'back to top ↑',
   },
-  header: { rainOn: 'live rain', rainOff: 'rain off', openMenu: 'Open menu', closeMenu: 'Close menu' },
+  header: { rainOn: 'live rain', rainOff: 'rain off', openMenu: 'Open menu', closeMenu: 'Close menu', contents: 'contents' },
   links: { open: 'Open', placeholder: 'Placeholder' },
   troubleshooting: { badge: 'System Alert', problem: 'Problem', rootCause: 'Root Cause', action: 'Action', result: 'Result' },
   palette: {
-    placeholder: 'Type a command or search...',
+    placeholder: 'Search the contents...',
     noResults: 'No commands found',
     hintToggle: 'Cmd+K or Cmd+` to toggle',
     hintNavigate: '↑↓ to navigate, Enter to select, Esc to close',
-    openAriaLabel: 'Open command palette',
-    dialogLabel: 'Command palette',
+    openAriaLabel: 'Open contents',
+    dialogLabel: 'Contents',
     commands: {
       home: { label: 'Go to Home', description: 'Navigate to the top of the page' },
       about: { label: 'Go to About', description: 'Jump to the About section' },
@@ -162,16 +162,16 @@ const ko: StringDictionary = {
     reachMeAt: ' 연락처: ',
     backToTop: '맨 위로 ↑',
   },
-  header: { rainOn: '레인 켜짐', rainOff: '레인 꺼짐', openMenu: '메뉴 열기', closeMenu: '메뉴 닫기' },
+  header: { rainOn: '레인 켜짐', rainOff: '레인 꺼짐', openMenu: '메뉴 열기', closeMenu: '메뉴 닫기', contents: '목차' },
   links: { open: '열기', placeholder: '준비 중' },
   troubleshooting: { badge: '시스템 경고', problem: '문제', rootCause: '원인', action: '조치', result: '결과' },
   palette: {
-    placeholder: '명령어를 입력하거나 검색하세요...',
+    placeholder: '목차를 검색하세요...',
     noResults: '일치하는 명령이 없습니다',
     hintToggle: 'Cmd+K 또는 Cmd+` 로 열기/닫기',
     hintNavigate: '↑↓ 이동, Enter 실행, Esc 닫기',
-    openAriaLabel: '커맨드 팔레트 열기',
-    dialogLabel: '커맨드 팔레트',
+    openAriaLabel: '목차 열기',
+    dialogLabel: '목차',
     commands: {
       home: { label: '홈으로 이동', description: '페이지 맨 위로 이동합니다' },
       about: { label: '소개로 이동', description: '소개 섹션으로 이동합니다' },
