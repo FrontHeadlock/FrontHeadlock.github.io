@@ -94,7 +94,8 @@ describe('App', () => {
     const recordLinks = screen.getAllByRole('link', { name: /View public record/i })
     expect(recordLinks.length).toBeGreaterThanOrEqual(7)
     expect(recordLinks.some((link) => link.getAttribute('href') === 'https://github.com/jenkinsci/docker/pull/2268')).toBe(true)
-    expect(recordLinks.some((link) => link.getAttribute('href') === 'https://github.com/k8s-Parkflow/park_python')).toBe(true)
+    expect(recordLinks.some((link) => link.getAttribute('href') === 'http://www.cukjournal.com/news/articleView.html?idxno=4554')).toBe(true)
+    expect(screen.getByRole('heading', { name: 'Awards' }).closest('article')).toHaveTextContent('Sequence log')
     recordLinks.forEach((link) => {
       expect(link).toHaveAttribute('target', '_blank')
       expect(link).toHaveAttribute('rel', 'noreferrer')
@@ -108,11 +109,11 @@ describe('App', () => {
 
     expect(screen.queryByText(/Overview/)).not.toBeInTheDocument()
 
-    await user.click(screen.getAllByRole('link', { name: /^Geulda/ })[0])
+    await user.click(screen.getAllByRole('link', { name: /^AI Agent Platform/ })[0])
 
-    expect(window.location.hash).toBe('#project-card-geulda')
+    expect(window.location.hash).toBe('#project-card-agentic-ops')
     expect(await screen.findByText(/Overview/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Geulda/i })).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('button', { name: /AI Agent Platform/i })).toHaveAttribute('aria-expanded', 'true')
     expect(screen.getByRole('link', { name: /^View public record \(github\.com\/jenkinsci\/docker\/pull\/2268\)$/ })).toBeInTheDocument()
 
     // 닫으면 해시도 지워져서 같은 링크를 다시 눌러도 열리고, 새로고침해도 다시 열리지 않는다.
@@ -120,7 +121,7 @@ describe('App', () => {
     expect(screen.queryByText(/Overview/)).not.toBeInTheDocument()
     expect(window.location.hash).toBe('')
 
-    await user.click(screen.getAllByRole('link', { name: /^Geulda/ })[0])
+    await user.click(screen.getAllByRole('link', { name: /^AI Agent Platform/ })[0])
     expect(await screen.findByText(/Overview/)).toBeInTheDocument()
 
     // 다른 카드로 바꿔도 이전 카드의 해시는 남지 않는다.

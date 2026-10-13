@@ -14,15 +14,7 @@ export const experienceEn: ExperienceEntry[] = [
       { text: 'AWS infrastructure and Jenkins, AWX, and Blue/Green deployment automation for Geulda as team lead and dev lead (2025.10 – 2025.11)' },
       { text: 'Designed the Kakao OAuth2, JWT, and Redis auth lifecycle and in-filter token reissue on the CATXI backend (2025.05 – 2025.12)' },
     ],
-    relatedProjects: ['geulda', 'catxi'],
-    techStack: ['Java', 'Spring Boot', 'Python', 'Linux', 'AWS'],
-  },
-  {
-    title: 'Military Service',
-    dateLabel: '2022.01 – 2023.10',
-    category: 'Military',
-    role: 'Service completed',
-    summary: 'Served from January 2022 to October 2023.',
+    link: 'http://www.cukjournal.com/news/articleView.html?idxno=4554',
     techStack: [],
   },
   {
@@ -61,7 +53,6 @@ export const experienceEn: ExperienceEntry[] = [
   },
   {
     title: 'Hyundai AutoEver Mobility SW School, Cloud Track',
-    organization: 'Hyundai AutoEver',
     dateLabel: '2025.12 – 2026.05',
     category: 'Training',
     role: 'Completed; backend developer on the ParkFlow team project',
@@ -69,12 +60,10 @@ export const experienceEn: ExperienceEntry[] = [
       'Practiced the full flow from code change to deployment: Linux, networking, access control, Docker, Kubernetes, and Jenkins and ArgoCD CI/CD. In the ParkFlow team project, split a parking service into microservices on Kubernetes and moved inter-service calls to gRPC to cut latency.',
     highlights: [
       { text: 'Split Django services by role with a central orchestrator managing the call flow' },
-      { text: 'Moved inter-service calls from REST to gRPC, cutting call latency by about 30%' },
       { text: 'Kept consistency and isolated failures in the distributed setup with Saga compensating transactions and circuit breakers' },
       { text: 'Kept 69 tests and over 80% coverage with TDD; synced cluster state with Git through ArgoCD GitOps' },
     ],
-    link: 'https://github.com/k8s-Parkflow/park_python',
-    techStack: ['Linux', 'Docker', 'Kubernetes', 'Jenkins', 'ArgoCD', 'Django', 'gRPC', 'MariaDB'],
+    techStack: [],
   },
   {
     title: 'Infrastructure Operations for Automotive SoC Development',
@@ -92,22 +81,7 @@ export const experienceEn: ExperienceEntry[] = [
       { text: 'Took part in the ISO 27001 audit, TISAX preparation documents, and government-project hardware procurement' },
     ],
     relatedProjects: ['agentic-ops', 'ontap-monitoring', 'ansible-deploy'],
-    techStack: [
-      'Linux (Ubuntu·Rocky·Oracle)',
-      'KVM',
-      'OpenStack',
-      'NetApp ONTAP',
-      'Ansible',
-      'Prometheus',
-      'Grafana',
-      'Fluent Bit',
-      'OpenLDAP',
-      'Gerrit',
-      'Jenkins',
-      'Python',
-      'LangChain',
-      'vLLM',
-    ],
+    techStack: ['Linux', 'KVM', 'OpenStack', 'NetApp ONTAP', 'Ansible', 'Prometheus', 'Grafana', 'Fluent Bit', 'Jenkins', 'Python'],
   },
   {
     title: 'Open Source Contribution Academy, OpenStack Track',
@@ -168,12 +142,7 @@ export const experienceEn: ExperienceEntry[] = [
   },
   {
     title: 'Awards',
-    organization: 'The Catholic University of Korea · GDGoC CUK',
-    dateLabel: '2024.06 – 2025.11',
     category: 'Awards',
-    role: 'Team lead, PM, and dev lead at the competition; dataset collection and preprocessing at the hackathon',
-    summary:
-      "Won the grand prize at the campus major competency competition with Geulda's AWS infrastructure and Blue/Green deployment automation, and the grand prize at the GDGoC CUK hackathon with an early dementia-detection AI model project.",
     highlights: [
       {
         text: 'Grand prize, major competency competition (2025.11.24): as team lead, PM, and dev lead, owned AWS infrastructure and Jenkins and AWX deployment automation, automating a six-step manual deployment and cutting deployment time from 30 minutes to under 10',
@@ -182,7 +151,6 @@ export const experienceEn: ExperienceEntry[] = [
         text: 'Grand prize, GDGoC CUK hackathon (2024.06.30): on the UN SDG theme of elderly dementia prevention, owned dataset collection, preprocessing, and data quality criteria for an early dementia-detection AI model',
       },
     ],
-    relatedProjects: ['geulda'],
-    techStack: ['AWS', 'Jenkins', 'Ansible AWX', 'Python'],
+    techStack: [],
   },
 ]

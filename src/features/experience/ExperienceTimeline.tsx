@@ -21,7 +21,6 @@ export function ExperienceTimeline() {
             id="experience-title"
             eyebrow={strings.experience.eyebrow}
             title={strings.experience.title}
-            description={strings.experience.description}
           />
         </Reveal>
         {/* 왼쪽 레일(흐린 기준선) 위로 각 항목이 노출될 때 액센트 구간이 차오르고 노드가 켜진다. */}

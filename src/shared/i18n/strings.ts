@@ -8,7 +8,6 @@ type StringDictionary = {
   experience: {
     eyebrow: string
     title: string
-    description: string
     sequenceLog: string
     publicRecord: string
     relatedProjects: string
@@ -69,7 +68,6 @@ const en: StringDictionary = {
   experience: {
     eyebrow: 'Experience',
     title: 'A timeline of problems met in operations and solved through automation and contribution.',
-    description: 'From university to the present, in chronological order. Contribution entries link to their public records.',
     sequenceLog: 'Sequence log',
     publicRecord: 'View public record',
     relatedProjects: 'Related projects',
@@ -145,7 +143,6 @@ const ko: StringDictionary = {
   experience: {
     eyebrow: '경력',
     title: '운영에서 만난 문제를 자동화하고 기여하며 풀어 왔습니다.',
-    description: '학부부터 현재까지 시간순으로 정리했습니다. 기여 항목에는 GitHub·Gerrit 링크를 함께 둡니다.',
     sequenceLog: '시퀀스 로그',
     publicRecord: '공개 기록 보기',
     relatedProjects: '관련 프로젝트',

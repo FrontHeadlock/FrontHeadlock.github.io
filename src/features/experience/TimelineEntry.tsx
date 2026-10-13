@@ -125,9 +125,9 @@ export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryPr
             {entry.organization ? (
               <p className="font-mono text-label-sm tracking-label-tight text-[var(--color-text-subtle)]">{entry.organization}</p>
             ) : null}
-            <p className="text-sm leading-6 text-[var(--color-text-muted)]">{entry.role}</p>
+            {entry.role ? <p className="text-sm leading-6 text-[var(--color-text-muted)]">{entry.role}</p> : null}
           </div>
-          <p className="text-sm leading-7 text-[var(--color-text-main)]">{entry.summary}</p>
+          {entry.summary ? <p className="whitespace-pre-line text-sm leading-7 text-[var(--color-text-main)]">{entry.summary}</p> : null}
           {entry.highlights && entry.highlights.length > 0 ? (
             <ul className="grid list-disc gap-2 pl-4 marker:text-[var(--color-accent)]">
               {entry.highlights.map((highlight) => (

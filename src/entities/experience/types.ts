@@ -10,8 +10,9 @@ export type ExperienceEntry = {
   organization?: string
   dateLabel?: string
   category: string
-  role: string
-  summary: string
+  /** 역할·설명은 수상처럼 성과 목록만 있는 카드에서 비워 둘 수 있다. 설명의 "\n"은 화면에서 줄바꿈된다. */
+  role?: string
+  summary?: string
   /** 설명 아래 불릿으로 나열되는 성과 목록. */
   highlights?: ExperienceHighlight[]
   /** 카드 전체를 대표하는 공개 기록 URL. 제목 오른쪽에 외부 링크 아이콘으로 노출. */
