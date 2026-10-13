@@ -6,3 +6,4 @@ docs/
 src/features/onboarding/
 src/shared/styles/onboarding.css
 .omc/
+lighthouserc.generated.json

@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+# 리포트 업로드 외에 저장소에 쓰는 일이 없다. 기본 토큰 권한을 읽기로 고정한다.
+permissions:
+  contents: read
+
+# 같은 브랜치에 연속 푸시하면 앞선 측정은 의미가 없으니 취소한다.
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
@@ -24,8 +33,35 @@ jobs:
       - name: Build
         run: npm run build
 
+      # GitHub 호스티드 러너의 CPU 속도는 실행마다 다르다(이 저장소에서 관측된 Lighthouse benchmarkIndex 454~2453).
+      # Lighthouse의 시뮬레이션 스로틀링은 "이 러너에서 잰 CPU 시간 × cpuSlowdownMultiplier(기본 4)"로 점수를 내므로
+      # 느린 러너를 만나면 같은 페이지가 0.73~0.88, 빠른 러너면 0.95가 나와 단일 실행 게이트가 무작위로 깨졌다.
+      # Lighthouse 문서(docs/throttling.md)의 보정 방식대로, 러너의 benchmarkIndex를 먼저 재서
+      # 고성능 데스크톱(≈2000)에서 4x가 되도록 배수를 비례 조정하고 [1, 4]로 묶는다. 빠른 러너의 결과는 그대로다.
+      - name: Calibrate CPU throttling to this runner
+        id: calibrate
+        run: |
+          npx vite preview --port 4173 --strictPort >/dev/null 2>&1 &
+          PREVIEW_PID=$!
+          for i in $(seq 1 30); do curl -sf -o /dev/null http://127.0.0.1:4173/ && break; sleep 1; done
+          npx --yes lighthouse@12 http://127.0.0.1:4173/ \
+            --only-categories=performance --only-audits=largest-contentful-paint \
+            --output=json --output-path=./calibration.json \
+            --chrome-flags="--headless=new --no-sandbox" --quiet
+          kill "$PREVIEW_PID" || true
+          node <<'NODE'
+          const fs = require('fs')
+          const bench = require('./calibration.json').environment.benchmarkIndex
+          const multiplier = Math.min(4, Math.max(1, Math.round(((4 * bench) / 2000) * 10) / 10))
+          const config = JSON.parse(fs.readFileSync('lighthouserc.json', 'utf8'))
+          config.ci.collect.settings = { ...(config.ci.collect.settings ?? {}), throttling: { cpuSlowdownMultiplier: multiplier } }
+          fs.writeFileSync('lighthouserc.generated.json', JSON.stringify(config, null, 2))
+          console.log(`benchmarkIndex=${Math.round(bench)} -> cpuSlowdownMultiplier=${multiplier}`)
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY ?? '/dev/null', `Runner benchmarkIndex ${Math.round(bench)} → cpuSlowdownMultiplier ${multiplier}\n`)
+          NODE
+
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         with:
-          configPath: ./lighthouserc.json
+          configPath: ./lighthouserc.generated.json
           temporaryPublicStorage: true
