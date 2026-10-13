@@ -83,12 +83,11 @@ export const experienceKo: ExperienceEntry[] = [
   },
   {
     title: '오픈소스 컨트리뷰션 아카데미 OpenStack 과정',
-    organization: '정보통신산업진흥원',
+    organization: '정보통신산업진흥원 (NIPA)',
     dateLabel: '2026.04 – 2026.06',
-    category: '교육',
+    category: '교육 수강 및 오픈소스 기여',
     role: '멘티. python-openstackclient 기여 절차 실습',
-    summary:
-      '사내에서 운영하던 OpenStack에서 Nova·Cinder 등 핵심 서비스의 구조와 API를 코드 수준까지 학습하고 Gerrit에 change를 올려 Zuul CI를 거쳐 코어 리뷰어 승인을 받는 기여 절차를 실습했습니다. 운영 중 마주치던 동작의 원인을 코드에서 직접 찾았고 과정 뒤 올린 change는 병합됐습니다.',
+    summary: 'OpenStack의 Nova·Cinder 등 핵심 서비스의 구조와 API를 코드 수준까지 학습하였습니다.',
     techStack: ['OpenStack', 'Python', 'Gerrit', 'Zuul', 'DevStack', 'tox'],
   },
   {
@@ -96,18 +95,17 @@ export const experienceKo: ExperienceEntry[] = [
     organization: 'AWS 워크숍 (OSSAI)',
     dateLabel: '2026.07 – 2026.09',
     category: '교육',
-    role: '수강, 핸즈온 실습',
+    role: '교육 수강, 핸즈온 실습',
     summary:
-      'vLLM으로 Qwen 3와 DeepSeek R1을 서빙하고 Bedrock의 Claude까지 LiteLLM 게이트웨이 하나로 묶은 뒤, Langfuse로 토큰과 비용을 추적하며 LangGraph·MCP 에이전트를 EKS에 배포했습니다. 에이전트는 만드는 일보다 배포 뒤 지연·비용·품질을 관측하며 운영하는 일이 더 중요하다는 것을 익혔습니다.',
+      'Qwen 3와 DeepSeekR1 등 vLLM을 서빙하며 이를 게이트웨이와 Langfuse 등으로 관리하며 EKS에 배포하였습니다.\nAI를 단순히 사용하는 것에서 그치지 않고, 어떻게 관리하고 그 토큰 및 비용을 추적해 사용성을 높여나가는 LLMOps 기반을 학습하였습니다.',
     techStack: ['Amazon EKS', 'vLLM', 'LiteLLM', 'Langfuse', 'LangGraph', 'MCP', 'Karpenter'],
   },
   {
-    title: '오픈소스 기여 — 쓰던 도구를 코드까지 읽고 고치기',
-    organization:
-      'jenkinsci/docker · openstack/python-openstackclient · Yeachan-Heo/oh-my-claudecode · Yeachan-Heo/gajae-code · openchoreo/openchoreo · devfloor9/engineering-playbook',
+    title: '오픈소스 기여',
+    organization: 'jenkinsci/docker · openstack/python-openstackclient · openchoreo/openchoreo 등',
     dateLabel: '2026.02 – 현재',
     category: '오픈소스',
-    role: '이슈 제보, PR·change 작성, 리뷰 대응',
+    role: '이슈 제보, PR·change 작성, 리뷰',
     summary:
       '새로운 기술들에 많은 관심을 기반으로 다양한 오픈소스들에 관심이 많습니다.\n단순히 오픈소스 사용이 아닌, 실질적인 기여로써 가치 창출에 기여하고자 노력해왔습니다.',
     highlights: [
