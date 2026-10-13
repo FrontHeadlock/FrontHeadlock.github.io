@@ -77,9 +77,8 @@ describe('App', () => {
     expect(
       screen.queryByText(/Technologies are categorized by operational context, not listed in isolation\./i),
     ).not.toBeInTheDocument()
-    expect(
-      screen.getByText(/If you want to talk about infrastructure operations, automation, or open-source contributions/i),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Contact/ })).toBeInTheDocument()
+    expect(screen.queryByText(/If you want to talk about infrastructure operations/i)).not.toBeInTheDocument()
     expect(screen.getByText('Static delivery on GitHub Pages')).toBeInTheDocument()
     expect(screen.queryByText(/resume PDF linkage/i)).not.toBeInTheDocument()
   })

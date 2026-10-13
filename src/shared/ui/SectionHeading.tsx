@@ -3,14 +3,28 @@ import { DecodeLabel } from './DecodeLabel'
 type SectionHeadingProps = {
   id?: string
   eyebrow: string
-  title: string
+  title?: string
   description?: string
 }
 
+const eyebrowClassName = 'font-mono text-label uppercase tracking-label-wide text-[var(--color-accent)]'
+
+/**
+ * 섹션 제목 블록. title이 없으면(연락처처럼 눈썹 라벨만 두는 구역) 눈썹 라벨이 h2가 되어
+ * section의 aria-labelledby가 계속 유효하다.
+ */
 export function SectionHeading({ id, eyebrow, title, description }: SectionHeadingProps) {
+  if (!title) {
+    return (
+      <h2 id={id} className={eyebrowClassName}>
+        <DecodeLabel text={eyebrow} />
+      </h2>
+    )
+  }
+
   return (
     <div className="space-y-3">
-      <p className="font-mono text-label uppercase tracking-label-wide text-[var(--color-accent)]">
+      <p className={eyebrowClassName}>
         <DecodeLabel text={eyebrow} />
       </p>
       <div className="space-y-2">

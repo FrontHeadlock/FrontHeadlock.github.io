@@ -19,11 +19,7 @@ export function Contact() {
     >
       <Reveal>
         <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
-          <SectionHeading
-            id="contact-title"
-            eyebrow={strings.contact.eyebrow}
-            title={strings.contact.title}
-          />
+          <SectionHeading id="contact-title" eyebrow={strings.contact.eyebrow} />
           <div className="space-y-5">
             <HeroLinks links={profile.links} />
             <TerminalFrame label={strings.contact.deliveryLabel}>

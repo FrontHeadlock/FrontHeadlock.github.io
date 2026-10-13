@@ -24,7 +24,7 @@ type StringDictionary = {
     troubleshooting: string
     repository: string
   }
-  contact: { eyebrow: string; title: string; deliveryLabel: string; deliveryHeading: string }
+  contact: { eyebrow: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
   // 시스템 토큰처럼 보이는 짧은 문구(resume.node, status online, ⌘K)는 테마 요소로 영어를 유지하고,
   // 내용을 설명하는 라벨은 아래 사전에서 번역한다.
@@ -94,7 +94,6 @@ const en: StringDictionary = {
   },
   contact: {
     eyebrow: 'Contact',
-    title: 'If you want to talk about infrastructure operations, automation, or open-source contributions, reach me below.',
     deliveryLabel: 'Portfolio Delivery',
     deliveryHeading: 'Infrastructure setup for this portfolio',
   },
@@ -168,7 +167,6 @@ const ko: StringDictionary = {
   },
   contact: {
     eyebrow: '연락처',
-    title: '인프라 운영과 자동화, 오픈소스 기여에 관해 이야기 나누고 싶다면 아래로 연락 주세요.',
     deliveryLabel: '포트폴리오 배포',
     deliveryHeading: '이 포트폴리오의 인프라 구성',
   },
