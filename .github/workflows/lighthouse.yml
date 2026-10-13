@@ -41,14 +41,28 @@ jobs:
       - name: Calibrate CPU throttling to this runner
         id: calibrate
         run: |
-          npx vite preview --port 4173 --strictPort >/dev/null 2>&1 &
+          # Node 18+에서 "localhost"는 ::1로 먼저 풀리므로 러너에서는 127.0.0.1로 명시해 묶는다.
+          npx vite preview --host 127.0.0.1 --port 4173 --strictPort >/dev/null 2>&1 &
           PREVIEW_PID=$!
-          for i in $(seq 1 30); do curl -sf -o /dev/null http://127.0.0.1:4173/ && break; sleep 1; done
-          npx --yes lighthouse@12 http://127.0.0.1:4173/ \
-            --only-categories=performance --only-audits=largest-contentful-paint \
-            --output=json --output-path=./calibration.json \
-            --chrome-flags="--headless=new --no-sandbox" --quiet
-          kill "$PREVIEW_PID" || true
+          ready=0
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null http://127.0.0.1:4173/; then ready=1; break; fi
+            sleep 1
+          done
+          calibrated=0
+          if [ "$ready" = "1" ] && npx --yes lighthouse@12 http://127.0.0.1:4173/ \
+              --only-categories=performance --only-audits=largest-contentful-paint \
+              --output=json --output-path=./calibration.json \
+              --chrome-flags="--headless=new --no-sandbox" --quiet; then
+            calibrated=1
+          fi
+          kill "$PREVIEW_PID" 2>/dev/null || true
+          # 보정에 실패해도 측정 자체는 진행한다(기본 4x). 대신 경고를 남겨 원인을 추적할 수 있게 한다.
+          if [ "$calibrated" != "1" ]; then
+            echo "::warning::CPU calibration failed (preview ready=$ready); falling back to the default 4x multiplier"
+            cp lighthouserc.json lighthouserc.generated.json
+            exit 0
+          fi
           node <<'NODE'
           const fs = require('fs')
           const bench = require('./calibration.json').environment.benchmarkIndex
