@@ -33,7 +33,6 @@ export function useCommandPalette() {
       { id: 'goto-about', ...labels.about, action: () => scrollToSection('about'), shortcut: 'g a' },
       { id: 'goto-experience', ...labels.experience, action: () => scrollToSection('experience'), shortcut: 'g e' },
       { id: 'goto-projects', ...labels.projects, action: () => scrollToSection('projects'), shortcut: 'g p' },
-      { id: 'goto-contact', ...labels.contact, action: () => scrollToSection('contact'), shortcut: 'g c' },
       { id: 'toggle-rain', ...labels.rain, action: toggleRain, shortcut: 't r' },
       ...(emailLink
         ? [

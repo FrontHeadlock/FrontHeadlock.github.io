@@ -31,7 +31,7 @@ describe('App', () => {
     )
     expect(screen.getByTestId('hero-copy')).toHaveTextContent('DevOps Engineer')
     expect(screen.getByTestId('hero-copy')).toHaveTextContent('Telechips · Automotive SoC Development Infrastructure')
-    expect(screen.getAllByRole('link', { name: /^(GitHub|Blog|Email|LinkedIn)/i })).toHaveLength(8)
+    expect(screen.getAllByRole('link', { name: /^(GitHub|Blog|Email|LinkedIn)/i })).toHaveLength(4)
     expect(screen.getAllByRole('link', { name: /^GitHub/i })[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
     expect(screen.queryByRole('button', { name: /Resume PDF/i })).not.toBeInTheDocument()
     expect(screen.queryByText(/DevOps Portfolio/i)).not.toBeInTheDocument()
@@ -77,9 +77,9 @@ describe('App', () => {
     expect(
       screen.queryByText(/Technologies are categorized by operational context, not listed in isolation\./i),
     ).not.toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Contact/ })).toBeInTheDocument()
-    expect(screen.queryByText(/If you want to talk about infrastructure operations/i)).not.toBeInTheDocument()
-    expect(screen.getByText('Static delivery on GitHub Pages')).toBeInTheDocument()
+    expect(document.getElementById('contact')).toBeNull()
+    expect(screen.queryByRole('heading', { name: /^Contact$/ })).not.toBeInTheDocument()
+    expect(screen.queryByText('Static delivery on GitHub Pages')).not.toBeInTheDocument()
     expect(screen.queryByText(/resume PDF linkage/i)).not.toBeInTheDocument()
   })
 

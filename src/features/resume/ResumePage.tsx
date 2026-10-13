@@ -1,7 +1,6 @@
 import { LazyMotion, MotionConfig } from 'framer-motion'
 import { Suspense, lazy } from 'react'
 import { About } from '../about/About'
-import { Contact } from '../contact/Contact'
 import { ExperienceTimeline } from '../experience/ExperienceTimeline'
 import { Footer } from '../footer/Footer'
 import { Header } from '../header/Header'
@@ -37,7 +36,6 @@ function ResumePageContent() {
             <About />
             <ExperienceTimeline />
             <ProjectsSection />
-            <Contact />
           </main>
           <Footer />
           {open ? (

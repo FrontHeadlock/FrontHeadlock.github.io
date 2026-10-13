@@ -65,5 +65,4 @@ export const profileKo: Profile = {
       kind: 'link',
     },
   ],
-  deliveryMeta: ['React SPA (Vite)', 'GitHub Pages 정적 배포', 'GitHub Actions + Lighthouse CI'],
 }

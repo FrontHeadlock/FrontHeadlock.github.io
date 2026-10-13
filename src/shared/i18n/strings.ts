@@ -24,7 +24,6 @@ type StringDictionary = {
     troubleshooting: string
     repository: string
   }
-  contact: { eyebrow: string; deliveryLabel: string; deliveryHeading: string }
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
   // 시스템 토큰처럼 보이는 짧은 문구(resume.node, status online, ⌘K)는 테마 요소로 영어를 유지하고,
   // 내용을 설명하는 라벨은 아래 사전에서 번역한다.
@@ -43,7 +42,6 @@ type StringDictionary = {
       about: { label: string; description: string }
       experience: { label: string; description: string }
       projects: { label: string; description: string }
-      contact: { label: string; description: string }
       rain: { label: string; description: string }
       email: { label: string; description: string }
     }
@@ -92,11 +90,6 @@ const en: StringDictionary = {
     troubleshooting: 'Troubleshooting',
     repository: 'Repository',
   },
-  contact: {
-    eyebrow: 'Contact',
-    deliveryLabel: 'Portfolio Delivery',
-    deliveryHeading: 'Infrastructure setup for this portfolio',
-  },
   footer: {
     sessionClosed: '> session closed.',
     reachMeAt: ' reach me at ',
@@ -117,7 +110,6 @@ const en: StringDictionary = {
       about: { label: 'Go to About', description: 'Jump to the About section' },
       experience: { label: 'Go to Experience', description: 'Jump to the Experience section' },
       projects: { label: 'Go to Projects', description: 'Jump to the Projects section' },
-      contact: { label: 'Go to Contact', description: 'Jump to the Contact section' },
       rain: { label: 'Toggle Rain', description: 'Turn the matrix rain animation on or off' },
       email: { label: 'Copy Email', description: 'Copy email address to clipboard' },
     },
@@ -165,11 +157,6 @@ const ko: StringDictionary = {
     troubleshooting: '트러블슈팅',
     repository: '저장소',
   },
-  contact: {
-    eyebrow: '연락처',
-    deliveryLabel: '포트폴리오 배포',
-    deliveryHeading: '이 포트폴리오의 인프라 구성',
-  },
   footer: {
     sessionClosed: '> 세션 종료.',
     reachMeAt: ' 연락처: ',
@@ -190,7 +177,6 @@ const ko: StringDictionary = {
       about: { label: '소개로 이동', description: '소개 섹션으로 이동합니다' },
       experience: { label: '경력으로 이동', description: '경력 섹션으로 이동합니다' },
       projects: { label: '프로젝트로 이동', description: '프로젝트 섹션으로 이동합니다' },
-      contact: { label: '연락처로 이동', description: '연락처 섹션으로 이동합니다' },
       rain: { label: '매트릭스 비 전환', description: '매트릭스 비 애니메이션을 켜거나 끕니다' },
       email: { label: '이메일 복사', description: '이메일 주소를 클립보드에 복사합니다' },
     },

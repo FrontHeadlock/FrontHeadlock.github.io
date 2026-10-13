@@ -21,5 +21,4 @@ export type Profile = {
   strengths: string[]
   metrics: ProfileMetric[]
   links: ProfileLink[]
-  deliveryMeta: string[]
 }
