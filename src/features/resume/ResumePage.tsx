@@ -8,6 +8,7 @@ import { Hero } from '../hero/Hero'
 import { ProjectsSection } from '../projects/ProjectsSection'
 import { MatrixRainCanvas } from '../../shared/ui/MatrixRainCanvas'
 import { RainPreferenceProvider } from '../../shared/hooks/useRainPreference'
+import { ThemePreferenceProvider } from '../../shared/hooks/useThemePreference'
 import { useCommandPalette } from '../../shared/hooks/useCommandPalette'
 import { LocaleProvider } from '../../shared/i18n/LocaleContext'
 import { useStrings } from '../../shared/i18n/strings'
@@ -62,9 +63,11 @@ function ResumePageContent() {
 export function ResumePage() {
   return (
     <LocaleProvider>
-      <RainPreferenceProvider>
-        <ResumePageContent />
-      </RainPreferenceProvider>
+      <ThemePreferenceProvider>
+        <RainPreferenceProvider>
+          <ResumePageContent />
+        </RainPreferenceProvider>
+      </ThemePreferenceProvider>
     </LocaleProvider>
   )
 }

@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { LocaleProvider } from '../i18n/LocaleContext'
 import { useCommandPalette } from './useCommandPalette'
 import { RainPreferenceProvider, useRainPreference } from './useRainPreference'
+import { ThemePreferenceProvider } from './useThemePreference'
 
 function Probe() {
   const { open, search, setSearch, selectedIndex, filtered } = useCommandPalette()
@@ -22,9 +23,11 @@ function Probe() {
 function renderPalette() {
   return render(
     <LocaleProvider>
-      <RainPreferenceProvider>
-        <Probe />
-      </RainPreferenceProvider>
+      <ThemePreferenceProvider>
+        <RainPreferenceProvider>
+          <Probe />
+        </RainPreferenceProvider>
+      </ThemePreferenceProvider>
     </LocaleProvider>,
   )
 }

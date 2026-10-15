@@ -27,7 +27,15 @@ type StringDictionary = {
   footer: { sessionClosed: string; reachMeAt: string; backToTop: string }
   // 시스템 토큰처럼 보이는 짧은 문구(resume.node, status online, ⌘K)는 테마 요소로 영어를 유지하고,
   // 내용을 설명하는 라벨은 아래 사전에서 번역한다.
-  header: { rainOn: string; rainOff: string; openMenu: string; closeMenu: string; contents: string }
+  header: {
+    rainOn: string
+    rainOff: string
+    openMenu: string
+    closeMenu: string
+    contents: string
+    toDark: string
+    toLight: string
+  }
   links: { open: string; placeholder: string }
   troubleshooting: { badge: string; problem: string; rootCause: string; action: string; result: string }
   palette: {
@@ -43,6 +51,7 @@ type StringDictionary = {
       experience: { label: string; description: string }
       projects: { label: string; description: string }
       rain: { label: string; description: string }
+      theme: { label: string; description: string }
       email: { label: string; description: string }
     }
   }
@@ -95,7 +104,15 @@ const en: StringDictionary = {
     reachMeAt: ' reach me at ',
     backToTop: 'back to top ↑',
   },
-  header: { rainOn: 'live rain', rainOff: 'rain off', openMenu: 'Open menu', closeMenu: 'Close menu', contents: 'contents' },
+  header: {
+    rainOn: 'live rain',
+    rainOff: 'rain off',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    contents: 'contents',
+    toDark: 'Switch to dark mode',
+    toLight: 'Switch to light mode',
+  },
   links: { open: 'Open', placeholder: 'Placeholder' },
   troubleshooting: { badge: 'System Alert', problem: 'Problem', rootCause: 'Root Cause', action: 'Action', result: 'Result' },
   palette: {
@@ -111,6 +128,7 @@ const en: StringDictionary = {
       experience: { label: 'Go to Experience', description: 'Jump to the Experience section' },
       projects: { label: 'Go to Projects', description: 'Jump to the Projects section' },
       rain: { label: 'Toggle Rain', description: 'Turn the matrix rain animation on or off' },
+      theme: { label: 'Toggle Theme', description: 'Switch between the light and dark theme' },
       email: { label: 'Copy Email', description: 'Copy email address to clipboard' },
     },
   },
@@ -162,7 +180,15 @@ const ko: StringDictionary = {
     reachMeAt: ' 연락처: ',
     backToTop: '맨 위로 ↑',
   },
-  header: { rainOn: '레인 켜짐', rainOff: '레인 꺼짐', openMenu: '메뉴 열기', closeMenu: '메뉴 닫기', contents: '목차' },
+  header: {
+    rainOn: '레인 켜짐',
+    rainOff: '레인 꺼짐',
+    openMenu: '메뉴 열기',
+    closeMenu: '메뉴 닫기',
+    contents: '목차',
+    toDark: '다크 모드로 전환',
+    toLight: '라이트 모드로 전환',
+  },
   links: { open: '열기', placeholder: '준비 중' },
   troubleshooting: { badge: '시스템 경고', problem: '문제', rootCause: '원인', action: '조치', result: '결과' },
   palette: {
@@ -178,6 +204,7 @@ const ko: StringDictionary = {
       experience: { label: '경력으로 이동', description: '경력 섹션으로 이동합니다' },
       projects: { label: '프로젝트로 이동', description: '프로젝트 섹션으로 이동합니다' },
       rain: { label: '매트릭스 비 전환', description: '매트릭스 비 애니메이션을 켜거나 끕니다' },
+      theme: { label: '테마 전환', description: '라이트 테마와 다크 테마를 바꿉니다' },
       email: { label: '이메일 복사', description: '이메일 주소를 클립보드에 복사합니다' },
     },
   },

@@ -4,6 +4,8 @@ import App from './App'
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
+  window.localStorage.clear()
+  delete document.documentElement.dataset.theme
 })
 
 afterEach(() => {
@@ -42,6 +44,8 @@ describe('App', () => {
     expect(screen.getByRole('link', { name: /^\[experience\]$/i })).toHaveAttribute('href', '#experience')
     expect(screen.getByRole('link', { name: /^\[projects\]$/i })).toHaveAttribute('href', '#projects')
     expect(screen.getByRole('button', { name: /^Open contents$/ })).toHaveTextContent('[contents]')
+    expect(document.documentElement.dataset.theme).toBe('light')
+    expect(screen.getAllByRole('button', { name: /^Switch to dark mode$/ })).not.toHaveLength(0)
     expect(screen.queryByText('⌘K')).not.toBeInTheDocument()
     expect(screen.getByText(/session closed/i)).toBeInTheDocument()
     expect(container.firstChild).toHaveClass('relative', 'isolate')
@@ -129,6 +133,29 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /CATXI/i }))
     expect(screen.getByText('2025.05 – 2025.12 · 8 members (4 backend)')).toBeInTheDocument()
     expect(window.location.hash).toBe('')
+  })
+
+  it('switches the theme from the header tab and remembers it', async () => {
+    const user = userEvent.setup()
+
+    render(<App />)
+
+    const tab = screen.getAllByRole('button', { name: /^Switch to dark mode$/ })[0]
+    await user.click(tab)
+
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(window.localStorage.getItem('theme')).toBe('dark')
+    expect(screen.getAllByRole('button', { name: /^Switch to light mode$/ })).not.toHaveLength(0)
+    expect(document.querySelector('meta[name="theme-color"]')?.getAttribute('content') ?? '#0a0a0a').toBe('#0a0a0a')
+  })
+
+  it('starts dark when the stored theme is dark', () => {
+    window.localStorage.setItem('theme', 'dark')
+
+    render(<App />)
+
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(screen.getAllByRole('button', { name: /^Switch to light mode$/ })).not.toHaveLength(0)
   })
 
   it('closes the expanded project panel from its close button or Escape and returns focus to the card', async () => {

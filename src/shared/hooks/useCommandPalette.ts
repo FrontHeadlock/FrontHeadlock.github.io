@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useProfile } from '../../entities/profile/useProfile'
 import { useStrings } from '../i18n/strings'
 import { useRainPreference } from './useRainPreference'
+import { useThemePreference } from './useThemePreference'
 
 export type Command = {
   id: string
@@ -20,6 +21,7 @@ export function useCommandPalette() {
   const strings = useStrings()
   const profile = useProfile()
   const { toggle: toggleRain } = useRainPreference()
+  const { toggle: toggleTheme } = useThemePreference()
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -34,6 +36,7 @@ export function useCommandPalette() {
       { id: 'goto-experience', ...labels.experience, action: () => scrollToSection('experience'), shortcut: 'g e' },
       { id: 'goto-projects', ...labels.projects, action: () => scrollToSection('projects'), shortcut: 'g p' },
       { id: 'toggle-rain', ...labels.rain, action: toggleRain, shortcut: 't r' },
+      { id: 'toggle-theme', ...labels.theme, action: toggleTheme, shortcut: 't t' },
       ...(emailLink
         ? [
             {
@@ -47,7 +50,7 @@ export function useCommandPalette() {
           ]
         : []),
     ]
-  }, [strings, profile, toggleRain])
+  }, [strings, profile, toggleRain, toggleTheme])
 
   const filtered = useMemo(
     () =>
