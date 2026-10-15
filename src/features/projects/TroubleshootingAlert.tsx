@@ -10,7 +10,7 @@ export function TroubleshootingAlert({ item }: TroubleshootingAlertProps) {
   return (
     <article className="rounded-inner border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h4 className="font-semibold text-white">{item.title}</h4>
+        <h4 className="font-semibold text-[var(--color-text-strong)]">{item.title}</h4>
         <span className="font-mono text-label-sm uppercase tracking-label text-[var(--color-danger-soft)]">{strings.troubleshooting.badge}</span>
       </div>
       <dl className="grid gap-4">

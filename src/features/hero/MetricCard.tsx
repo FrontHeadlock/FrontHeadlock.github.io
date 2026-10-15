@@ -84,11 +84,11 @@ export function MetricCard({ metric, isLead = false, index }: MetricCardProps) {
       onFocus={playValueAnimation}
       onMouseLeave={resetValue}
       onBlur={resetValue}
-      className="group rounded-inner border border-[var(--color-border)] bg-[rgba(255,255,255,0.03)] p-4 transition duration-300 hover:border-[var(--color-border-strong)] hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]"
+      className="group rounded-inner border border-[var(--color-border)] bg-[var(--color-hairline-soft)] p-4 transition duration-300 hover:border-[var(--color-border-strong)] hover:shadow-[0_0_30px_var(--color-accent-tint-2)]"
       data-metric-card={isLead ? 'lead' : 'default'}
     >
       <p className="font-mono text-label-sm uppercase tracking-label text-[var(--color-accent)]">{metric.label}</p>
-      <p className="mt-3 font-mono text-2xl font-semibold tabular-nums tracking-tight text-white transition duration-200 group-hover:text-[var(--color-accent)]">
+      <p className="mt-3 font-mono text-2xl font-semibold tabular-nums tracking-tight text-[var(--color-text-strong)] transition duration-200 group-hover:text-[var(--color-accent)]">
         {displayValue}
       </p>
       <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">{metric.detail}</p>

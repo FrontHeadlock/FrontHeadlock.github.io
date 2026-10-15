@@ -102,7 +102,7 @@ export function CommandPalette({ onClose, search, onSearchChange, selectedIndex,
                 onClick={() => onSelect(cmd)}
                 className={cn(
                   'w-full border-b border-[var(--color-border)] px-4 py-3 text-left transition',
-                  idx === selectedIndex ? 'bg-[rgba(0,255,65,0.12)] text-[var(--color-accent)]' : 'text-[var(--color-text-main)] hover:bg-[rgba(0,255,65,0.06)]',
+                  idx === selectedIndex ? 'bg-[var(--color-accent-tint-3)] text-[var(--color-accent)]' : 'text-[var(--color-text-main)] hover:bg-[var(--color-accent-tint-1)]',
                 )}
               >
                 <div className="flex items-center justify-between">

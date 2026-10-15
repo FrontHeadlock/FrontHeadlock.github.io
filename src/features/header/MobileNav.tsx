@@ -49,7 +49,7 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
-      className="absolute inset-x-0 top-full border-t border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.96)] px-5 py-4 md:hidden"
+      className="absolute inset-x-0 top-full border-t border-[var(--color-hairline)] bg-[var(--color-menu-bg)] px-5 py-4 md:hidden"
     >
       <div className="grid gap-2">
         {sections.map((section, index) => (
@@ -60,7 +60,7 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
             onClick={onClose}
             className={cn(
               itemClass,
-              activeSection === section.id && 'border-[var(--color-border-strong)] bg-[rgba(0,255,65,0.08)] text-[var(--color-accent)]',
+              activeSection === section.id && 'border-[var(--color-border-strong)] bg-[var(--color-accent-tint-2)] text-[var(--color-accent)]',
             )}
           >
             {section.label}
@@ -68,7 +68,7 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
         ))}
 
         {/* 데스크톱 헤더에만 있던 레인 토글을 모바일에서도 노출 — 폰에서 캔버스를 끌 수 있어야 한다. */}
-        <div className="mt-1 grid grid-cols-2 gap-2 border-t border-[rgba(255,255,255,0.06)] pt-3">
+        <div className="mt-1 grid grid-cols-2 gap-2 border-t border-[var(--color-hairline)] pt-3">
           <button type="button" onClick={toggleLocale} aria-pressed={locale === 'ko'} className={cn(itemClass, toggleClass)}>
             {locale === 'ko' ? '[KO]' : '[EN]'}
           </button>
@@ -79,7 +79,7 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
             className={cn(
               itemClass,
               toggleClass,
-              rainEnabled && 'border-[var(--color-border)] bg-[rgba(0,255,65,0.06)] text-[var(--color-accent)]',
+              rainEnabled && 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]',
             )}
           >
             {rainEnabled ? strings.header.rainOn : strings.header.rainOff}

@@ -19,7 +19,7 @@ export function IconLinkButton({ href, icon, label, value, disabled = false }: I
       <button
         type="button"
         disabled
-        className={`${baseClassName} cursor-not-allowed border-[var(--color-border)] bg-[rgba(255,255,255,0.02)] text-[var(--color-text-subtle)]`}
+        className={`${baseClassName} cursor-not-allowed border-[var(--color-border)] bg-[var(--color-hairline-soft)] text-[var(--color-text-subtle)]`}
       >
         <span className="flex items-center gap-3">
           <span className="text-[var(--color-text-subtle)]">{icon}</span>
@@ -38,7 +38,7 @@ export function IconLinkButton({ href, icon, label, value, disabled = false }: I
       href={href}
       target={label === 'Email' ? undefined : '_blank'}
       rel={label === 'Email' ? undefined : 'noreferrer'}
-      className={`${baseClassName} border-[var(--color-border)] bg-[rgba(255,255,255,0.02)] text-[var(--color-text-main)] hover:translate-x-[2px] hover:-translate-y-[2px] hover:border-[var(--color-border-strong)] hover:bg-[rgba(0,255,65,0.06)] focus-visible:translate-x-[2px] focus-visible:-translate-y-[2px] focus-visible:border-[var(--color-border-strong)] focus-visible:bg-[rgba(0,255,65,0.06)] focus-visible:outline-none`}
+      className={`${baseClassName} border-[var(--color-border)] bg-[var(--color-hairline-soft)] text-[var(--color-text-main)] hover:translate-x-[2px] hover:-translate-y-[2px] hover:border-[var(--color-border-strong)] hover:bg-[var(--color-accent-tint-1)] focus-visible:translate-x-[2px] focus-visible:-translate-y-[2px] focus-visible:border-[var(--color-border-strong)] focus-visible:bg-[var(--color-accent-tint-1)] focus-visible:outline-none`}
     >
       <span className="flex items-center gap-3">
         <span className="text-[var(--color-accent)] transition duration-200 group-hover:-translate-y-0.5 group-focus-visible:-translate-y-0.5">

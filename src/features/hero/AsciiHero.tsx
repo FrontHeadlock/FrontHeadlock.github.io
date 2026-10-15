@@ -14,7 +14,7 @@ export function AsciiHero({ text, srOnlyText, className }: AsciiHeroProps) {
     <div data-testid="ascii-hero" className={cn('relative w-full', className)}>
       <h1
         className={cn(
-          'font-mono text-[clamp(4rem,14vw,8.75rem)] font-semibold tracking-[-0.08em] text-white',
+          'font-mono text-[clamp(4rem,14vw,8.75rem)] font-semibold tracking-[-0.08em] text-[var(--color-text-strong)]',
           !reducedMotion && isReady && 'sr-only',
         )}
       >

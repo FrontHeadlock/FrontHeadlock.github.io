@@ -104,7 +104,7 @@ export function ProjectDetailPanel({ project, onClose }: ProjectDetailPanelProps
               <p className="font-mono text-label uppercase tracking-label text-[var(--color-accent)]">{project.title}</p>
               <ProjectKindTag kind={project.kind} />
             </div>
-            <h3 className="text-2xl font-semibold text-white md:text-3xl">{project.subtitle}</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-strong)] md:text-3xl">{project.subtitle}</h3>
             {meta ? <p className="font-mono text-label-sm tracking-label-tight text-[var(--color-text-subtle)]">{meta}</p> : null}
           </div>
           <div className="flex shrink-0 items-center gap-2">

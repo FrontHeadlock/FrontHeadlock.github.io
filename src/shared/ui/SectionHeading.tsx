@@ -28,7 +28,7 @@ export function SectionHeading({ id, eyebrow, title, description }: SectionHeadi
         <DecodeLabel text={eyebrow} />
       </p>
       <div className="space-y-2">
-        <h2 id={id} className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
+        <h2 id={id} className="text-3xl font-semibold tracking-tight text-[var(--color-text-strong)] md:text-4xl">
           {title}
         </h2>
         {description ? <p className="max-w-3xl text-sm leading-7 text-[var(--color-text-muted)] md:text-base">{description}</p> : null}

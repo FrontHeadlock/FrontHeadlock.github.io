@@ -82,7 +82,7 @@ export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryPr
         aria-hidden="true"
         style={{ transitionDelay: delay }}
         className={cn(
-          'timeline-rail absolute -left-8 ml-[5px] w-px origin-top bg-[var(--color-accent)] shadow-[0_0_8px_rgba(0,255,65,0.6)] transition-transform duration-700 ease-out motion-reduce:transition-none',
+          'timeline-rail absolute -left-8 ml-[5px] w-px origin-top bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent-glow-soft)] transition-transform duration-700 ease-out motion-reduce:transition-none',
           isFirst ? 'top-3' : '-top-4',
           isLast ? 'bottom-3' : 'bottom-0',
           revealed ? 'scale-y-100' : 'scale-y-0',
@@ -91,14 +91,14 @@ export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryPr
       {/* 노드: 헤더의 status 점과 같은 핑을 노출 순간 두 번만 재생해 "켜지는" 인상을 준다. */}
       <span aria-hidden="true" className="timeline-node absolute -left-8 top-7 flex h-[11px] w-[11px] items-center justify-center">
         {revealed ? (
-          <span className="absolute inset-0 rounded-full bg-[rgba(0,255,65,0.55)] animate-ping [animation-duration:1.4s] [animation-iteration-count:2] motion-reduce:hidden" />
+          <span className="absolute inset-0 rounded-full bg-[var(--color-accent-glow-soft)] animate-ping [animation-duration:1.4s] [animation-iteration-count:2] motion-reduce:hidden" />
         ) : null}
         <span
           style={{ transitionDelay: delay }}
           className={cn(
             'relative h-[11px] w-[11px] rounded-full border transition-colors duration-500',
             revealed
-              ? 'border-[var(--color-accent)] bg-[var(--color-accent)] shadow-[0_0_14px_rgba(0,255,65,0.95)]'
+              ? 'border-[var(--color-accent)] bg-[var(--color-accent)] shadow-[0_0_14px_var(--color-accent-glow)]'
               : 'border-[var(--color-border)] bg-[var(--color-bg)]',
           )}
         />
@@ -119,7 +119,7 @@ export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryPr
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-start justify-between gap-3">
-              <h3 className="text-xl font-semibold text-white">{entry.title}</h3>
+              <h3 className="text-xl font-semibold text-[var(--color-text-strong)]">{entry.title}</h3>
               {entry.link ? <RecordLink href={entry.link} label={strings.experience.publicRecord} /> : null}
             </div>
             {entry.organization ? (

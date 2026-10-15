@@ -23,6 +23,27 @@
   --color-danger-border: rgba(255, 95, 86, 0.3);
   --color-danger-bg: rgba(255, 95, 86, 0.06);
   --color-warning: #ffbd2e;
+  /* 컴포넌트에 흩어져 있던 리터럴을 모은 토큰. 값은 기존과 같다. */
+  --color-text-strong: #ffffff;
+  --color-accent-tint-1: rgba(0, 255, 65, 0.06);
+  --color-accent-tint-2: rgba(0, 255, 65, 0.08);
+  --color-accent-tint-3: rgba(0, 255, 65, 0.12);
+  --color-accent-glow: rgba(0, 255, 65, 0.95);
+  --color-accent-glow-soft: rgba(0, 255, 65, 0.55);
+  --color-hairline: rgba(255, 255, 255, 0.06);
+  --color-hairline-soft: rgba(255, 255, 255, 0.02);
+  --color-header-bg: rgba(10, 10, 10, 0.78);
+  --color-menu-bg: rgba(10, 10, 10, 0.96);
+  --color-surface-hover: rgba(24, 32, 28, 0.84);
+  --color-chip-bg: transparent;
+  --shadow-frame: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 24px 80px rgba(0, 0, 0, 0.45);
+  --page-background:
+    radial-gradient(circle at top, rgba(0, 255, 65, 0.08), transparent 26%),
+    linear-gradient(180deg, #0a0a0a 0%, #0a0d0b 100%);
+  --backdrop-background:
+    radial-gradient(80% 60% at 20% 18%, rgba(0, 255, 115, 0.08), transparent 62%),
+    radial-gradient(70% 50% at 78% 70%, rgba(0, 198, 255, 0.07), transparent 64%),
+    linear-gradient(180deg, rgba(2, 8, 12, 0.94), rgba(3, 6, 10, 0.98));
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
@@ -45,9 +66,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top, rgba(0, 255, 65, 0.08), transparent 26%),
-    linear-gradient(180deg, #0a0a0a 0%, #0a0d0b 100%);
+  background: var(--page-background);
   color: var(--color-text-main);
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }

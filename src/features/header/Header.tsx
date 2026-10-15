@@ -27,15 +27,15 @@ export function Header({ onOpenPalette }: HeaderProps) {
   ]
 
   return (
-    <header data-site-header className="sticky top-0 z-40 border-b border-[rgba(255,255,255,0.06)] bg-[rgba(10,10,10,0.78)] backdrop-blur-xl">
+    <header data-site-header className="sticky top-0 z-40 border-b border-[var(--color-hairline)] bg-[var(--color-header-bg)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 md:px-8">
         <div className="group flex items-center gap-3">
           <span className="relative flex h-2.5 w-2.5">
             <span
               aria-hidden="true"
-              className="absolute inset-0 animate-ping rounded-full bg-[rgba(0,255,65,0.55)] [animation-duration:2.4s] motion-reduce:hidden"
+              className="absolute inset-0 animate-ping rounded-full bg-[var(--color-accent-glow-soft)] [animation-duration:2.4s] motion-reduce:hidden"
             />
-            <span className="relative h-2.5 w-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_14px_rgba(0,255,65,0.95)] transition group-hover:scale-110" />
+            <span className="relative h-2.5 w-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_14px_var(--color-accent-glow)] transition group-hover:scale-110" />
           </span>
           {/* resume.node / status online은 시스템 토큰 — 로케일과 무관하게 영어로 유지한다. */}
           <span className="flex flex-col leading-none">
@@ -51,7 +51,7 @@ export function Header({ onOpenPalette }: HeaderProps) {
               href={`#${section.id}`}
               className={cn(
                 'rounded-full border border-transparent px-3 py-1.5 font-mono text-label-sm uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]',
-                activeSection === section.id && 'border-[var(--color-border-strong)] bg-[rgba(0,255,65,0.08)] text-[var(--color-accent)]',
+                activeSection === section.id && 'border-[var(--color-border-strong)] bg-[var(--color-accent-tint-2)] text-[var(--color-accent)]',
               )}
             >
               [{section.label.toLowerCase()}]
@@ -72,7 +72,7 @@ export function Header({ onOpenPalette }: HeaderProps) {
             className={cn(
               'rounded-full border px-3 py-1 font-mono text-label-xs uppercase tracking-label-tight transition',
               rainEnabled
-                ? 'border-[var(--color-border)] bg-[rgba(0,255,65,0.06)] text-[var(--color-accent)]'
+                ? 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]'
                 : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-accent)]',
             )}
           >

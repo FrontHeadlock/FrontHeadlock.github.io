@@ -34,8 +34,8 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
       className={cn(
         'group scroll-mt-24 rounded-card border p-6 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-strong)]',
         isActive
-          ? 'border-[var(--color-border-strong)] bg-[rgba(0,255,65,0.08)] shadow-[0_0_40px_rgba(0,255,65,0.12)]'
-          : 'border-[var(--color-border)] bg-[var(--color-surface-card)] hover:border-[var(--color-border-strong)] hover:bg-[rgba(24,32,28,0.84)]',
+          ? 'border-[var(--color-border-strong)] bg-[var(--color-accent-tint-2)] shadow-[0_0_40px_var(--color-accent-tint-3)]'
+          : 'border-[var(--color-border)] bg-[var(--color-surface-card)] hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-hover)]',
       )}
       aria-expanded={isActive}
       aria-controls={isActive ? projectPanelId(project.slug) : undefined}
@@ -49,14 +49,14 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
               </p>
               <ProjectKindTag kind={project.kind} />
             </div>
-            <h3 className="text-xl font-semibold text-white">{project.subtitle}</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-strong)]">{project.subtitle}</h3>
           </div>
           <span className="font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)]">
             {isActive ? strings.projects.expanded : strings.projects.open}
           </span>
         </div>
         <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.summary}</p>
-        <p className="rounded-inner border border-[var(--color-border)] bg-[rgba(24,30,27,0.82)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
+        <p className="rounded-inner border border-[var(--color-border)] bg-[var(--color-surface-hover)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
           {project.focus}
         </p>
         <TechStackChips items={project.techStack} />

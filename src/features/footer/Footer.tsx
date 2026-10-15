@@ -7,7 +7,7 @@ export function Footer() {
   const emailLink = profile.links.find((link) => link.kind === 'email')
 
   return (
-    <footer className="border-t border-[rgba(255,255,255,0.06)] px-5 py-8 md:px-8">
+    <footer className="border-t border-[var(--color-hairline)] px-5 py-8 md:px-8">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 text-center">
         <p className="font-mono text-label text-[var(--color-text-subtle)]">
           {strings.footer.sessionClosed}
