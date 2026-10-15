@@ -10,7 +10,6 @@ import { MatrixRainCanvas } from '../../shared/ui/MatrixRainCanvas'
 import { RainPreferenceProvider } from '../../shared/hooks/useRainPreference'
 import { ThemePreferenceProvider, useThemePreference } from '../../shared/hooks/useThemePreference'
 import { useCommandPalette } from '../../shared/hooks/useCommandPalette'
-import { LocaleProvider } from '../../shared/i18n/LocaleContext'
 import { useStrings } from '../../shared/i18n/strings'
 import '../../shared/styles/matrix-effects.css'
 import '../../shared/styles/print.css'
@@ -64,12 +63,10 @@ function ResumePageContent() {
 
 export function ResumePage() {
   return (
-    <LocaleProvider>
-      <ThemePreferenceProvider>
+    <ThemePreferenceProvider>
         <RainPreferenceProvider>
           <ResumePageContent />
         </RainPreferenceProvider>
-      </ThemePreferenceProvider>
-    </LocaleProvider>
+    </ThemePreferenceProvider>
   )
 }

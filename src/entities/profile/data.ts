@@ -1,6 +1,6 @@
 import type { Profile } from './types'
 
-export const profileKo: Profile = {
+export const profile: Profile = {
   name: '박규민',
   role: 'DevOps Engineer',
   affiliation: 'Telechips · 차량용 SoC 개발 인프라 운영 및 DevOps Engineer',

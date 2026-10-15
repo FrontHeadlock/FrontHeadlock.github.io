@@ -2,7 +2,7 @@ import type { ExperienceEntry } from './types'
 
 // 순서 = 화면 순서. 오래된 것부터 현재로 가되, 오픈소스 기여와 수상은 맨 뒤에 모아 둔다.
 // 설명의 줄바꿈("\n")은 화면에서 그대로 줄이 나뉜다(whitespace-pre-line).
-export const experienceKo: ExperienceEntry[] = [
+export const experience: ExperienceEntry[] = [
   {
     title: '컴퓨터정보공학부 학사',
     organization: '가톨릭대학교',

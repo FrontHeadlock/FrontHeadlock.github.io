@@ -3,7 +3,6 @@ import { Moon, Sun } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useRainPreference } from '../../shared/hooks/useRainPreference'
 import { useThemePreference } from '../../shared/hooks/useThemePreference'
-import { useLocale } from '../../shared/i18n/LocaleContext'
 import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 
@@ -20,7 +19,6 @@ const itemClass =
 const toggleClass = 'justify-center font-mono text-label-sm uppercase tracking-label-tight'
 
 function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProps, 'open'>) {
-  const { locale, toggleLocale } = useLocale()
   const { enabled: rainEnabled, toggle: toggleRain } = useRainPreference()
   const { theme, toggle: toggleTheme } = useThemePreference()
   const strings = useStrings()
@@ -71,10 +69,7 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
         ))}
 
         {/* 데스크톱 헤더에만 있던 레인 토글을 모바일에서도 노출 — 폰에서 캔버스를 끌 수 있어야 한다. */}
-        <div className={cn('mt-1 grid gap-2 border-t border-[var(--color-hairline)] pt-3', theme === 'dark' ? 'grid-cols-3' : 'grid-cols-2')}>
-          <button type="button" onClick={toggleLocale} aria-pressed={locale === 'ko'} className={cn(itemClass, toggleClass)}>
-            {locale === 'ko' ? '[KO]' : '[EN]'}
-          </button>
+        <div className={cn('mt-1 grid gap-2 border-t border-[var(--color-hairline)] pt-3', theme === 'dark' ? 'grid-cols-2' : 'grid-cols-1')}>
           <button
             type="button"
             onClick={toggleTheme}

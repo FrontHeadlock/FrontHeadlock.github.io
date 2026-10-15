@@ -1,6 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { LocaleProvider } from '../i18n/LocaleContext'
 import { useCommandPalette } from './useCommandPalette'
 import { RainPreferenceProvider, useRainPreference } from './useRainPreference'
 import { ThemePreferenceProvider } from './useThemePreference'
@@ -24,13 +23,11 @@ function renderPalette({ theme = 'light' }: { theme?: 'light' | 'dark' } = {}) {
   window.localStorage.setItem('theme', theme)
 
   return render(
-    <LocaleProvider>
-      <ThemePreferenceProvider>
-        <RainPreferenceProvider>
-          <Probe />
-        </RainPreferenceProvider>
-      </ThemePreferenceProvider>
-    </LocaleProvider>,
+    <ThemePreferenceProvider>
+      <RainPreferenceProvider>
+        <Probe />
+      </RainPreferenceProvider>
+    </ThemePreferenceProvider>,
   )
 }
 
@@ -70,7 +67,7 @@ describe('useCommandPalette', () => {
   it('filters commands by label and description', () => {
     renderPalette({ theme: 'dark' })
 
-    fireEvent.change(screen.getByTestId('search'), { target: { value: 'rain' } })
+    fireEvent.change(screen.getByTestId('search'), { target: { value: '매트릭스' } })
 
     expect(screen.getByTestId('count')).toHaveTextContent('1')
     expect(screen.getByTestId('selected')).toHaveTextContent('toggle-rain')
@@ -95,7 +92,7 @@ describe('useCommandPalette', () => {
     expect(screen.getByTestId('rain')).toHaveTextContent('true')
 
     pressKey({ key: 'k', metaKey: true })
-    fireEvent.change(screen.getByTestId('search'), { target: { value: 'rain' } })
+    fireEvent.change(screen.getByTestId('search'), { target: { value: '매트릭스' } })
     pressKey({ key: 'Enter' })
 
     expect(screen.getByTestId('rain')).toHaveTextContent('false')

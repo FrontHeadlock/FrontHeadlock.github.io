@@ -1,5 +1,3 @@
-import { useLocale, type Locale } from './LocaleContext'
-
 type StringDictionary = {
   skipToContent: string
   nav: { about: string; experience: string; projects: string }
@@ -57,86 +55,8 @@ type StringDictionary = {
   }
 }
 
-const en: StringDictionary = {
-  skipToContent: 'Skip to content',
-  nav: { about: 'about', experience: 'experience', projects: 'projects' },
-  hero: {
-    metricsLabel: 'Operational Metrics',
-    coreResults: 'Core Results',
-    metricsBasis: 'Measured in 2026',
-    metricsCount: '{count} metrics',
-    coreResultsDescription:
-      'Figures measured in in-house infrastructure operations and projects, chosen around repetitive-work automation, storage capacity reclamation, and shorter deployment and authentication latency.',
-  },
-  about: {
-    eyebrow: 'About',
-    title: 'I build infrastructure that automates recurring operations and surfaces resource state through metrics first.',
-    description: 'I prefer operations that catch problems early over firefighting, and reversible changes over manual work.',
-    problemSolvingLabel: 'Problem Solving',
-  },
-  experience: {
-    eyebrow: 'Experience',
-    title: 'A timeline of problems met in operations and solved through automation and contribution.',
-    sequenceLog: 'Sequence log',
-    publicRecord: 'View public record',
-    relatedProjects: 'Related projects',
-  },
-  projects: {
-    eyebrow: 'Projects',
-    title: 'Projects are laid out so the problem, the judgment call, and the measured result come first.',
-    description:
-      'In-house projects from my current role come first, followed by university projects. In-house entries describe only structure and figures that can be shared publicly.',
-    open: 'Open',
-    expanded: 'Expanded',
-    close: 'Close',
-  },
-  projectDetail: {
-    overview: 'Overview',
-    role: 'Role',
-    techStack: 'Tech Stack',
-    problemContext: 'Problem Context',
-    approach: 'Approach',
-    outcomes: 'Outcomes / Metrics',
-    learnings: 'Learnings',
-    troubleshooting: 'Troubleshooting',
-    repository: 'Repository',
-  },
-  footer: {
-    sessionClosed: '> session closed.',
-    reachMeAt: ' reach me at ',
-    backToTop: 'back to top ↑',
-  },
-  header: {
-    rainOn: 'live rain',
-    rainOff: 'rain off',
-    openMenu: 'Open menu',
-    closeMenu: 'Close menu',
-    contents: 'contents',
-    toDark: 'Switch to dark mode',
-    toLight: 'Switch to light mode',
-  },
-  links: { open: 'Open', placeholder: 'Placeholder' },
-  troubleshooting: { badge: 'System Alert', problem: 'Problem', rootCause: 'Root Cause', action: 'Action', result: 'Result' },
-  palette: {
-    placeholder: 'Search the contents...',
-    noResults: 'No commands found',
-    hintToggle: 'Cmd+K or Cmd+` to toggle',
-    hintNavigate: '↑↓ to navigate, Enter to select, Esc to close',
-    openAriaLabel: 'Open contents',
-    dialogLabel: 'Contents',
-    commands: {
-      home: { label: 'Go to Home', description: 'Navigate to the top of the page' },
-      about: { label: 'Go to About', description: 'Jump to the About section' },
-      experience: { label: 'Go to Experience', description: 'Jump to the Experience section' },
-      projects: { label: 'Go to Projects', description: 'Jump to the Projects section' },
-      rain: { label: 'Toggle Rain', description: 'Turn the matrix rain animation on or off' },
-      theme: { label: 'Toggle Theme', description: 'Switch between the light and dark theme' },
-      email: { label: 'Copy Email', description: 'Copy email address to clipboard' },
-    },
-  },
-}
-
-const ko: StringDictionary = {
+// 한국어 단일 사전. 영문판은 2026-10-15에 제거했다.
+export const strings: StringDictionary = {
   skipToContent: '본문으로 건너뛰기',
   nav: { about: '소개', experience: '경력', projects: '프로젝트' },
   hero: {
@@ -214,9 +134,6 @@ const ko: StringDictionary = {
   },
 }
 
-export const strings: Record<Locale, StringDictionary> = { en, ko }
-
 export function useStrings() {
-  const { locale } = useLocale()
-  return strings[locale]
+  return strings
 }

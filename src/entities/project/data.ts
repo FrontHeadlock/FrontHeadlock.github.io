@@ -2,7 +2,7 @@ import type { Project } from './types'
 
 // 순서 = 화면 순서. 재직 중 사내 프로젝트를 앞에, 학부 프로젝트를 뒤에 둔다.
 // 사내 프로젝트에는 고객사명·SoC 프로젝트명·내부 식별자를 쓰지 않는다.
-export const projectsKo: Project[] = [
+export const projects: Project[] = [
   {
     slug: 'agentic-ops',
     title: 'AI Agent Platform',

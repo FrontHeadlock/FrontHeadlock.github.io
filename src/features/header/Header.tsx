@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useActiveSection } from '../../shared/hooks/useActiveSection'
 import { useRainPreference } from '../../shared/hooks/useRainPreference'
 import { useThemePreference } from '../../shared/hooks/useThemePreference'
-import { useLocale } from '../../shared/i18n/LocaleContext'
 import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 import { MobileNav } from './MobileNav'
@@ -18,7 +17,6 @@ export function Header({ onOpenPalette }: HeaderProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const activeSection = useActiveSection(SECTION_IDS)
   const { enabled: rainEnabled, toggle: toggleRain } = useRainPreference()
-  const { locale, toggleLocale } = useLocale()
   const { theme, toggle: toggleTheme } = useThemePreference()
   const strings = useStrings()
 
@@ -65,20 +63,12 @@ export function Header({ onOpenPalette }: HeaderProps) {
               {theme === 'dark' ? `[${section.label.toLowerCase()}]` : section.label}
             </a>
           ))}
-          <button
-            type="button"
-            onClick={toggleLocale}
-            aria-pressed={locale === 'ko'}
-            className="ml-2 rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-label-xs uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
-          >
-            {locale === 'ko' ? '[KO]' : '[EN]'}
-          </button>
           {/* 해·달 탭: 현재 테마를 아이콘으로 보여주고(라이트=해, 다크=달), 음성 라벨은 전환 동작을 읽는다. */}
           <button
             type="button"
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? strings.header.toLight : strings.header.toDark}
-            className="inline-flex h-7 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
+            className="ml-2 inline-flex h-7 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
           >
             {theme === 'dark' ? <Moon size={14} aria-hidden="true" /> : <Sun size={14} aria-hidden="true" />}
           </button>
