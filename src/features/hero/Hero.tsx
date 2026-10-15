@@ -13,10 +13,8 @@ export function Hero() {
   const strings = useStrings()
 
   return (
-    <section
-      id="home"
-      className="mx-auto grid max-w-7xl gap-8 px-5 pb-16 pt-12 md:px-8 md:pb-24 md:pt-20 xl:grid-cols-[1.15fr_0.85fr] xl:items-start"
-    >
+    <section id="home" className="theme-band">
+      <div className="mx-auto grid max-w-7xl gap-8 px-5 pb-16 pt-12 md:px-8 md:pb-24 md:pt-20 xl:grid-cols-[1.15fr_0.85fr] xl:items-start">
       <Reveal>
         <div className="flex flex-col gap-6 xl:min-h-[33rem] xl:justify-between">
           <div data-testid="hero-copy" className="space-y-3 md:space-y-4">
@@ -35,7 +33,7 @@ export function Hero() {
       </Reveal>
 
       <Reveal delay={0.08}>
-        <TerminalFrame label={strings.hero.metricsLabel} className="xl:mb-2">
+        <TerminalFrame label={strings.hero.metricsLabel} className="theme-card xl:mb-2">
           <div className="space-y-4">
             <div className="space-y-1.5">
               <p className="font-mono text-label uppercase tracking-label text-[var(--color-text-subtle)]">{strings.hero.coreResults}</p>
@@ -45,6 +43,7 @@ export function Hero() {
           </div>
         </TerminalFrame>
       </Reveal>
+      </div>
     </section>
   )
 }

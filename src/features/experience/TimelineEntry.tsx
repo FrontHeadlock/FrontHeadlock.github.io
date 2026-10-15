@@ -108,7 +108,7 @@ export function TimelineEntry({ entry, index, isFirst, isLast }: TimelineEntryPr
         data-reveal={revealed ? 'revealed' : 'pending'}
         style={{ transitionDelay: delay, transitionDuration: `${REVEAL.duration}s` }}
         className={cn(
-          'grid gap-4 rounded-card border border-[var(--color-border)] bg-[var(--color-surface-card)] p-5 transition ease-out motion-reduce:!translate-y-0 motion-reduce:!opacity-100 md:grid-cols-[140px_1fr]',
+          'theme-card grid gap-4 rounded-card border border-[var(--color-border)] bg-[var(--color-surface-card)] p-5 transition ease-out motion-reduce:!translate-y-0 motion-reduce:!opacity-100 md:grid-cols-[140px_1fr]',
           revealed ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
         )}
       >

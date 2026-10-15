@@ -12,10 +12,10 @@ export function ExperienceTimeline() {
     <section
       id="experience"
       aria-labelledby="experience-title"
-      className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24"
+      className="theme-band"
       style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1200px' }}
     >
-      <div className="space-y-8">
+      <div className="mx-auto max-w-7xl space-y-8 px-5 py-12 md:px-8 md:py-24">
         <Reveal>
           <SectionHeading
             id="experience-title"

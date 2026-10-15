@@ -97,9 +97,9 @@ export function ProjectsSection() {
   }, [selectedSlug, close])
 
   return (
-    <section id="projects" aria-labelledby="projects-title" className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
+    <section id="projects" aria-labelledby="projects-title" className="theme-alt">
       <Reveal>
-        <div className="space-y-8">
+        <div className="mx-auto max-w-7xl space-y-8 px-5 py-12 md:px-8 md:py-24">
           <SectionHeading
             id="projects-title"
             eyebrow={strings.projects.eyebrow}

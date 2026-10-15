@@ -37,7 +37,7 @@ export function Header({ onOpenPalette }: HeaderProps) {
               aria-hidden="true"
               className="absolute inset-0 animate-ping rounded-full bg-[var(--color-accent-glow-soft)] [animation-duration:2.4s] motion-reduce:hidden"
             />
-            <span className="relative h-2.5 w-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_14px_var(--color-accent-glow)] transition group-hover:scale-110" />
+            <span className="relative h-2.5 w-2.5 rounded-full bg-[var(--color-status)] shadow-[0_0_14px_var(--color-accent-glow)] transition group-hover:scale-110" />
           </span>
           {/* resume.node / status online은 시스템 토큰 — 로케일과 무관하게 영어로 유지한다. */}
           <span className="flex flex-col leading-none">
@@ -52,11 +52,17 @@ export function Header({ onOpenPalette }: HeaderProps) {
               key={section.id}
               href={`#${section.id}`}
               className={cn(
-                'rounded-full border border-transparent px-3 py-1.5 font-mono text-label-sm uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]',
-                activeSection === section.id && 'border-[var(--color-border-strong)] bg-[var(--color-accent-tint-2)] text-[var(--color-accent)]',
+                theme === 'dark'
+                  ? 'rounded-full border border-transparent px-3 py-1.5 font-mono text-label-sm uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]'
+                  : 'border-b-2 border-transparent px-3 py-1.5 text-sm font-semibold text-[var(--color-text-muted)] transition hover:text-[var(--color-text-strong)]',
+                activeSection === section.id &&
+                  (theme === 'dark'
+                    ? 'border-[var(--color-border-strong)] bg-[var(--color-accent-tint-2)] text-[var(--color-accent)]'
+                    : 'border-[var(--color-accent)] text-[var(--color-text-strong)]'),
               )}
             >
-              [{section.label.toLowerCase()}]
+              {/* 다크는 터미널식 [label], 라이트는 TDS식 밑줄 탭 */}
+              {theme === 'dark' ? `[${section.label.toLowerCase()}]` : section.label}
             </a>
           ))}
           <button
@@ -96,7 +102,7 @@ export function Header({ onOpenPalette }: HeaderProps) {
             aria-label={strings.palette.openAriaLabel}
             className="ml-2 rounded-full border border-transparent px-3 py-1.5 font-mono text-label-sm uppercase tracking-label-tight text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]"
           >
-            [{strings.header.contents}]
+            {theme === 'dark' ? `[${strings.header.contents}]` : strings.header.contents}
           </button>
         </nav>
 

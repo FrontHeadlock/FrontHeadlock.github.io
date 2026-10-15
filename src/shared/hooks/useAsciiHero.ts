@@ -90,6 +90,15 @@ export function useAsciiHero(text: string) {
 
     // initial=true: 흩어진 위치에서 모여드는 인트로. false(리사이즈 재샘플링): 현재 자리 근처에서 바로 정착해
     // 재흩뿌림이 보이지 않고, 디코드 타이밍도 되감지 않는다.
+    // 밴드(.theme-band) 안에서 재정의된 --color-accent를 쓰도록 캔버스 자신의 계산값을 읽는다.
+    const readAccent = () => getComputedStyle(canvas).getPropertyValue('--color-accent').trim() || '#00ff41'
+
+    // 테마가 바뀌면 입자 색만 갱신한다(재샘플링 없음).
+    const themeObserver = new MutationObserver(() => {
+      accentColor = readAccent()
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
     const buildParticles = (initial: boolean) => {
       const parentWidth = canvas.parentElement?.clientWidth ?? canvas.clientWidth ?? 640
       const isMobile = window.innerWidth < 768
@@ -109,7 +118,7 @@ export function useAsciiHero(text: string) {
       canvas.height = Math.floor(height * dpr)
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#00ff41'
+      accentColor = readAccent()
 
       const offscreenCanvas = document.createElement('canvas')
       offscreenCanvas.width = width
@@ -350,6 +359,7 @@ export function useAsciiHero(text: string) {
 
     return () => {
       cancelled = true
+      themeObserver.disconnect()
       stopLoop()
       window.clearTimeout(fontTimer)
       window.clearTimeout(resizeTimer)

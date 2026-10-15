@@ -40,10 +40,14 @@ describe('App', () => {
     expect(screen.queryByText(/whoami/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Tech Stack/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /^Contact$/i })).not.toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /^\[about\]$/i })).toHaveAttribute('href', '#about')
-    expect(screen.getByRole('link', { name: /^\[experience\]$/i })).toHaveAttribute('href', '#experience')
-    expect(screen.getByRole('link', { name: /^\[projects\]$/i })).toHaveAttribute('href', '#projects')
-    expect(screen.getByRole('button', { name: /^Open contents$/ })).toHaveTextContent('[contents]')
+    expect(screen.getByRole('link', { name: /^about$/i })).toHaveAttribute('href', '#about')
+    expect(screen.getByRole('link', { name: /^experience$/i })).toHaveAttribute('href', '#experience')
+    expect(screen.getByRole('link', { name: /^projects$/i })).toHaveAttribute('href', '#projects')
+    expect(screen.getByRole('button', { name: /^Open contents$/ })).toHaveTextContent('contents')
+    expect(screen.getByRole('button', { name: /^Open contents$/ })).not.toHaveTextContent('[')
+    expect(document.getElementById('home')).toHaveClass('theme-band')
+    expect(document.getElementById('experience')).toHaveClass('theme-band')
+    expect(document.getElementById('projects')).toHaveClass('theme-alt')
     expect(document.documentElement.dataset.theme).toBe('light')
     expect(screen.getAllByRole('button', { name: /^Switch to dark mode$/ })).not.toHaveLength(0)
     expect(screen.queryByText('⌘K')).not.toBeInTheDocument()
@@ -156,6 +160,9 @@ describe('App', () => {
 
     expect(document.documentElement.dataset.theme).toBe('dark')
     expect(screen.getAllByRole('button', { name: /^Switch to light mode$/ })).not.toHaveLength(0)
+    // 다크는 터미널식 대괄호 라벨을 유지한다
+    expect(screen.getByRole('link', { name: /^\[about\]$/i })).toHaveAttribute('href', '#about')
+    expect(screen.getByRole('button', { name: /^Open contents$/ })).toHaveTextContent('[contents]')
   })
 
   it('closes the expanded project panel from its close button or Escape and returns focus to the card', async () => {

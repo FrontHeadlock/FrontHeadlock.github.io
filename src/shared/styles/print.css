@@ -151,6 +151,18 @@
     padding-left: 0;
   }
 
+  /* 라이트 테마의 네이비 밴드는 인쇄에서 바탕을 없애고 글자색을 본문값으로 되돌린다 */
+  .theme-band,
+  .theme-alt {
+    background: transparent !important;
+    --color-text-main: #1a1a1a;
+    --color-text-strong: #1a1a1a;
+    --color-text-muted: #404040;
+    --color-text-subtle: #666666;
+    --color-accent: #0066cc;
+    --color-border: #d0d0d0;
+  }
+
   .rounded-card,
   .rounded-inner,
   .rounded-full {

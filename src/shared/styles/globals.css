@@ -25,6 +25,7 @@
   --color-warning: #ffbd2e;
   /* 컴포넌트에 흩어져 있던 리터럴을 모은 토큰. 값은 기존과 같다. */
   --color-text-strong: #ffffff;
+  --color-status: #00ff41;
   --color-accent-tint-1: rgba(0, 255, 65, 0.06);
   --color-accent-tint-2: rgba(0, 255, 65, 0.08);
   --color-accent-tint-3: rgba(0, 255, 65, 0.12);
@@ -45,6 +46,116 @@
     radial-gradient(70% 50% at 78% 70%, rgba(0, 198, 255, 0.07), transparent 64%),
     linear-gradient(180deg, rgba(2, 8, 12, 0.94), rgba(3, 6, 10, 0.98));
   font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}
+
+/*
+ * 라이트 테마(기본). 도안 "N1+ 네이비": TDS grey 단계 글자색, 네이비(#002c5f) 악센트,
+ * 히어로·경력은 네이비 밴드(.theme-band), 프로젝트는 연회색 밴드(.theme-alt), 그 안의 카드는 .theme-card로 흰 카드.
+ * 다크는 :root 값 그대로이며 data-theme="dark"일 때 아무것도 덮어쓰지 않는다.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-strong: #ffffff;
+  --color-surface-card: #ffffff;
+  --color-surface-deep: #f2f4f6;
+  --color-accent: #002c5f;
+  --color-border: #e5e8eb;
+  --color-border-strong: #002c5f;
+  --color-text-main: #333d4b;
+  --color-text-strong: #191f28;
+  --color-text-muted: #4e5968;
+  --color-text-subtle: #6b7684;
+  --color-danger: #d6373f;
+  --color-danger-soft: #c0282f;
+  --color-danger-border: rgba(240, 68, 82, 0.35);
+  --color-danger-bg: rgba(240, 68, 82, 0.06);
+  --color-warning: #b86e00;
+  --color-status: #04c75a;
+  --color-accent-tint-1: #f2f4f6;
+  --color-accent-tint-2: #e8f3ff;
+  --color-accent-tint-3: rgba(0, 44, 95, 0.12);
+  --color-accent-glow: transparent;
+  --color-accent-glow-soft: rgba(4, 199, 90, 0.35);
+  --color-hairline: #e5e8eb;
+  --color-hairline-soft: #f9fafb;
+  --color-header-bg: rgba(255, 255, 255, 0.92);
+  --color-menu-bg: rgba(255, 255, 255, 0.97);
+  --color-surface-hover: #f2f4f6;
+  --color-chip-bg: #f2f4f6;
+  --shadow-frame: 0 1px 2px rgba(25, 31, 40, 0.04);
+  --page-background: #ffffff;
+  --backdrop-background: none;
+}
+
+/* 네이비 밴드: 글자는 흰색·연파랑, 악센트는 연파랑(#aacae6, 네이비 위 7.7:1) */
+:root[data-theme='light'] .theme-band {
+  background: #002c5f;
+  --color-text-main: #ffffff;
+  --color-text-strong: #ffffff;
+  --color-text-muted: #aacae6;
+  --color-text-subtle: #aacae6;
+  --color-accent: #aacae6;
+  --color-border: rgba(255, 255, 255, 0.28);
+  --color-border-strong: rgba(255, 255, 255, 0.6);
+  --color-hairline-soft: rgba(255, 255, 255, 0.08);
+  --color-accent-tint-1: rgba(255, 255, 255, 0.12);
+  --color-accent-tint-2: rgba(255, 255, 255, 0.16);
+  --color-chip-bg: rgba(255, 255, 255, 0.1);
+  --color-accent-glow-soft: rgba(170, 202, 230, 0.35);
+}
+
+/* 밴드 안의 흰 카드: 바깥 라이트 값으로 되돌린다 */
+:root[data-theme='light'] .theme-band .theme-card {
+  --color-text-main: #333d4b;
+  --color-text-strong: #191f28;
+  --color-text-muted: #4e5968;
+  --color-text-subtle: #6b7684;
+  --color-accent: #002c5f;
+  --color-border: #e5e8eb;
+  --color-border-strong: #002c5f;
+  --color-hairline-soft: #f9fafb;
+  --color-accent-tint-1: #f2f4f6;
+  --color-accent-tint-2: #e8f3ff;
+  --color-chip-bg: #f2f4f6;
+}
+
+:root[data-theme='light'] .theme-alt {
+  background: #f9fafb;
+}
+
+/* 라이트는 터미널 라벨 대신 TDS식 산세리프 라벨: 모노·대문자·광폭 자간을 푼다 */
+:root[data-theme='light'] .font-mono {
+  font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  letter-spacing: 0;
+}
+
+:root[data-theme='light'] .uppercase {
+  text-transform: none;
+}
+
+:root[data-theme='light'] .text-label,
+:root[data-theme='light'] .text-label-sm,
+:root[data-theme='light'] .text-label-xs {
+  font-weight: 600;
+}
+
+/* 섹션 눈썹 라벨은 라이트에서 칩이 된다 */
+:root[data-theme='light'] .section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: var(--color-accent-tint-2);
+  color: var(--color-accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+:root[data-theme='light'] .theme-band .section-eyebrow {
+  color: #ffffff;
 }
 
 html {
