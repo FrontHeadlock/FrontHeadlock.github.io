@@ -4,6 +4,7 @@ import { IconLinkButton } from '../../shared/ui/IconLinkButton'
 
 type HeroLinksProps = {
   links: ProfileLink[]
+  variant?: 'terminal' | 'tile'
 }
 
 function resolveIcon(label: string) {
@@ -14,7 +15,7 @@ function resolveIcon(label: string) {
   return <FileText size={18} />
 }
 
-export function HeroLinks({ links }: HeroLinksProps) {
+export function HeroLinks({ links, variant = 'terminal' }: HeroLinksProps) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {links.map((link) => (
@@ -25,6 +26,7 @@ export function HeroLinks({ links }: HeroLinksProps) {
           label={link.label}
           value={link.value}
           disabled={link.kind === 'disabled'}
+          variant={variant}
         />
       ))}
     </div>

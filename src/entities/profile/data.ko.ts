@@ -4,6 +4,8 @@ export const profileKo: Profile = {
   name: '박규민',
   role: 'DevOps Engineer',
   affiliation: 'Telechips · 차량용 SoC 개발 인프라 운영 및 DevOps Engineer',
+  company: 'Telechips',
+  employmentStatus: '재직중',
   heroSummary:
     '차량용 SoC 개발 환경의 인프라를 운영하며 반복되는 운영을 자동화하고 자원 상태를 수치로 드러내는 DevOps 엔지니어입니다.',
   aboutSummary: [

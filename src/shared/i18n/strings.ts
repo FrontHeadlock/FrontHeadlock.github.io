@@ -3,7 +3,7 @@ import { useLocale, type Locale } from './LocaleContext'
 type StringDictionary = {
   skipToContent: string
   nav: { about: string; experience: string; projects: string }
-  hero: { metricsLabel: string; coreResults: string; coreResultsDescription: string }
+  hero: { metricsLabel: string; coreResults: string; coreResultsDescription: string; metricsBasis: string; metricsCount: string }
   about: { eyebrow: string; title: string; description: string; problemSolvingLabel: string }
   experience: {
     eyebrow: string
@@ -63,6 +63,8 @@ const en: StringDictionary = {
   hero: {
     metricsLabel: 'Operational Metrics',
     coreResults: 'Core Results',
+    metricsBasis: 'Measured in 2026',
+    metricsCount: '{count} metrics',
     coreResultsDescription:
       'Figures measured in in-house infrastructure operations and projects, chosen around repetitive-work automation, storage capacity reclamation, and shorter deployment and authentication latency.',
   },
@@ -140,6 +142,8 @@ const ko: StringDictionary = {
   hero: {
     metricsLabel: '운영 지표',
     coreResults: '핵심 성과',
+    metricsBasis: '측정 기준 2026',
+    metricsCount: '{count}개 지표',
     coreResultsDescription:
       '사내 인프라 운영과 프로젝트에서 측정한 수치입니다. 반복 업무 자동화, 스토리지 용량 회수, 배포와 인증 지연 단축을 중심으로 골랐습니다.',
   },

@@ -4,6 +4,8 @@ export const profileEn: Profile = {
   name: 'KyuminPark',
   role: 'DevOps Engineer',
   affiliation: 'Telechips · Automotive SoC Development Infrastructure',
+  company: 'Telechips',
+  employmentStatus: 'Employed',
   heroSummary:
     'I am a DevOps engineer running the development infrastructure for automotive SoC teams, automating recurring operations and making resource state visible through metrics.',
   aboutSummary: [

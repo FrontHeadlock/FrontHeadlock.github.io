@@ -37,6 +37,7 @@
   --color-menu-bg: rgba(10, 10, 10, 0.96);
   --color-surface-hover: rgba(24, 32, 28, 0.84);
   --color-chip-bg: transparent;
+  --color-panel-translucent: rgba(255, 255, 255, 0.03);
   --shadow-frame: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 24px 80px rgba(0, 0, 0, 0.45);
   --page-background:
     radial-gradient(circle at top, rgba(0, 255, 65, 0.08), transparent 26%),
@@ -94,15 +95,16 @@
   background: #002c5f;
   --color-text-main: #ffffff;
   --color-text-strong: #ffffff;
-  --color-text-muted: #aacae6;
+  --color-text-muted: rgba(255, 255, 255, 0.8);
   --color-text-subtle: #aacae6;
   --color-accent: #aacae6;
-  --color-border: rgba(255, 255, 255, 0.28);
-  --color-border-strong: rgba(255, 255, 255, 0.6);
-  --color-hairline-soft: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-strong: rgba(255, 255, 255, 0.5);
+  --color-hairline-soft: rgba(255, 255, 255, 0.07);
   --color-accent-tint-1: rgba(255, 255, 255, 0.12);
   --color-accent-tint-2: rgba(255, 255, 255, 0.16);
   --color-chip-bg: rgba(255, 255, 255, 0.1);
+  --color-panel-translucent: rgba(255, 255, 255, 0.05);
   --color-accent-glow-soft: rgba(170, 202, 230, 0.35);
 }
 
