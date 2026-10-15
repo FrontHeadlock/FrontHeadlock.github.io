@@ -8,7 +8,7 @@ import { Hero } from '../hero/Hero'
 import { ProjectsSection } from '../projects/ProjectsSection'
 import { MatrixRainCanvas } from '../../shared/ui/MatrixRainCanvas'
 import { RainPreferenceProvider } from '../../shared/hooks/useRainPreference'
-import { ThemePreferenceProvider } from '../../shared/hooks/useThemePreference'
+import { ThemePreferenceProvider, useThemePreference } from '../../shared/hooks/useThemePreference'
 import { useCommandPalette } from '../../shared/hooks/useCommandPalette'
 import { LocaleProvider } from '../../shared/i18n/LocaleContext'
 import { useStrings } from '../../shared/i18n/strings'
@@ -21,13 +21,15 @@ const CommandPalette = lazy(() => import('../../shared/ui/CommandPalette').then(
 function ResumePageContent() {
   const { open, setOpen, search, setSearch, selectedIndex, filtered } = useCommandPalette()
   const strings = useStrings()
+  const { theme } = useThemePreference()
 
   return (
     <LazyMotion features={loadFramerFeatures} strict>
       <MotionConfig reducedMotion="user">
         <div className="relative isolate min-h-screen overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text-main)]">
           <div className="matrix-backdrop -z-20" aria-hidden="true" />
-          <MatrixRainCanvas />
+          {/* 매트릭스 레인은 다크 테마의 정체성. 라이트에서는 캔버스를 아예 마운트하지 않는다. */}
+          {theme === 'dark' ? <MatrixRainCanvas /> : null}
           <a href="#main-content" className="sr-only focus:not-sr-only">
             {strings.skipToContent}
           </a>

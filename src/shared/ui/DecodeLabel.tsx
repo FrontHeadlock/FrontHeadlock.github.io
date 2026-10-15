@@ -1,6 +1,7 @@
 import { useDecodeText } from '../hooks/useDecodeText'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useThemePreference } from '../hooks/useThemePreference'
 import { cn } from '../lib/cn'
 
 type DecodeLabelProps = {
@@ -17,7 +18,9 @@ type DecodeLabelProps = {
 export function DecodeLabel({ text, className }: DecodeLabelProps) {
   const { ref, revealed } = useScrollReveal<HTMLSpanElement>()
   const reducedMotion = usePrefersReducedMotion()
-  const decoded = useDecodeText(text, revealed && !reducedMotion)
+  const { theme } = useThemePreference()
+  // 디코드 스크램블은 매트릭스(다크) 테마의 효과. 라이트에서는 바로 최종 텍스트를 그린다.
+  const decoded = useDecodeText(text, revealed && !reducedMotion && theme === 'dark')
 
   return (
     <span ref={ref} className={cn('relative inline-block whitespace-nowrap', className)}>

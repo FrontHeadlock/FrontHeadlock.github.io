@@ -71,7 +71,7 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
         ))}
 
         {/* 데스크톱 헤더에만 있던 레인 토글을 모바일에서도 노출 — 폰에서 캔버스를 끌 수 있어야 한다. */}
-        <div className="mt-1 grid grid-cols-3 gap-2 border-t border-[var(--color-hairline)] pt-3">
+        <div className={cn('mt-1 grid gap-2 border-t border-[var(--color-hairline)] pt-3', theme === 'dark' ? 'grid-cols-3' : 'grid-cols-2')}>
           <button type="button" onClick={toggleLocale} aria-pressed={locale === 'ko'} className={cn(itemClass, toggleClass)}>
             {locale === 'ko' ? '[KO]' : '[EN]'}
           </button>
@@ -83,18 +83,20 @@ function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProp
           >
             {theme === 'dark' ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
           </button>
-          <button
-            type="button"
-            onClick={toggleRain}
-            aria-pressed={rainEnabled}
-            className={cn(
-              itemClass,
-              toggleClass,
-              rainEnabled && 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]',
-            )}
-          >
-            {rainEnabled ? strings.header.rainOn : strings.header.rainOff}
-          </button>
+          {theme === 'dark' ? (
+            <button
+              type="button"
+              onClick={toggleRain}
+              aria-pressed={rainEnabled}
+              className={cn(
+                itemClass,
+                toggleClass,
+                rainEnabled && 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]',
+              )}
+            >
+              {rainEnabled ? strings.header.rainOn : strings.header.rainOff}
+            </button>
+          ) : null}
         </div>
       </div>
     </m.nav>

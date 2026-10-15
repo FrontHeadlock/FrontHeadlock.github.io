@@ -21,7 +21,7 @@ export function useCommandPalette() {
   const strings = useStrings()
   const profile = useProfile()
   const { toggle: toggleRain } = useRainPreference()
-  const { toggle: toggleTheme } = useThemePreference()
+  const { theme, toggle: toggleTheme } = useThemePreference()
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -35,7 +35,8 @@ export function useCommandPalette() {
       { id: 'goto-about', ...labels.about, action: () => scrollToSection('about'), shortcut: 'g a' },
       { id: 'goto-experience', ...labels.experience, action: () => scrollToSection('experience'), shortcut: 'g e' },
       { id: 'goto-projects', ...labels.projects, action: () => scrollToSection('projects'), shortcut: 'g p' },
-      { id: 'toggle-rain', ...labels.rain, action: toggleRain, shortcut: 't r' },
+      // 레인은 다크 테마에만 있으므로 라이트에서는 명령도 숨긴다.
+      ...(theme === 'dark' ? [{ id: 'toggle-rain', ...labels.rain, action: toggleRain, shortcut: 't r' }] : []),
       { id: 'toggle-theme', ...labels.theme, action: toggleTheme, shortcut: 't t' },
       ...(emailLink
         ? [
@@ -50,7 +51,7 @@ export function useCommandPalette() {
           ]
         : []),
     ]
-  }, [strings, profile, toggleRain, toggleTheme])
+  }, [strings, profile, toggleRain, toggleTheme, theme])
 
   const filtered = useMemo(
     () =>

@@ -20,7 +20,9 @@ function Probe() {
   )
 }
 
-function renderPalette() {
+function renderPalette({ theme = 'light' }: { theme?: 'light' | 'dark' } = {}) {
+  window.localStorage.setItem('theme', theme)
+
   return render(
     <LocaleProvider>
       <ThemePreferenceProvider>
@@ -66,7 +68,7 @@ describe('useCommandPalette', () => {
   })
 
   it('filters commands by label and description', () => {
-    renderPalette()
+    renderPalette({ theme: 'dark' })
 
     fireEvent.change(screen.getByTestId('search'), { target: { value: 'rain' } })
 
@@ -88,7 +90,7 @@ describe('useCommandPalette', () => {
   })
 
   it('executes the toggle-rain command against the rain preference context', () => {
-    renderPalette()
+    renderPalette({ theme: 'dark' })
 
     expect(screen.getByTestId('rain')).toHaveTextContent('true')
 

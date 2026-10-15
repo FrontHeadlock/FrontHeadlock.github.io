@@ -53,7 +53,9 @@ describe('App', () => {
     expect(screen.queryByText('⌘K')).not.toBeInTheDocument()
     expect(screen.getByText(/session closed/i)).toBeInTheDocument()
     expect(container.firstChild).toHaveClass('relative', 'isolate')
-    expect(container.querySelector('.matrix-layer')).toHaveClass('-z-10')
+    // 라이트에서는 레인 캔버스도, 레인 토글도 없다
+    expect(container.querySelector('.matrix-layer')).toBeNull()
+    expect(screen.queryByRole('button', { name: /live rain|rain off/i })).not.toBeInTheDocument()
   })
 
   it('renders project cards and expandable project details without a tech-stack section', async () => {
@@ -160,6 +162,8 @@ describe('App', () => {
 
     expect(document.documentElement.dataset.theme).toBe('dark')
     expect(screen.getAllByRole('button', { name: /^Switch to light mode$/ })).not.toHaveLength(0)
+    expect(document.querySelector('.matrix-layer')).toHaveClass('-z-10')
+    expect(screen.getByRole('button', { name: /live rain|rain off/i })).toBeInTheDocument()
     // 다크는 터미널식 대괄호 라벨을 유지한다
     expect(screen.getByRole('link', { name: /^\[about\]$/i })).toHaveAttribute('href', '#about')
     expect(screen.getByRole('button', { name: /^Open contents$/ })).toHaveTextContent('[contents]')

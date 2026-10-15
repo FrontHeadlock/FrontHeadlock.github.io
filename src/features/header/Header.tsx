@@ -82,19 +82,21 @@ export function Header({ onOpenPalette }: HeaderProps) {
           >
             {theme === 'dark' ? <Moon size={14} aria-hidden="true" /> : <Sun size={14} aria-hidden="true" />}
           </button>
-          <button
-            type="button"
-            onClick={toggleRain}
-            aria-pressed={rainEnabled}
-            className={cn(
-              'rounded-full border px-3 py-1 font-mono text-label-xs uppercase tracking-label-tight transition',
-              rainEnabled
-                ? 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]'
-                : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-accent)]',
-            )}
-          >
-            {rainEnabled ? strings.header.rainOn : strings.header.rainOff}
-          </button>
+          {theme === 'dark' ? (
+            <button
+              type="button"
+              onClick={toggleRain}
+              aria-pressed={rainEnabled}
+              className={cn(
+                'rounded-full border px-3 py-1 font-mono text-label-xs uppercase tracking-label-tight transition',
+                rainEnabled
+                  ? 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]'
+                  : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-accent)]',
+              )}
+            >
+              {rainEnabled ? strings.header.rainOn : strings.header.rainOff}
+            </button>
+          ) : null}
           {/* 목차 탭: 섹션 링크와 같은 모양으로 두고, 누르면 목차 오버레이(검색·이동)를 연다. Cmd+K 단축키는 그대로 동작한다. */}
           <button
             type="button"
