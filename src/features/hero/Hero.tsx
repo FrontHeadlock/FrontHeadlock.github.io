@@ -33,7 +33,8 @@ export function Hero() {
                       {profile.employmentStatus}
                     </span>
                   </p>
-                  <AsciiHero variant="static" text={HERO_NAME} srOnlyText={profile.name} />
+                  {/* 0/1 입자 이름은 두 테마 공통. 라이트에서는 밴드의 연파랑(--color-accent)으로 그려진다. */}
+                  <AsciiHero text={HERO_NAME} srOnlyText={profile.name} className="-mt-4 max-w-4xl md:-mt-6" />
                   <p className="text-[15px] text-[var(--color-text-subtle)]">{profile.affiliation}</p>
                 </>
               ) : (
