@@ -7,3 +7,4 @@ src/features/onboarding/
 src/shared/styles/onboarding.css
 .omc/
 lighthouserc.generated.json
+src/shared/styles/fonts/
