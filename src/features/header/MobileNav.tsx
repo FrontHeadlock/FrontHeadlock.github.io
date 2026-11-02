@@ -1,0 +1,107 @@
+import { AnimatePresence, m } from 'framer-motion'
+import { Moon, Sun } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { useRainPreference } from '../../shared/hooks/useRainPreference'
+import { useThemePreference } from '../../shared/hooks/useThemePreference'
+import { useStrings } from '../../shared/i18n/strings'
+import { cn } from '../../shared/lib/cn'
+
+type MobileNavProps = {
+  open: boolean
+  onClose: () => void
+  sections: { id: string; label: string }[]
+  activeSection: string
+}
+
+// 44px 이상 터치 영역을 보장하는 공통 항목 스타일.
+const itemClass =
+  'flex min-h-11 items-center rounded-inner border border-transparent px-4 py-3 text-sm text-[var(--color-text-muted)] transition hover:text-[var(--color-accent)]'
+const toggleClass = 'justify-center font-mono text-label-sm uppercase tracking-label-tight'
+
+function MobileNavPanel({ onClose, sections, activeSection }: Omit<MobileNavProps, 'open'>) {
+  const { enabled: rainEnabled, toggle: toggleRain } = useRainPreference()
+  const { theme, toggle: toggleTheme } = useThemePreference()
+  const strings = useStrings()
+  const firstLinkRef = useRef<HTMLAnchorElement | null>(null)
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    firstLinkRef.current?.focus()
+
+    return () => previouslyFocused?.focus()
+  }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  return (
+    <m.nav
+      id="mobile-nav"
+      aria-label="Mobile"
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      className="absolute inset-x-0 top-full border-t border-[var(--color-hairline)] bg-[var(--color-menu-bg)] px-5 py-4 md:hidden"
+    >
+      <div className="grid gap-2">
+        {sections.map((section, index) => (
+          <a
+            key={section.id}
+            ref={index === 0 ? firstLinkRef : undefined}
+            href={`#${section.id}`}
+            onClick={onClose}
+            className={cn(
+              itemClass,
+              activeSection === section.id && 'border-[var(--color-border-strong)] bg-[var(--color-accent-tint-2)] text-[var(--color-accent)]',
+            )}
+          >
+            {section.label}
+          </a>
+        ))}
+
+        {/* 데스크톱 헤더에만 있던 레인 토글을 모바일에서도 노출 — 폰에서 캔버스를 끌 수 있어야 한다. */}
+        <div className={cn('mt-1 grid gap-2 border-t border-[var(--color-hairline)] pt-3', theme === 'dark' ? 'grid-cols-2' : 'grid-cols-1')}>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? strings.header.toLight : strings.header.toDark}
+            className={cn(itemClass, toggleClass)}
+          >
+            {theme === 'dark' ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
+          </button>
+          {theme === 'dark' ? (
+            <button
+              type="button"
+              onClick={toggleRain}
+              aria-pressed={rainEnabled}
+              className={cn(
+                itemClass,
+                toggleClass,
+                rainEnabled && 'border-[var(--color-border)] bg-[var(--color-accent-tint-1)] text-[var(--color-accent)]',
+              )}
+            >
+              {rainEnabled ? strings.header.rainOn : strings.header.rainOff}
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </m.nav>
+  )
+}
+
+export function MobileNav({ open, onClose, sections, activeSection }: MobileNavProps) {
+  return (
+    <AnimatePresence>
+      {open ? <MobileNavPanel onClose={onClose} sections={sections} activeSection={activeSection} /> : null}
+    </AnimatePresence>
+  )
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- 첫 그리기 전에 저장된 테마를 붙인다. 기본은 라이트, 저장값이 dark일 때만 다크. useThemePreference와 같은 규칙. -->
+    <script>
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'
+      } catch (error) {
+        document.documentElement.dataset.theme = 'light'
+      }
+    </script>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://frontheadlock.github.io/" />
+
+    <title>박규민 — DevOps 엔지니어</title>
+    <meta
+      name="description"
+      content="차량용 SoC 개발 환경의 인프라를 운영하는 DevOps 엔지니어 박규민의 포트폴리오입니다. 반복 운영 자동화, 스토리지 용량 가시화, 오픈소스 기여를 측정한 결과와 함께 정리했습니다."
+    />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="박규민 — DevOps 엔지니어" />
+    <meta property="og:title" content="박규민 — DevOps 엔지니어" />
+    <meta
+      property="og:description"
+      content="차량용 SoC 개발 환경의 인프라를 운영하는 DevOps 엔지니어. Ansible, OpenStack, NetApp ONTAP, Prometheus/Grafana, 승인을 거치는 ITSM AI 에이전트."
+    />
+    <meta property="og:url" content="https://frontheadlock.github.io/" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:image" content="https://frontheadlock.github.io/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="박규민 — DevOps 엔지니어 포트폴리오" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="박규민 — DevOps 엔지니어" />
+    <meta
+      name="twitter:description"
+      content="반복 운영 자동화, 스토리지 용량 가시화, 오픈소스 기여 병합."
+    />
+    <meta name="twitter:image" content="https://frontheadlock.github.io/og.png" />
+    <meta name="twitter:image:alt" content="박규민 — DevOps 엔지니어 포트폴리오" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "박규민",
+        "alternateName": "Kyumin Park",
+        "jobTitle": "DevOps Engineer",
+        "worksFor": { "@type": "Organization", "name": "Telechips" },
+        "url": "https://frontheadlock.github.io/",
+        "email": "mailto:southvi1@naver.com",
+        "sameAs": [
+          "https://github.com/FrontHeadlock",
+          "https://linkedin.com/in/kyumin19",
+          "https://frontheadlock.tistory.com/"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

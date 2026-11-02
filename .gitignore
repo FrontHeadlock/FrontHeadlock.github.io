@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.DS_Store
+docs/
+*.tsbuildinfo
+src/features/onboarding/
+src/shared/styles/onboarding.css
+.omc/
+lighthouserc.generated.json
+src/shared/styles/fonts/

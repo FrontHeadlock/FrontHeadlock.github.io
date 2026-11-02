@@ -1,0 +1,24 @@
+import type { ReactNode } from 'react'
+import { DecodeLabel } from './DecodeLabel'
+
+type TerminalFrameProps = {
+  label: string
+  children: ReactNode
+  className?: string
+}
+
+export function TerminalFrame({ label, children, className }: TerminalFrameProps) {
+  return (
+    <div className={`rounded-card border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-frame)] ${className ?? ''}`}>
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-danger)]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-warning)]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent)]" />
+        </div>
+        <DecodeLabel text={label} className="font-mono text-label-sm uppercase tracking-label text-[var(--color-text-subtle)]" />
+      </div>
+      {children}
+    </div>
+  )
+}

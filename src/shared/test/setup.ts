@@ -1,0 +1,218 @@
+import '@testing-library/jest-dom/vitest'
+import React from 'react'
+import { vi } from 'vitest'
+
+class MockIntersectionObserver implements IntersectionObserver {
+  private readonly callback: IntersectionObserverCallback
+  private readonly elements = new Set<Element>()
+  readonly root = null
+  readonly rootMargin = '0px'
+  readonly thresholds = [0]
+
+  constructor(callback: IntersectionObserverCallback) {
+    this.callback = callback
+    ;(globalThis as { __mockIntersectionObservers?: MockIntersectionObserver[] }).__mockIntersectionObservers ??= []
+    ;(globalThis as { __mockIntersectionObservers?: MockIntersectionObserver[] }).__mockIntersectionObservers?.push(this)
+  }
+
+  disconnect() {
+    this.elements.clear()
+  }
+
+  observe(element: Element) {
+    this.elements.add(element)
+  }
+
+  takeRecords(): IntersectionObserverEntry[] {
+    return []
+  }
+
+  trigger(isIntersecting: boolean) {
+    const targets = this.elements.size > 0 ? [...this.elements] : [document.body]
+    const entries = targets.map(
+      (element) =>
+        ({
+          isIntersecting,
+          target: element,
+          intersectionRatio: isIntersecting ? 1 : 0,
+          boundingClientRect: element.getBoundingClientRect(),
+          intersectionRect: element.getBoundingClientRect(),
+          rootBounds: null,
+          time: Date.now(),
+        }) satisfies IntersectionObserverEntry,
+    )
+
+    this.callback(entries, this)
+  }
+
+  unobserve(element: Element) {
+    this.elements.delete(element)
+  }
+}
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+})
+
+Object.defineProperty(globalThis, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+})
+
+const createMockGradient = () =>
+  ({
+    addColorStop: () => undefined,
+  }) as CanvasGradient
+
+const createMockCanvasContext = () =>
+  ({
+    arc: () => undefined,
+    beginPath: () => undefined,
+    clearRect: () => undefined,
+    clip: () => undefined,
+    closePath: () => undefined,
+    createImageData: () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 }),
+    createLinearGradient: () => createMockGradient(),
+    createPattern: () => null,
+    createRadialGradient: () => createMockGradient(),
+    drawImage: () => undefined,
+    fill: () => undefined,
+    fillRect: () => undefined,
+    fillText: () => undefined,
+    getImageData: () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 }),
+    lineTo: () => undefined,
+    measureText: (text: string) =>
+      ({
+        width: text.length * 8,
+      }) as TextMetrics,
+    moveTo: () => undefined,
+    putImageData: () => undefined,
+    resetTransform: () => undefined,
+    restore: () => undefined,
+    rotate: () => undefined,
+    save: () => undefined,
+    scale: () => undefined,
+    setTransform: () => undefined,
+    stroke: () => undefined,
+    strokeRect: () => undefined,
+    translate: () => undefined,
+    filter: 'none',
+    fillStyle: '',
+    font: '',
+    globalAlpha: 1,
+    globalCompositeOperation: 'source-over',
+    lineWidth: 1,
+    shadowBlur: 0,
+    shadowColor: '',
+    strokeStyle: '',
+    textAlign: 'left',
+    textBaseline: 'alphabetic',
+  }) as unknown as CanvasRenderingContext2D
+
+Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+  writable: true,
+  configurable: true,
+  value: () => createMockCanvasContext(),
+})
+
+class MemoryStorage implements Storage {
+  private store = new Map<string, string>()
+
+  get length() {
+    return this.store.size
+  }
+
+  clear() {
+    this.store.clear()
+  }
+
+  getItem(key: string) {
+    return this.store.has(key) ? (this.store.get(key) ?? null) : null
+  }
+
+  key(index: number) {
+    return [...this.store.keys()][index] ?? null
+  }
+
+  removeItem(key: string) {
+    this.store.delete(key)
+  }
+
+  setItem(key: string, value: string) {
+    this.store.set(key, String(value))
+  }
+}
+
+Object.defineProperty(window, 'localStorage', {
+  writable: true,
+  configurable: true,
+  value: new MemoryStorage(),
+})
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  configurable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  }),
+})
+
+vi.mock('framer-motion', () => {
+  const stripMotionProps = (props: Record<string, unknown>) => {
+    const {
+      animate,
+      exit,
+      initial,
+      layout,
+      layoutId,
+      transition,
+      viewport,
+      whileHover,
+      whileInView,
+      ...rest
+    } = props
+
+    return rest
+  }
+
+  // 태그별로 컴포넌트를 캐시해 실제 framer처럼 컴포넌트 identity를 고정한다.
+  // 접근할 때마다 새 forwardRef를 만들면 리렌더마다 DOM이 교체되어 포커스·ref가 끊긴다.
+  const componentCache = new Map<string, React.ComponentType<React.HTMLAttributes<HTMLElement>>>()
+  const motion = new Proxy(
+    {},
+    {
+      get: (_, tag: string) => {
+        const cached = componentCache.get(tag)
+        if (cached) {
+          return cached
+        }
+
+        const component = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(({ children, ...props }, ref) =>
+          React.createElement(tag, { ...stripMotionProps(props), ref }, children),
+        )
+        componentCache.set(tag, component)
+        return component
+      },
+    },
+  )
+
+  return {
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+    LazyMotion: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+    MotionConfig: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
+    motion,
+    m: motion,
+    domMax: {},
+    domAnimation: {},
+  }
+})

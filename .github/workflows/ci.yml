@@ -1,0 +1,121 @@
+name: CI
+
+# lint → test → build를 한 번만 돌리고 dist를 아티팩트로 남긴다.
+# PR에서는 그대로 검증 게이트로 쓰이고, deploy.yml은 이 워크플로를 호출한 뒤 같은 아티팩트를 배포한다.
+on:
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ci-build-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+
+      # 설치 시 패키지의 lifecycle script를 실행하지 않는다(설치 훅을 통한 공급망 공격 차단).
+      # esbuild 같은 네이티브 바이너리는 optionalDependencies로 들어오므로 postinstall 없이도 동작한다.
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      # 설치된 모든 패키지의 레지스트리 서명과 attestation을 검증한다.
+      - name: Verify package signatures
+        run: npm audit signatures
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload build output
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse (calibrated, median of 3)
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ci-lighthouse-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+
+      - name: Download build output
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: dist
+          path: dist
+
+      # GitHub 호스티드 러너의 CPU 속도는 실행마다 다르다(이 저장소에서 관측된 Lighthouse benchmarkIndex 454~2453).
+      # Lighthouse의 시뮬레이션 스로틀링은 "이 러너에서 잰 CPU 시간 × cpuSlowdownMultiplier(기본 4)"로 점수를 내므로
+      # 느린 러너를 만나면 같은 페이지가 0.73~0.88, 빠른 러너면 0.95가 나와 단일 실행 게이트가 무작위로 깨졌다.
+      # Lighthouse 문서(docs/throttling.md)의 보정 방식대로, 러너의 benchmarkIndex를 먼저 재서
+      # 고성능 데스크톱(≈2000)에서 4x가 되도록 배수를 비례 조정하고 [1, 4]로 묶는다. 빠른 러너의 결과는 그대로다.
+      - name: Calibrate CPU throttling to this runner
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory dist >/dev/null 2>&1 &
+          PREVIEW_PID=$!
+          ready=0
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null http://127.0.0.1:4173/; then ready=1; break; fi
+            sleep 1
+          done
+          calibrated=0
+          if [ "$ready" = "1" ] && npx --yes lighthouse@12 http://127.0.0.1:4173/ \
+              --only-categories=performance --only-audits=largest-contentful-paint \
+              --output=json --output-path=./calibration.json \
+              --chrome-flags="--headless=new --no-sandbox" --quiet; then
+            calibrated=1
+          fi
+          kill "$PREVIEW_PID" 2>/dev/null || true
+          # 보정에 실패해도 측정 자체는 진행한다(기본 4x). 대신 경고를 남겨 원인을 추적할 수 있게 한다.
+          if [ "$calibrated" != "1" ]; then
+            echo "::warning::CPU calibration failed (preview ready=$ready); falling back to the default 4x multiplier"
+            cp lighthouserc.json lighthouserc.generated.json
+            exit 0
+          fi
+          node <<'NODE'
+          const fs = require('fs')
+          const bench = require('./calibration.json').environment.benchmarkIndex
+          const multiplier = Math.min(4, Math.max(1, Math.round(((4 * bench) / 2000) * 10) / 10))
+          const config = JSON.parse(fs.readFileSync('lighthouserc.json', 'utf8'))
+          config.ci.collect.settings = { ...(config.ci.collect.settings ?? {}), throttling: { cpuSlowdownMultiplier: multiplier } }
+          fs.writeFileSync('lighthouserc.generated.json', JSON.stringify(config, null, 2))
+          console.log(`benchmarkIndex=${Math.round(bench)} -> cpuSlowdownMultiplier=${multiplier}`)
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY ?? '/dev/null', `Runner benchmarkIndex ${Math.round(bench)} → cpuSlowdownMultiplier ${multiplier}\n`)
+          NODE
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@03becbfc543944dd6e7534f7ff768abb8a296826 # v10
+        with:
+          configPath: ./lighthouserc.generated.json
+          temporaryPublicStorage: true
