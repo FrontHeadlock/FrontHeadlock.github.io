@@ -5,6 +5,7 @@ import { projectPanelId } from '../../entities/project/anchors'
 import type { Project } from '../../entities/project/types'
 import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
+import { EmphasisText } from '../../shared/ui/EmphasisText'
 import { describeRecordUrl, hostnameOf } from '../../shared/lib/recordUrl'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { ProjectKindTag } from './ProjectCard'
@@ -16,7 +17,7 @@ type ProjectDetailPanelProps = {
   onClose: () => void
 }
 
-/** 항목이 없는 블록(예: 배운 점을 비운 프로젝트)은 제목까지 통째로 생략한다. */
+/** 항목이 없는 블록은 제목까지 통째로 생략한다. */
 function DetailBlock({ title, items, className }: { title: string; items: string[]; className?: string }) {
   if (items.length === 0) {
     return null
@@ -28,7 +29,7 @@ function DetailBlock({ title, items, className }: { title: string; items: string
       <ul className="grid gap-3">
         {items.map((item) => (
           <li key={item} className="whitespace-pre-line rounded-inner border border-[var(--color-border)] bg-[var(--color-surface-card)] px-4 py-3 text-sm leading-7 text-[var(--color-text-main)]">
-            {item}
+            <EmphasisText text={item} />
           </li>
         ))}
       </ul>
@@ -153,18 +154,15 @@ export function ProjectDetailPanel({ project, onClose }: ProjectDetailPanelProps
           </div>
         </div>
 
-        {/* 데스크톱은 왼쪽(문제 → 성과)·오른쪽(접근 → 배운 점) 두 열을 따로 쌓는다. 네 블록을 한 그리드에 두면 행 높이가
-            긴 블록에 맞춰져 짧은 블록 아래에 빈 공간이 생긴다. 모바일은 래퍼를 contents로 풀고 order로
-            문제 → 접근 → 성과 → 배운 점 순서를 유지한다. */}
+        {/* 데스크톱은 왼쪽에 문제 → 성과를 쌓고 오른쪽에 접근을 둔다. 세 블록을 한 그리드에 두면 행 높이가
+            긴 블록에 맞춰져 짧은 블록 아래에 빈 공간이 생긴다. 모바일은 왼쪽 래퍼를 contents로 풀고 order로
+            문제 → 접근 → 성과 순서를 유지한다. */}
         <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
           <div className="contents lg:flex lg:flex-col lg:gap-8">
             <DetailBlock title={strings.projectDetail.problemContext} items={project.problem} className="order-1 lg:order-none" />
             <DetailBlock title={strings.projectDetail.outcomes} items={project.outcomes} className="order-3 lg:order-none" />
           </div>
-          <div className="contents lg:flex lg:flex-col lg:gap-8">
-            <DetailBlock title={strings.projectDetail.approach} items={project.approach} className="order-2 lg:order-none" />
-            <DetailBlock title={strings.projectDetail.learnings} items={project.learnings} className="order-4 lg:order-none" />
-          </div>
+          <DetailBlock title={strings.projectDetail.approach} items={project.approach} className="order-2 lg:order-none" />
         </div>
 
         <section className="space-y-4">

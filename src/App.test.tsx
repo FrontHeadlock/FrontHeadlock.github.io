@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 
@@ -30,7 +30,11 @@ describe('App', () => {
     expect(screen.getByText(/정량적인 수치를 기반으로/)).toHaveClass('whitespace-pre-line')
     expect(screen.getByRole('heading', { name: /반복되는 운영 자동화,\s+지표를 근거로 한 Pain Point 개선/ })).toHaveClass('whitespace-pre-line')
     // 강점의 **…** 표기는 굵게 그려지고 별표는 화면에 남지 않는다
-    expect(screen.getByText('볼륨 사용률 수십 TiB 이상 확보').tagName).toBe('STRONG')
+    expect(screen.getByText('Aggregate 여유 공간 약 30 TiB 확보').tagName).toBe('STRONG')
+    // 히어로는 기술 문장과 팀 문구 두 줄, 성과 4번은 CATXI 대신 ONTAP 30 TiB
+    expect(screen.getByText(/수백 대 규모의 차량용 SoC 개발 인프라를 운영하며/)).toHaveClass('whitespace-pre-line')
+    expect(screen.getByText('30 TiB')).toBeInTheDocument()
+    expect(screen.queryByText('68ms -> 3ms')).not.toBeInTheDocument()
     expect(document.getElementById('about')).not.toHaveTextContent('**')
     expect(screen.getByTestId('ascii-hero')).toBeInTheDocument()
     expect(screen.getByTestId('hero-copy')).toHaveTextContent('DevOps Engineer')
@@ -78,23 +82,26 @@ describe('App', () => {
 
     expect(screen.getByText('개요')).toBeInTheDocument()
     expect(screen.getByText('트러블슈팅')).toBeInTheDocument()
+    // 포커스·성과의 개선 결과도 강조되고, 별표는 화면에 남지 않는다
+    expect(screen.getAllByText('30분에서 10분 이내로 단축').every((element) => element.tagName === 'STRONG')).toBe(true)
+    expect(document.getElementById('projects')).not.toHaveTextContent('**')
     expect(screen.getByText('Jenkins 컨테이너의 Docker Hub Push 실패')).toBeInTheDocument()
     // 트러블슈팅 박스에 '시스템 경고' 배지는 더 이상 없다
     expect(screen.queryByText('시스템 경고')).not.toBeInTheDocument()
-    expect(screen.getByText('배운 점')).toBeInTheDocument()
+    // 배운 점 블록은 없앴다
+    expect(screen.queryByText('배운 점')).not.toBeInTheDocument()
     expect(screen.getByText('2025.10 – 2025.11')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /^저장소/ })).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: /SoC 개발 환경 스토리지 용량 모니터링/ }))
 
     expect(screen.getByText('2026 · 2인')).toBeInTheDocument()
-    // 배운 점을 비운 프로젝트는 블록 제목도 그리지 않고, Fluent Bit 언급은 없다
-    expect(screen.queryByText('배운 점')).not.toBeInTheDocument()
+    // Fluent Bit 언급은 없다
     expect(screen.queryByText(/Fluent Bit/)).not.toBeInTheDocument()
     expect(screen.getByText('space-guarantee 예약에 묶인 NVMe Aggregate 공간')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: /80여 대 개발 서버/ }))
-    expect(screen.getByText('관리대장과 달랐던 Inventory와 접속 계정')).toBeInTheDocument()
+    expect(screen.getByText('Ubuntu·Rocky·Oracle 혼재 환경에서 다시 돌려도 바뀌지 않는 플레이북')).toBeInTheDocument()
   })
 
   it('renders experience entries with organization, highlights, and public-record links', () => {
@@ -103,6 +110,11 @@ describe('App', () => {
     // 재직 중 카드 제목만 강조색으로 그린다
     expect(screen.getByRole('heading', { name: 'Telechips DevOps Team' })).toHaveClass('text-[var(--color-emphasis)]')
     expect(screen.getByRole('heading', { name: '오픈소스 기여' })).not.toHaveClass('text-[var(--color-emphasis)]')
+    // 개선 결과 수치는 **…**로 표기해 앰버 강조로 그리고, 별표는 화면에 남지 않는다
+    const telechipsCard = screen.getByRole('heading', { name: 'Telechips DevOps Team' }).closest('article') as HTMLElement
+    expect(within(telechipsCard).getByText('3시간에서 30분으로 단축')).toHaveClass('emphasis-mark')
+    expect(within(telechipsCard).getByText('약 30 TiB 확보').tagName).toBe('STRONG')
+    expect(document.getElementById('experience')).not.toHaveTextContent('**')
 
     const entry = screen.getByRole('heading', { name: '오픈소스 기여' }).closest('article')
     expect(entry).toHaveTextContent('jenkinsci/docker · openstack/python-openstackclient')
@@ -118,7 +130,7 @@ describe('App', () => {
     })
     // 기간이 없는 카드는 대체 문구 없이 비워 두고, 수상명 뒤에서 줄을 바꾼다
     expect(screen.getByRole('heading', { name: '수상' }).closest('article')).not.toHaveTextContent('시퀀스 로그')
-    expect(screen.getByText(/전공역량 경진대회 최우수상/)).toHaveClass('whitespace-pre-line')
+    expect(screen.getByText('전공역량 경진대회 최우수상').closest('li')).toHaveClass('whitespace-pre-line')
   })
 
   it('opens the related project panel from an experience entry link', async () => {

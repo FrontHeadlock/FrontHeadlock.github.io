@@ -63,12 +63,12 @@ export const experience: ExperienceEntry[] = [
     organization: 'Manager',
     dateLabel: '2026.05 – 현재',
     category: '재직중',
-    role: '연구소 개발 인프라와 SoC 폐쇄망 개발 서버 운영',
+    role: '수백 대 규모의 연구소 개발 인프라와 SoC 폐쇄망 개발 서버 운영',
     summary:
-      '서버 견적 산정부터 랙 실장과 운영까지 Onpremise 환경 전반에 관여하고 있습니다.\n베어메탈부터 KVM/OpenStack Private Cloud, ONTAP 스토리지등을 운영하며 더 나은 환경으로 개선하고자 노력합니다.',
+      '서버 견적 산정·랙 실장부터 OS·가상화·스토리지 운영까지 온프레미스 전 계층을 담당합니다.\nRocky·Ubuntu 베어메탈, KVM/OpenStack Private Cloud, NetApp ONTAP 스토리지를 운영하고, Prometheus·Grafana로 스토리지 용량을 관측하며 개선해 나갑니다.',
     highlights: [
-      { text: 'AI 에이전트와 규칙기반 플랫폼을 활용한 반복업무 자동화해 일 평균 처리 시간을 3시간에서 30분으로 단축' },
-      { text: 'ONTAP 용량 모니터링 체계를 구축하고 유휴 Thick Volume을 회수해 볼륨 사용률 약 15% 개선' },
+      { text: 'AI 에이전트와 규칙기반 플랫폼을 활용한 반복업무 자동화해 일 평균 처리 시간을 **3시간에서 30분으로 단축**' },
+      { text: 'ONTAP 용량 모니터링 체계를 구축하고 Thick→Thin 전환과 유휴 볼륨 회수로 증설 없이 Aggregate 여유 공간 **약 30 TiB 확보**, 볼륨 사용률 **약 15% 개선**' },
       { text: '80여 대 개발 서버의 라이선스·툴 배포를 Ansible 4단계 플레이북으로 표준화' },
       { text: 'Prometheus·Grafana로 서버·스토리지 지표를 수집하고 ONTAP API 기반 계정별 사용량 조회 기능 개발' },
       { text: 'Rocky·Ubuntu Linux 환경에서 발생하는 사내 이슈들 트러블 슈팅 지원' },
@@ -130,10 +130,10 @@ export const experience: ExperienceEntry[] = [
     category: '수상',
     highlights: [
       {
-        text: '전공역량 경진대회 최우수상 (2025.11.24).\n팀 리드·개발 파트장으로 AWS 인프라와 배포 자동화를 맡아 6단계 수동 배포를 자동화하고 배포 시간을 30분에서 10분 이내로 단축',
+        text: '**전공역량 경진대회 최우수상** (2025.11.24).\n팀 리드·개발 파트장으로 AWS 인프라와 배포 자동화를 맡아 6단계 수동 배포를 자동화하고 배포 시간을 **30분에서 10분 이내로 단축**',
       },
       {
-        text: 'GDGoC CUK 해커톤 최우수상 (2024.06.30).\nUN SDG 17개 주제 중 노인 치매 예방을 주제로 치매 조기 진단 AI 모델의 데이터셋을 수집·전처리하고 데이터 품질 기준 수립',
+        text: '**GDGoC CUK 해커톤 최우수상** (2024.06.30).\nUN SDG 17개 주제 중 노인 치매 예방을 주제로 치매 조기 진단 AI 모델의 데이터셋을 수집·전처리하고 데이터 품질 기준 수립',
       },
     ],
     techStack: [],

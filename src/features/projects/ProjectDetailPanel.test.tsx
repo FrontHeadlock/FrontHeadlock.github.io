@@ -18,8 +18,7 @@ const fixture: Project = {
   role: '백엔드',
   problem: ['문제 상황 1'],
   approach: ['접근 방법 1'],
-  outcomes: ['성과 1'],
-  learnings: [],
+  outcomes: [],
   troubleshooting: [{ title: '항목 제목', problem: '문제 본문', analysis: '원인 본문', action: '조치 본문', result: '결과 본문' }],
 }
 
@@ -30,6 +29,8 @@ describe('ProjectDetailPanel', () => {
     expect(screen.getByText('2025.05 – 2025.12 · 8인')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /^저장소 \(github\.com\/example\/repo\)$/ })).toHaveAttribute('href', 'https://github.com/example/repo')
     expect(screen.getByText('문제 상황')).toBeInTheDocument()
+    // 항목이 없는 블록(여기서는 성과)은 제목까지 생략하고, 배운 점 블록은 더 이상 없다
+    expect(screen.queryByText('성과 / 지표')).not.toBeInTheDocument()
     expect(screen.queryByText('배운 점')).not.toBeInTheDocument()
     // 트러블슈팅 박스는 제목과 네 칸만 그리고 배지는 없다
     expect(screen.getByText('항목 제목')).toBeInTheDocument()

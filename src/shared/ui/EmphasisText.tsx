@@ -2,15 +2,15 @@ import { Fragment } from 'react'
 
 type EmphasisTextProps = {
   text: string
-  /** 강조 구간의 클래스. 기본은 굵게 + 강한 글자색. */
+  /** 강조 구간의 클래스. 기본은 앰버 강조(.emphasis-mark, globals.css). */
   className?: string
 }
 
 /**
- * 원고의 `**굵게**` 표기를 <strong>으로 그린다.
+ * 원고의 `**강조**` 표기를 <strong>으로 그린다. 개선 결과 수치·수상과 소개 강점에 쓴다.
  * 짝이 맞지 않는 `**`가 있으면 원문을 그대로 보여 준다.
  */
-export function EmphasisText({ text, className = 'font-semibold text-[var(--color-text-strong)]' }: EmphasisTextProps) {
+export function EmphasisText({ text, className = 'emphasis-mark' }: EmphasisTextProps) {
   const parts = text.split('**')
 
   // split 결과가 짝수면 `**` 개수가 홀수, 즉 닫히지 않은 강조가 있다.

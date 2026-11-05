@@ -26,7 +26,6 @@ export type Project = {
   problem: string[]
   approach: string[]
   outcomes: string[]
-  learnings: string[]
   architectureNotes?: string[]
   troubleshooting: TroubleShootingItem[]
 }

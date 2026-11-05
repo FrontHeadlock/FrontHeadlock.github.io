@@ -7,6 +7,7 @@ import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 import { describeRecordUrl, hostnameOf } from '../../shared/lib/recordUrl'
 import { REVEAL, staggerDelay } from '../../shared/lib/motion'
+import { EmphasisText } from '../../shared/ui/EmphasisText'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 
 type TimelineEntryProps = {
@@ -44,10 +45,13 @@ function RecordLink({ href, label, inline = false }: RecordLinkProps) {
   )
 }
 
-/** 성과 문장 + 링크 아이콘. 아이콘이 줄 끝에서 혼자 다음 줄로 떨어지지 않도록 마지막 단어와 묶는다. */
+/**
+ * 성과 문장 + 링크 아이콘. 아이콘이 줄 끝에서 혼자 다음 줄로 떨어지지 않도록 마지막 단어와 묶는다.
+ * `**…**` 강조는 마지막 단어 앞 구간에서만 그린다(링크가 있는 문장의 마지막 단어에는 강조를 걸지 않는다).
+ */
 function HighlightText({ text, href, label }: { text: string; href?: string; label: string }) {
   if (!href) {
-    return <>{text}</>
+    return <EmphasisText text={text} />
   }
 
   const lastSpace = text.lastIndexOf(' ')
@@ -56,7 +60,7 @@ function HighlightText({ text, href, label }: { text: string; href?: string; lab
 
   return (
     <>
-      {head}
+      <EmphasisText text={head} />
       <span className="whitespace-nowrap">
         {tail}
         <RecordLink href={href} label={label} inline />

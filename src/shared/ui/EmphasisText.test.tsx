@@ -7,7 +7,7 @@ describe('EmphasisText', () => {
 
     const strong = container.querySelector('strong')
     expect(strong).toHaveTextContent('강조')
-    expect(strong).toHaveClass('font-semibold')
+    expect(strong).toHaveClass('emphasis-mark')
     expect(container).toHaveTextContent('앞 강조 뒤')
     expect(container.textContent).not.toContain('**')
   })

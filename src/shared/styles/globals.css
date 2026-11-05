@@ -220,6 +220,12 @@ a {
 }
 
 /* 히어로 지표 값: 카운트업이 끝나면 한 번 살짝 커졌다 돌아온다 */
+/* 원고의 **…** 강조(개선 결과 수치·수상, 소개 강점). 두 테마 모두 강조색(#ff8700) 굵은 글자로 그린다. */
+.emphasis-mark {
+  font-weight: 700;
+  color: var(--color-emphasis);
+}
+
 @keyframes metric-pop {
   0% {
     transform: scale(1);

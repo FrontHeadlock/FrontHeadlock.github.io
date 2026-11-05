@@ -17,7 +17,6 @@ type StringDictionary = {
     problemContext: string
     approach: string
     outcomes: string
-    learnings: string
     troubleshooting: string
     repository: string
   }
@@ -94,7 +93,6 @@ export const strings: StringDictionary = {
     problemContext: '문제 상황',
     approach: '접근 방법',
     outcomes: '성과 / 지표',
-    learnings: '배운 점',
     troubleshooting: '트러블슈팅',
     repository: '저장소',
   },

@@ -47,7 +47,7 @@ export function Hero() {
                   </p>
                 </>
               )}
-              <p className="max-w-2xl text-base leading-7 text-[var(--color-text-muted)] md:text-lg md:leading-8">{profile.heroSummary}</p>
+              <p className="max-w-2xl whitespace-pre-line text-base leading-7 text-[var(--color-text-muted)] md:text-lg md:leading-8">{profile.heroSummary}</p>
             </div>
             <div className="space-y-5 xl:pt-2">
               <HeroLinks links={profile.links} variant={light ? 'tile' : 'terminal'} />

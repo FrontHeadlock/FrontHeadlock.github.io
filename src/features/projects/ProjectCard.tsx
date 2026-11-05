@@ -3,6 +3,7 @@ import type { Project } from '../../entities/project/types'
 import { useStrings } from '../../shared/i18n/strings'
 import { cn } from '../../shared/lib/cn'
 import { DecodeLabel } from '../../shared/ui/DecodeLabel'
+import { EmphasisText } from '../../shared/ui/EmphasisText'
 import { TechStackChips } from '../../shared/ui/TechStackChips'
 import { projectCardId, projectPanelId } from '../../entities/project/anchors'
 
@@ -57,7 +58,7 @@ export function ProjectCard({ project, isActive, onSelect }: ProjectCardProps) {
         </div>
         <p className="text-sm leading-7 text-[var(--color-text-main)]">{project.summary}</p>
         <p className="rounded-inner border border-[var(--color-border)] bg-[var(--color-surface-hover)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
-          {project.focus}
+          <EmphasisText text={project.focus} />
         </p>
         <TechStackChips items={project.techStack} />
       </div>
