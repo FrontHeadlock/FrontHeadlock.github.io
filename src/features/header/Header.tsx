@@ -27,7 +27,7 @@ export function Header({ onOpenPalette }: HeaderProps) {
   ]
 
   return (
-    <header data-site-header className="sticky top-0 z-40 border-b border-[var(--color-hairline)] bg-[var(--color-header-bg)] backdrop-blur-xl">
+    <header data-site-header className="sticky top-0 z-40 border-b border-[var(--color-hairline)] bg-[var(--color-header-bg)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 md:px-8">
         <div className="group flex items-center gap-3">
           <span className="relative flex h-2.5 w-2.5">

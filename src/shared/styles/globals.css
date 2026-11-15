@@ -47,7 +47,8 @@
   --color-accent-glow-soft: rgba(0, 255, 65, 0.55);
   --color-hairline: rgba(255, 255, 255, 0.06);
   --color-hairline-soft: rgba(255, 255, 255, 0.02);
-  --color-header-bg: rgba(10, 10, 10, 0.78);
+  /* 헤더는 backdrop-filter 없이(블러가 페이지 상단에서 프레임 드롭을 일으킴) 불투명도로만 뒤를 가린다. */
+  --color-header-bg: rgba(10, 10, 10, 0.92);
   --color-menu-bg: rgba(10, 10, 10, 0.96);
   --color-surface-hover: rgba(24, 32, 28, 0.84);
   --color-chip-bg: transparent;

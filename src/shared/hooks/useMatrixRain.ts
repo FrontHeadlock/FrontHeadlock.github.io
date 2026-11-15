@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react'
+import { afterHeroIntro } from '../lib/heroIntro'
 import { advanceColumn } from '../lib/matrixRain'
 import { useRainPreference } from './useRainPreference'
+
+// 히어로 인트로를 기다리는 최대 시간. 폰트 대기(최대 1.5초) + 인트로(≈0.9초)를 덮는다.
+const HERO_INTRO_MAX_WAIT_MS = 2800
 
 type RainColumn = {
   x: number
@@ -116,6 +120,10 @@ export function useMatrixRain() {
     }
 
     const handleVisibilityChange = () => {
+      if (!started) {
+        return
+      }
+
       if (document.hidden) {
         window.cancelAnimationFrame(animationFrame)
         return
@@ -146,12 +154,26 @@ export function useMatrixRain() {
       }, 150)
     }
 
+    // 히어로 이름 인트로와 프레임을 나눠 쓰지 않도록 인트로가 끝난 뒤 시작하고, CSS([data-waiting])로 서서히 나타낸다.
+    let started = false
+    canvas.dataset.waiting = ''
+    const begin = () => {
+      started = true
+      delete canvas.dataset.waiting
+      lastFrameTime = performance.now()
+      if (!document.hidden) {
+        animationFrame = window.requestAnimationFrame(draw)
+      }
+    }
+
     resize()
-    animationFrame = window.requestAnimationFrame(draw)
+    const cancelIntroWait = afterHeroIntro(begin, HERO_INTRO_MAX_WAIT_MS)
     window.addEventListener('resize', handleResize)
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
+      cancelIntroWait()
+      delete canvas.dataset.waiting
       window.cancelAnimationFrame(animationFrame)
       window.clearTimeout(resizeTimer)
       window.removeEventListener('resize', handleResize)

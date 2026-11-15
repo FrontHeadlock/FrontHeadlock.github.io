@@ -1,33 +1,50 @@
 import { useEffect, useRef, useState } from 'react'
+import { beginHeroIntro } from '../lib/heroIntro'
 
 type AsciiParticle = {
   x: number
   y: number
+  sx: number
+  sy: number
   tx: number
   ty: number
   vx: number
   vy: number
   char: string
   finalChar: string
-  phase: number
-  revealDelay: number
+  delay: number
 }
 
 // 글자 형태는 particle 위치(텍스트 알파 마스크 샘플링)가 만들고, 글리프 자체는 0/1만 쓴다.
 // 디코드 중에는 0↔1이 프레임마다 뒤바뀌고, 정착 후에는 particle마다 고정된 비트로 남는다.
 const CHARACTERS = '01'
-// 스프링 상수는 60fps 1프레임 기준값. draw()에서 경과 시간으로 보정하므로 프레임이 떨어져도 같은 속도로 수렴한다.
+// 인트로: particle마다 delay초에 흩어진 자리에서 출발해 INTRO_TRAVEL초 동안 easeOutCubic으로 제자리에 도착한다.
+// 출발은 왼쪽→오른쪽 스윕(INTRO_SWEEP) + 흔들림(INTRO_JITTER). 프레임 수가 아니라 경과 시간 기준이라
+// 프레임이 떨어져도 마지막 particle이 SWEEP + JITTER + TRAVEL(≈0.9초)에 정착한다.
+const INTRO_SWEEP = 0.25
+const INTRO_JITTER = 0.08
+const INTRO_TRAVEL = 0.57
+// 출발 후 SCRAMBLE_WINDOW초까지 0↔1을 뒤섞고(이동의 약 70% 지점), 밝기는 DECODE_FADE초에 걸쳐 올린다.
+const SCRAMBLE_WINDOW = 0.4
+const DECODE_FADE = 0.16
+// 인트로 이후(마우스 반발, 리사이즈 재정착)는 스프링. 상수는 60fps 1스텝 기준이고,
+// 프레임 간격을 1스텝 안팎의 하위 스텝으로 나눠 적분하므로 프레임이 떨어져도 같은 속도로 수렴한다.
 const SPRING = 0.06
 const DAMPING = 0.86
 const FRAME_MS = 1000 / 60
-// 왼쪽→오른쪽 디코드 스윕과 글자별 스크램블 유지 시간(초). 마지막 글자가 약 1초 안에 자리 잡는다.
-const REVEAL_SWEEP = 0.5
-const REVEAL_JITTER = 0.12
-const SCRAMBLE_WINDOW = 0.4
+// 탭 복귀 등 긴 공백은 이만큼(100ms)까지만 따라잡는다.
+const MAX_CATCH_UP_MS = FRAME_MS * 6
+// 속도(px/스텝)가 REST_SPEED 아래로 REST_FRAMES 프레임 연속 머물면 루프를 멈춘다. 포인터가 없을 때는
+// 제자리 오차도 REST_OFFSET(px) 안이어야 한다. 포인터 이동·이탈, 테마·크기 변화가 다시 깨운다.
+const REST_SPEED = 0.02
+const REST_OFFSET = 0.25
+const REST_FRAMES = 8
 // 샘플링에 쓰는 웹폰트. 준비 전에 빌드하면 폴백 폰트 모양으로 샘플링했다가 폰트 도착 후 다시 흩뿌려야 하므로
 // 준비될 때까지(최대 FONT_WAIT_MS) 일반 h1을 그대로 보여 주고 한 번만 빌드한다.
 const HERO_FONT = '700 16px "JetBrains Mono Variable"'
 const FONT_WAIT_MS = 1500
+
+const easeOutCubic = (progress: number) => 1 - (1 - progress) ** 3
 
 export function useAsciiHero(text: string) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -68,6 +85,9 @@ export function useAsciiHero(text: string) {
       }
     }
 
+    // 인트로가 끝날 때까지 매트릭스 레인 시작을 미룬다(heroIntro.ts).
+    const endIntro = beginHeroIntro()
+
     let animationFrame = 0
     let particles: AsciiParticle[] = []
     let width = 0
@@ -75,6 +95,7 @@ export function useAsciiHero(text: string) {
     let dpr = 1
     let pointerX = -9999
     let pointerY = -9999
+    let pointerActive = false
     let fontSize = 72
     let step = 5
     let charSize = 7
@@ -82,23 +103,20 @@ export function useAsciiHero(text: string) {
     let mouseForce = 3.2
     let accentColor = '#00ff41'
     let running = false
+    let settled = false
+    let restFrames = 0
     let inViewport = true
     let cancelled = false
     let fontTimer = 0
     let startedAt = performance.now()
     let lastFrameTime = startedAt
+    let introEnd = 0
 
-    // initial=true: 흩어진 위치에서 모여드는 인트로. false(리사이즈 재샘플링): 현재 자리 근처에서 바로 정착해
-    // 재흩뿌림이 보이지 않고, 디코드 타이밍도 되감지 않는다.
     // 밴드(.theme-band) 안에서 재정의된 --color-accent를 쓰도록 캔버스 자신의 계산값을 읽는다.
     const readAccent = () => getComputedStyle(canvas).getPropertyValue('--color-accent').trim() || '#00ff41'
 
-    // 테마가 바뀌면 입자 색만 갱신한다(재샘플링 없음).
-    const themeObserver = new MutationObserver(() => {
-      accentColor = readAccent()
-    })
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-
+    // initial=true: 흩어진 위치에서 모여드는 인트로. false(리사이즈 재샘플링): 현재 자리 근처에서 스프링으로 바로 정착해
+    // 재흩뿌림이 보이지 않고, 디코드도 되감지 않는다.
     const buildParticles = (initial: boolean) => {
       const parentWidth = canvas.parentElement?.clientWidth ?? canvas.clientWidth ?? 640
       const isMobile = window.innerWidth < 768
@@ -128,6 +146,7 @@ export function useAsciiHero(text: string) {
       if (!offscreenContext) {
         particles = []
         setIsReady(false)
+        endIntro()
         return
       }
 
@@ -140,6 +159,7 @@ export function useAsciiHero(text: string) {
       ) {
         particles = []
         setIsReady(false)
+        endIntro()
         return
       }
 
@@ -158,6 +178,7 @@ export function useAsciiHero(text: string) {
       const imageData = offscreenContext.getImageData(0, 0, width, height)
 
       particles = []
+      let lastDelay = 0
 
       for (let y = 0; y < height; y += step) {
         for (let x = 0; x < width; x += step) {
@@ -166,17 +187,24 @@ export function useAsciiHero(text: string) {
             continue
           }
 
+          const sx = initial ? x + (Math.random() - 0.5) * width * 0.42 : x + (Math.random() - 0.5) * 12
+          const sy = initial ? y + (Math.random() - 0.5) * height * 1.9 : y + (Math.random() - 0.5) * 12
+          // 리사이즈 재샘플링은 인트로 없이 바로 스프링 단계로 들어가도록 출발 시각을 과거로 둔다.
+          const delay = initial ? (x / width) * INTRO_SWEEP + Math.random() * INTRO_JITTER : -INTRO_TRAVEL
+          lastDelay = Math.max(lastDelay, delay)
+
           particles.push({
-            x: initial ? x + (Math.random() - 0.5) * width * 0.42 : x + (Math.random() - 0.5) * 12,
-            y: initial ? y + (Math.random() - 0.5) * height * 1.9 : y + (Math.random() - 0.5) * 12,
+            x: sx,
+            y: sy,
+            sx,
+            sy,
             tx: x,
             ty: y,
             vx: 0,
             vy: 0,
             char: CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
             finalChar: CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
-            phase: Math.random() * Math.PI * 2,
-            revealDelay: (x / width) * REVEAL_SWEEP + Math.random() * REVEAL_JITTER,
+            delay,
           })
         }
       }
@@ -184,47 +212,67 @@ export function useAsciiHero(text: string) {
       if (initial) {
         startedAt = performance.now()
         lastFrameTime = startedAt
+        introEnd = lastDelay + INTRO_TRAVEL
+      }
+
+      if (particles.length === 0) {
+        endIntro()
       }
 
       setIsReady(particles.length > 0)
     }
 
-    const handlePointerMove = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      pointerX = event.clientX - rect.left
-      pointerY = event.clientY - rect.top
-    }
-
-    const handlePointerLeave = () => {
-      pointerX = -9999
-      pointerY = -9999
-    }
-
-    const handleTouch = (event: TouchEvent) => {
-      const touch = event.touches[0]
-      if (!touch) {
-        pointerX = -9999
-        pointerY = -9999
-        return
-      }
-
-      const rect = canvas.getBoundingClientRect()
-      pointerX = touch.clientX - rect.left
-      pointerY = touch.clientY - rect.top
-    }
-
-    const handleTouchEnd = () => {
-      pointerX = -9999
-      pointerY = -9999
-    }
-
     const draw = (timestamp: number) => {
-      // 프레임 간격을 60fps 배수로 환산해 물리를 보정한다. 탭 복귀 등 큰 공백은 34ms로 잘라 튀지 않게 한다.
-      const delta = Math.max(8, Math.min(34, timestamp - lastFrameTime))
+      // 프레임 간격을 1스텝(60fps 1프레임) 안팎의 하위 스텝으로 나눠 스프링을 적분한다.
+      const delta = Math.max(1, Math.min(MAX_CATCH_UP_MS, timestamp - lastFrameTime))
       lastFrameTime = timestamp
-      const steps = delta / FRAME_MS
-      const damping = DAMPING ** steps
+      const substeps = Math.max(1, Math.round(delta / FRAME_MS))
+      const scale = delta / substeps / FRAME_MS
+      const spring = SPRING * scale
+      const damping = DAMPING ** scale
+      const force = mouseForce * scale
       const elapsed = (timestamp - startedAt) / 1000
+
+      let maxSpeed = 0
+      let maxOffset = 0
+
+      for (const particle of particles) {
+        const sinceStart = elapsed - particle.delay
+
+        if (sinceStart < INTRO_TRAVEL) {
+          // 인트로 중: 경과 시간으로 위치를 정한다(프레임 수와 무관).
+          const progress = easeOutCubic(Math.max(0, sinceStart) / INTRO_TRAVEL)
+          particle.x = particle.sx + (particle.tx - particle.sx) * progress
+          particle.y = particle.sy + (particle.ty - particle.sy) * progress
+          continue
+        }
+
+        for (let i = 0; i < substeps; i += 1) {
+          particle.vx += (particle.tx - particle.x) * spring
+          particle.vy += (particle.ty - particle.y) * spring
+
+          if (pointerActive) {
+            const dx = particle.x - pointerX
+            const dy = particle.y - pointerY
+            const distanceSquared = dx * dx + dy * dy
+
+            if (distanceSquared < mouseRadius * mouseRadius && distanceSquared > 0) {
+              const distance = Math.sqrt(distanceSquared)
+              const push = (1 - distance / mouseRadius) ** 2 * force
+              particle.vx += (dx / distance) * push
+              particle.vy += (dy / distance) * push
+            }
+          }
+
+          particle.vx *= damping
+          particle.vy *= damping
+          particle.x += particle.vx * scale
+          particle.y += particle.vy * scale
+        }
+
+        maxSpeed = Math.max(maxSpeed, Math.abs(particle.vx), Math.abs(particle.vy))
+        maxOffset = Math.max(maxOffset, Math.abs(particle.x - particle.tx), Math.abs(particle.y - particle.ty))
+      }
 
       context.clearRect(0, 0, width, height)
       context.font = `600 ${charSize}px "JetBrains Mono Variable", monospace`
@@ -232,40 +280,36 @@ export function useAsciiHero(text: string) {
       context.textBaseline = 'middle'
       context.fillStyle = accentColor
 
-      particles.forEach((particle) => {
-        particle.vx += (particle.tx - particle.x) * SPRING * steps
-        particle.vy += (particle.ty - particle.y) * SPRING * steps
+      let currentAlpha = -1
+      for (const particle of particles) {
+        const revealed = Math.max(0, elapsed - particle.delay)
+        particle.char =
+          revealed < SCRAMBLE_WINDOW ? CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)] : particle.finalChar
 
-        const dx = particle.x - pointerX
-        const dy = particle.y - pointerY
-        const distance = Math.sqrt(dx * dx + dy * dy)
-
-        if (distance < mouseRadius && distance > 0) {
-          const force = ((1 - distance / mouseRadius) ** 2) * mouseForce * steps
-          particle.vx += (dx / distance) * force
-          particle.vy += (dy / distance) * force
+        const alpha = Math.min(0.96, 0.22 + Math.min(1, revealed / DECODE_FADE) * 0.74)
+        if (alpha !== currentAlpha) {
+          context.globalAlpha = alpha
+          currentAlpha = alpha
         }
-
-        particle.vx *= damping
-        particle.vy *= damping
-        particle.x += particle.vx * steps
-        particle.y += particle.vy * steps
-
-        const revealed = Math.max(0, elapsed - particle.revealDelay)
-        const decodeAlpha = Math.min(1, revealed / 0.16)
-        const idleJitter = Math.sin(elapsed * 1.2 + particle.phase) * 0.8
-
-        if (revealed < SCRAMBLE_WINDOW) {
-          particle.char = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]
-        } else {
-          particle.char = particle.finalChar
-        }
-
-        context.globalAlpha = Math.min(0.96, 0.22 + decodeAlpha * 0.74)
-        context.fillText(particle.char, particle.x, particle.y + idleJitter)
-      })
+        context.fillText(particle.char, particle.x, particle.y)
+      }
 
       context.globalAlpha = 1
+
+      const introRunning = elapsed < introEnd
+      if (!introRunning) {
+        endIntro()
+      }
+
+      const atRest = !introRunning && maxSpeed < REST_SPEED && (pointerActive || maxOffset < REST_OFFSET)
+      restFrames = atRest ? restFrames + 1 : 0
+
+      if (restFrames >= REST_FRAMES) {
+        // 정지 상태: 캔버스는 마지막 그림을 유지하므로 더 그릴 필요가 없다.
+        settled = true
+        stopLoop()
+        return
+      }
 
       if (running) {
         animationFrame = window.requestAnimationFrame(draw)
@@ -290,15 +334,58 @@ export function useAsciiHero(text: string) {
     const syncLoop = () => {
       if (document.hidden || !inViewport) {
         stopLoop()
-      } else {
+      } else if (!settled) {
         startLoop()
       }
     }
 
+    // 정지해 있던 루프를 다시 돌린다(포인터, 테마, 리사이즈).
+    const wake = () => {
+      settled = false
+      restFrames = 0
+      syncLoop()
+    }
+
+    // 테마가 바뀌면 입자 색만 갱신하고 한 번 다시 그린다(재샘플링 없음).
+    const themeObserver = new MutationObserver(() => {
+      accentColor = readAccent()
+      wake()
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
+    const handlePointerMove = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      pointerX = event.clientX - rect.left
+      pointerY = event.clientY - rect.top
+      pointerActive = true
+      wake()
+    }
+
+    const handlePointerLeave = () => {
+      pointerActive = false
+      wake()
+    }
+
+    const handleTouch = (event: TouchEvent) => {
+      const touch = event.touches[0]
+      if (!touch) {
+        handlePointerLeave()
+        return
+      }
+
+      const rect = canvas.getBoundingClientRect()
+      pointerX = touch.clientX - rect.left
+      pointerY = touch.clientY - rect.top
+      pointerActive = true
+      wake()
+    }
+
+    // 캔버스가 숨김(준비 전)→보임으로 바뀌면 두 항목이 한 번에 올 수 있으므로 가장 최근(마지막) 항목을 쓴다.
+    // 첫 항목을 쓰면 '안 보임'으로 판정해 인트로가 멈춘 채로 남는다.
     const viewportObserver =
       typeof IntersectionObserver === 'function'
-        ? new IntersectionObserver(([entry]) => {
-            inViewport = entry?.isIntersecting ?? true
+        ? new IntersectionObserver((entries) => {
+            inViewport = entries[entries.length - 1]?.isIntersecting ?? true
             syncLoop()
           })
         : null
@@ -316,6 +403,7 @@ export function useAsciiHero(text: string) {
       resizeTimer = window.setTimeout(() => {
         lastInnerWidth = window.innerWidth
         buildParticles(false)
+        wake()
       }, 150)
     }
 
@@ -325,6 +413,7 @@ export function useAsciiHero(text: string) {
       }
 
       buildParticles(true)
+      settled = false
       startLoop()
     }
 
@@ -355,10 +444,11 @@ export function useAsciiHero(text: string) {
     canvas.addEventListener('mouseleave', handlePointerLeave)
     canvas.addEventListener('touchstart', handleTouch, { passive: true })
     canvas.addEventListener('touchmove', handleTouch, { passive: true })
-    canvas.addEventListener('touchend', handleTouchEnd)
+    canvas.addEventListener('touchend', handlePointerLeave)
 
     return () => {
       cancelled = true
+      endIntro()
       themeObserver.disconnect()
       stopLoop()
       window.clearTimeout(fontTimer)
@@ -371,7 +461,7 @@ export function useAsciiHero(text: string) {
       canvas.removeEventListener('mouseleave', handlePointerLeave)
       canvas.removeEventListener('touchstart', handleTouch)
       canvas.removeEventListener('touchmove', handleTouch)
-      canvas.removeEventListener('touchend', handleTouchEnd)
+      canvas.removeEventListener('touchend', handlePointerLeave)
     }
   }, [text, reducedMotion])
 
